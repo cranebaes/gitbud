@@ -1,8 +1,8 @@
 # GitBud Server Code
 
-> Most server code is clearly modularised and heavily (perhaps excessively) annotated for the benefit of teams wishing to inherit this codebase. On the understanding that comments can become inaccurate over time and that people may want to udnerstand the what module does what before jumping in, we're providing short notes here.
-> We prefer each file to fulfill one role so modules with diverse responsibilities (_e.g._ the _routes_ module, which exports request handlers for _/API/_ and _/auth/_ routes) will generally have one file fo each responsibility and a short _index.js_ that draws together exports functionality from the module's distinct files.
-> This modularisation was intended to be clear, not perfect. You may wish to reorgniase some code; for instance, the distinction between request-handler and routes is a little confusing and perhaps artificial.
+> Most server code is clearly modularized and heavily (perhaps excessively) annotated for the benefit of teams wishing to inherit this codebase. On the understanding that comments can become inaccurate over time and that people may want to understand the what module does what before jumping in, we're providing short notes here.
+> We prefer each file to fulfill one role so modules with diverse responsibilities (_e.g._ the _routes_ module, which exports request handlers for _/API/_ and _/auth/_ routes) will generally have one file for each responsibility and a short _index.js_ that draws together exports functionality from the module's distinct files.
+> This modularization was intended to be clear, not perfect. You may wish to reorganize some code; for instance, the distinction between request-handler and routes is a little confusing and perhaps artificial.
 __Note:__ We've aimed to use the names of React components in this documentation, which will hopefully make it easier to cross-reference with the front-end code. Components are marked by JSX style tags (_e.g._ <App> component).
 
 ## Table of Contents
@@ -39,7 +39,7 @@ This depends heavily on the nature of the request, so we've provided two example
 #### New user
 When a new user clicks on _'Sign in with GitHub'_ on the <Landing> component with which all users are greeted the following things happen:
 1. The user is redirected to GitHub's OAuth page and (after successful authorisation) punted back to _/auth/github/callback_.
-1. Their _req_ hits _server.js_ and is handed on (with a request and a response object) to the the handler function exported from the _request-handler_ module.
+1. Their _req_ hits _server.js_ and is handed on (with a request and a response object) to the handler function exported from the _request-handler_ module.
 1. This functions tests in the order above and finds that the user has requested an _/auth/_ route, checks whether or not the object exported by _/server/routes/auth.js/_ has a _github_ function and invokes it with the _req_ and _res_ objects.
 1. The _github_ function verifies that this is an OAuth callback and invokes the appropriate middleware exported from the authentication module.
 1. This middleware (_exports.callback_) mostly defers to other passport functionality, redirecting back to _/_ on failure and _/projects_ on successful authentication, so at this point the _req_ is handled and _res_ (a redirect) has been sent.
