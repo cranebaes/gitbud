@@ -37,6 +37,7 @@ const users = (state, action) => {
   inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
+
   if (state === undefined) {
     return [];
   } else if (action.type === 'LIST_PROJECTS') {
@@ -56,6 +57,8 @@ const projects = (state, action) => {
       return project;
     });
   }
+  console.log('this is the state from projects', state)
+
   return state;
 };
 

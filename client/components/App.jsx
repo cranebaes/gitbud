@@ -33,6 +33,7 @@ import ProjectList from './ProjectList';
 import Questionnaire from './Questionnaire';
 import NotFound from './NotFound';
 import MyProjects from './MyProjects';
+import MyPartners from './MyPartners';
 
 class App extends React.Component {
   constructor(props) {
@@ -125,6 +126,7 @@ class App extends React.Component {
               <Route path="/projects/:id" component={Project} />
               <Route path="/status" component={ProjectStatus} />
               <Route path="/my-projects" component={MyProjects} />
+              <Route path="/my-partners" component={MyPartners} />
 
               {/*
                 given this path render this component and pass down the loggedIn state as user props
@@ -133,6 +135,7 @@ class App extends React.Component {
                 render={() => (<UserProfile user={this.state.loggedIn} />) } />
 
               <Route path="/user/:id/:projectId?" component={UserDetails} />
+              <Route path="/user/:id" component={UserDetails} />
               <Route component={NotFound} />
             </Switch>
             <FloatingActionButton secondary={ true } style={ { position: "absolute", bottom: 20, left: 20 } } onClick={ this.togglePartyMode } >
