@@ -1,4 +1,4 @@
-# GitBud Server Code
+# GitPal Server Code
 
 > Most server code is clearly modularized and heavily (perhaps excessively) annotated for the benefit of teams wishing to inherit this codebase. On the understanding that comments can become inaccurate over time and that people may want to understand the what module does what before jumping in, we're providing short notes here.
 > We prefer each file to fulfill one role so modules with diverse responsibilities (_e.g._ the _routes_ module, which exports request handlers for _/API/_ and _/auth/_ routes) will generally have one file for each responsibility and a short _index.js_ that draws together exports functionality from the module's distinct files.

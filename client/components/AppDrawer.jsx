@@ -18,7 +18,7 @@ import DeviceDeveloperMode from 'material-ui/svg-icons/device/developer-mode';
 function AppDrawer(props) {
   return (
     <Drawer open={ props.open } docked={ false } onRequestChange={ props.changeOpenState }>
-      <AppBar title="Gitbud" showMenuIconButton={ false }/>
+      <AppBar title="GitPal" showMenuIconButton={ false }/>
       <Card style={ { margin: 12, width: '90%', paddingBottom: 12 } }>
         <CardHeader title="Projects"/>
         <div style={ {width:'90%', margin: 'auto'} }>

@@ -41,7 +41,7 @@ function addUsers() {
 
 const addProjectsQueryString = `
   CREATE
-    (:Project {project: 'Hello GitBud', language: 'JavaScript', experience: 'Beginner', link: 'https://github.com/cranebaes/hello-gitbud', description: "Get familiar with contributing to open source projects by making a first pull request. In this project, you will learn to use CDN and make pull request.", structure: '[{"text":"Need to add jQuery to application","hint":"Hint: Look up what a content delivery network (CDN) is","complete":false},{"text":"Make your first pull request","hint":"Hint: Refer to the README.md in the repository","complete":false}]'}),
+    (:Project {project: 'Hello GitPal', language: 'JavaScript', experience: 'Beginner', link: 'https://github.com/cranebaes/hello-GitPal', description: "Get familiar with contributing to open source projects by making a first pull request. In this project, you will learn to use CDN and make pull request.", structure: '[{"text":"Need to add jQuery to application","hint":"Hint: Look up what a content delivery network (CDN) is","complete":false},{"text":"Make your first pull request","hint":"Hint: Refer to the README.md in the repository","complete":false}]'}),
     (:Project {project: 'Random Quote Machine', language: 'JavaScript', experience: 'Beginner', link: 'https://github.com/cranebaes/random-quote-machine', description: "Learn to work with pre-written code to analyze and debug possible issues. In this project, you will learn to locate and solve minor bugs in an existing codebase.", structure: '[{"text":"Missing jQuery library","hint":"Hint: Remember CDN?","complete":false},{"text":"script.js and styles.css are not being loaded","complete":false},{"text":"Quote Me button is not functioning","hint":"Hint: Which function is invoked on button click?","complete":false},{"text":"Quote Me button is not being stylized correctly","complete":false},{"text":"Typo in title of index.html","complete":false},{"text":"Dummy quote that was used for testing is included","complete":false}, {"text":"Make a pull request","hint":"Hint: Remember to end your files with a newline","complete":false}]'}),
     (:Project {project: 'Tic Tac Toe', language: 'JavaScript', experience: 'Intermediate', link: 'https://github.com/cranebaes/tic-tac-toe', description: "Start thinking algorithmically as you deal with complicated problems involving multiple large steps. In this project, you will learn to implement logic in a classic paper-and-pencil game.", structure: '[{"text":"script.js and styles.css are not being loaded","complete":false},{"text":"gameboard is not defined","hint":"Hint: Trace back where gameboard is used","complete":false},{"text":"clearBoard does not clear blue player","hint":"Hint: How about red player?","complete":false},{"text":"Implement checkForWin function that takes in moves and outputs a boolean based on game condition","complete":false},{"text":"resetScores does not clear board","hint":"Hint: Which function clears board?","complete":false}]'}),
     (:Project {project: 'The Grey Marble', language: 'JavaScript', experience: 'Advanced', link: 'https://github.com/francisngo/the_grey_marble', description: "Try your hands at contributing to a real world project made by one of our developers. In this project, you will learn to navigate through a full stack app and help improve the project.", structure: '[{"text":"Webpack environment is not set up for Heroku","complete":false}]'})
@@ -65,11 +65,11 @@ const addInterestedInRelationshipsQueryString = `
   MATCH (arya:User) WHERE arya.name = "Arya Stark"
   MATCH (jon:User) WHERE jon.name = "Jon Snow"
   MATCH (bran:User) WHERE bran.name = "Bran Stark"
-  MATCH (helloGitBud:Project) WHERE helloGitBud.project = "Hello GitBud"
+  MATCH (helloGitPal:Project) WHERE helloGitPal.project = "Hello GitPal"
   MATCH (randomQuoteMachine:Project) WHERE randomQuoteMachine.project = "Random Quote Machine"
   CREATE
-    (robb)-[:INTERESTED_IN]->(helloGitBud),
-    (arya)-[:INTERESTED_IN]->(helloGitBud),
+    (robb)-[:INTERESTED_IN]->(helloGitPal),
+    (arya)-[:INTERESTED_IN]->(helloGitPal),
     (jon)-[:INTERESTED_IN]->(randomQuoteMachine),
     (bran)-[:INTERESTED_IN]->(randomQuoteMachine)
   `;
