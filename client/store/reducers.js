@@ -57,7 +57,7 @@ const pairedUsers = (state, action) => {
   first condition is the initial state
   inside App component we dispatch 'LIST_PROJECTS' to display list of projects
   inside ProjectDetails component we dispatch 'CHANGE_PROJECT_INTEREST' when user selects 'they are interested'
-  inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
+  inside UserDetails component we dispatch 'CHANGE_USER' when user select 'WORK WITH ME' button
 */
 const projects = (state, action) => {
   console.log('projects state: ', state);

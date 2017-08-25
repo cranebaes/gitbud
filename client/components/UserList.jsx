@@ -1,3 +1,5 @@
+/* Not currently connected to FIND PARTNER button */
+/* Used to show All Users */
 import React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -33,6 +33,7 @@ function AppDrawer(props) {
       <Card style={ { margin: 12, width: '90%', paddingBottom: 12 } }>
         <CardHeader title="Users"/>
         <div style={ {width:'90%', margin: 'auto'} }>
+          // Wrap both raised buttons in a Link tag with to="endpoint"
           <RaisedButton label="Find A Partner" fullWidth={ true } secondary={ true } onClick={ props.closeDrawer } icon={ <ActionFace/> }/>
           <Link to="/my-partners">
             <RaisedButton label="My Partners"fullWidth={ true } onClick={ props.closeDrawer } />
