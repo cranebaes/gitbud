@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack-dev-server": "webpack-dev-server --progress --hot --inline",
     "dev": "webpack -w",
+    "dev2": "nodemon --inspect server.js -i client/ -i dist/",
     "postInstall": "webpack -p",
     "start": "nodemon server.js -i client/ -i dist/",
     "seed": "node server/db/seed.js"
