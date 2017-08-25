@@ -22,6 +22,8 @@ const customContentStyle = {
 };
 /* for Dialog  */
 
+import io from 'socket.io-client';
+const socket = io();
 
 class UserDetails extends React.Component {
 
@@ -29,7 +31,11 @@ class UserDetails extends React.Component {
     super(props);
     this.state = {
       expanded: false,
-      message: '',
+      partnerName: '',
+      message: 'placeholder',
+      chatBox: [],
+      myMessage: 'myMessage',
+      receivedMessage:'receivedMessage',
       //for popUp window
       open: false,
     }
@@ -37,10 +43,17 @@ class UserDetails extends React.Component {
     this.expandCard = () => {
       this.setState({ expanded: true });
     }
+
+    socket.on('chat message', (msg) => this.renderMessages(msg));
+    //receive messages
+
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
       axios.post('/API/messages', {
@@ -99,7 +112,29 @@ class UserDetails extends React.Component {
         onClick={ this.togglePair }
         primary={ true } />
     }
-  }
+  };
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // socket.emit('chat message', );
+    var newMessage = {
+      message: this._message.value,
+      username: this.props.user.name
+    }
+    this.setState({
+      myMessage: 'me:' + newMessage.message
+    });
+
+    socket.emit('chat message', newMessage); //send msg
+    console.log(newMessage);
+  };
+
+
+  renderMessages(msg) {
+    this.setState({
+      receivedMessage: msg.username + ":" + msg.message
+    });
+  };
 
   render() {
      const actions = [
@@ -141,20 +176,26 @@ class UserDetails extends React.Component {
           <div>
 
           <Dialog
-            title="Dialog With Custom Width"
+            title="Send a message"
             actions={actions}
             modal={true}
             contentStyle={customContentStyle}
             open={this.state.open}
           >
-            This dialog spans the entire width of the screen.
+            <ul id="messages"></ul>
+              <p>{this.state.myMessage}</p><br/>
+              <p>{this.state.receivedMessage}</p><br/>
+              <form onSubmit={this.handleSubmit}>
+                <input ref={(message) => this._message = message} id="newMessage" type="text"/>
+                <button type="submit">Send</button>
+              </form>
           </Dialog>
         </div>
         {/*dialog for message end*/}
 
 
           {/* should be deleted */}
-          // {
+          {
           //   <div expandable={true}>
           //   <TextField
           //     floatingLabelText="Ask user to pair up"

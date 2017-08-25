@@ -19,6 +19,7 @@
 // Allows storing of environment variables
 // in .env of root directory.
 require('dotenv').config();
+const open = require('open');
 // Libraries for handling requests
 const express = require('express');
 const path = require('path');
@@ -32,9 +33,39 @@ const requestHandler = require('./server/request-handler');
 // Make express server
 const app = express();
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+
+const server = app.listen(port, function(err) {
+  if (err) {
+    console.log(err);
+  } else {
+    open(`http://localhost:${port}`);
+  }
 });
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  // // when the client emits 'new message', this listens and executes
+  // socket.on('new message', function (data) {
+  //   // we tell the client to execute 'new message'
+  //   socket.broadcast.emit('new message', {
+  //     username: socket.username,
+  //     message: data
+  //   });
+  // });
+
+  socket.on('chat message', function(msg) {
+    console.log(msg);
+    socket.broadcast.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
 
 // Save sessions
 // NOTE: This is using a bad memory store
