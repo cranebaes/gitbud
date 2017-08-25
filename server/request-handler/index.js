@@ -12,7 +12,7 @@
  *
  *  This order should mean that the quickest or simplest
  *  requests are handled first.
- * 
+ *
  *  Many of these functions make db queries. There's more information on these in the
  *  db module, but importantly you will notice that with neo4j, we can extract the various
  *  aliased fields of a response with the .get() method of a record. This is extremely useful
@@ -22,7 +22,7 @@
 // Node librares
 const fs = require('fs');
 const path = require('path');
-// GitBud module with methods for various endpoints
+// GitPal module with methods for various endpoints
 const routes = require('../routes');
 
 // Cache index.html to serve quickly on React routes and invalid URLs

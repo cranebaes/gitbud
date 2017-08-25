@@ -24,7 +24,7 @@
 const forEach = require('lodash/forEach');
 const map = require('lodash/map');
 const union = require('lodash/union');
-// GitBud modules
+// GitPal modules
 const db = require('../db');
 
 module.exports = function compareUser(dbSession, ghId) {

@@ -1,7 +1,7 @@
 // Libraries for authentication
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
-// GitBud modules
+// GitPal modules
 const db = require('../db');
 const profiling = require('../profiling');
 

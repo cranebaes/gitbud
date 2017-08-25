@@ -53,7 +53,7 @@ class Questionnaire extends React.Component {
         <h1>Welcome, {this.props.user.name}</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius quam id quam aliquot, quis varius est euismod.</p>
         <br />
-        <p>Select your preferred language to use with other GitBud members:</p>
+        <p>Select your preferred language to use with other GitPal members:</p>
         <DropDownMenu value={this.state.selectedLanguage} onChange={(e, idx, val) => this.onLanguageSelect(val)}>
           <MenuItem value={"JavaScript"} primaryText="JavaScript" />
           <MenuItem value={"Ruby"} primaryText="Ruby" />
@@ -68,7 +68,7 @@ class Questionnaire extends React.Component {
           <RadioButton label="Advanced" value="Advanced" />
         </RadioButtonGroup>
         <br />
-        <p>Write a short introduction about yourself that other GitBud members can see:</p>
+        <p>Write a short introduction about yourself that other GitPal members can see:</p>
         <TextField id="description" multiLine={ true } rows={ 2 } style ={ { width: '100%' } } onChange={(e, val) => this.onDescriptionChange(val)} />
         <br />
         <RaisedButton label="Submit" secondary={ true }  fullWidth={ true } onClick={() => this.onButtonClick()} />

@@ -1,6 +1,6 @@
-# GitBud
+# GitPal
 
-> GitBud is an application that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
+> GitPal is an application that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
 
 ## Team
 
@@ -20,7 +20,7 @@
 
 ## Usage
 
-> __Environment Variables__ GitBud has hardcoded a username of 'neo4j' and a password of 'neo' for neo4j. You can change these in the code or override them by setting the appropriate environment variables. You will also need a GitHub Client ID and Client Secret to use the GitHub API. These, too, are set as environment variables. We have used the .env package, which allows environment variables to be set easily with the .env file in the root directory of the project. An example of the necessary variables for GitBud been provided here in this repo.
+> __Environment Variables__ GitPal has hardcoded a username of 'neo4j' and a password of 'neo' for neo4j. You can change these in the code or override them by setting the appropriate environment variables. You will also need a GitHub Client ID and Client Secret to use the GitHub API. These, too, are set as environment variables. We have used the .env package, which allows environment variables to be set easily with the .env file in the root directory of the project. An example of the necessary variables for GitPal been provided here in this repo.
 
 - Fork and clone the repo
 - Install dependencies from the root of the repo by running
@@ -63,7 +63,7 @@ npm install
 
 ### Roadmap
 
-View the project roadmap [here](https://github.com/cranebaes/gitbud/issues)
+View the project roadmap [here](https://github.com/cranebaes/GitPal/issues)
 
 
 ## Contributing

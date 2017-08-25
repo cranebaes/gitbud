@@ -14,7 +14,7 @@ const style = {
 function Landing(props) {
   return (
     <Card style={ { maxWidth: '300px', width: '75%', margin: 'auto', paddingBottom: 12, marginTop: 12 } }>
-      <AppBar title="Welcome to GitBud!" style={style} showMenuIconButton={ false }/>
+      <AppBar title="Welcome to GitPal!" style={style} showMenuIconButton={ false }/>
       <CardMedia>
         <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/>
       </CardMedia>

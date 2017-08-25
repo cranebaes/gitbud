@@ -1,5 +1,5 @@
 {
-  "name": "gitbud",
+  "name": "GitPal",
   "version": "1.0.0",
   "description": "An application to help programmers begin working on open source projects.",
   "main": "server.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cranebaes/gitbud.git"
+    "url": "git+https://github.com/Toucans456/GitPal.git"
   },
   "author": "haque-kim-ngo-warner-medley",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cranebaes/gitbud/issues"
+    "url": "https://github.com/Toucans456/GitPal/issues"
   },
-  "homepage": "https://github.com/cranebaes/gitbud#readme",
+  "homepage": "https://github.com/Toucans456/GitPal#readme",
   "devDependencies": {
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^15.1.0",
