@@ -13,6 +13,16 @@ import ActionDone from 'material-ui/svg-icons/action/done';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import TextField from 'material-ui/TextField';
 
+/* for Dialog  */
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+const customContentStyle = {
+  width: '80%',
+  maxWidth: 'none',
+};
+/* for Dialog  */
+
+
 class UserDetails extends React.Component {
 
   constructor(props) {
@@ -20,6 +30,8 @@ class UserDetails extends React.Component {
     this.state = {
       expanded: false,
       message: '',
+      //for popUp window
+      open: false,
     }
     this.paired = false;
     this.expandCard = () => {
@@ -27,6 +39,8 @@ class UserDetails extends React.Component {
     }
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
       axios.post('/API/messages', {
@@ -56,6 +70,17 @@ class UserDetails extends React.Component {
       });
   }
 
+  /* dialog  handler*/
+  handleOpen() {
+    console.log("clicked")
+    this.setState({open: true});
+  };
+
+  handleClose() {
+    this.setState({open: false});
+  };
+  /* dialog  handler end*/
+
   pairButton() {
     if (this.props.user.paired.length > 0) {
       return <RaisedButton
@@ -77,6 +102,19 @@ class UserDetails extends React.Component {
   }
 
   render() {
+     const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
     return (
       <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
         <Card expanded={this.state.expanded} style={{ width: '40%', marginLeft: 'auto', marginRight: 'auto', marginBottom: 12 }}>
@@ -96,25 +134,47 @@ class UserDetails extends React.Component {
           <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
           <div>
             { this.pairButton() }
-            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.expandCard} secondary={true} />
+            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.handleOpen} secondary={true} />
           </div>
-          <div expandable={true}>
-            <TextField
-              floatingLabelText="Ask user to pair up"
-              hintText="Enter your message"
-              style={{ padding: 20 }}
-              onChange={ this.setMessageText }
-            />
-          </div>
-          <div expandable={true}>
-            <RaisedButton label="Send" onClick={ this.sendMessage } fullWidth={true} icon={<ContentSend />} secondary={true}/>
-            { this.props.messages.map((message, index) =>
-              <Card key={ index }>
-                <CardTitle>{ message.sender ? 'You' : this.props.user.name }</CardTitle>
-                <CardText>{ message.text }</CardText>
-              </Card>
-            )}
-          </div>
+
+        {/*dialog for message*/}
+          <div>
+
+          <Dialog
+            title="Dialog With Custom Width"
+            actions={actions}
+            modal={true}
+            contentStyle={customContentStyle}
+            open={this.state.open}
+          >
+            This dialog spans the entire width of the screen.
+          </Dialog>
+        </div>
+        {/*dialog for message end*/}
+
+
+          {/* should be deleted */}
+          // {
+          //   <div expandable={true}>
+          //   <TextField
+          //     floatingLabelText="Ask user to pair up"
+          //     hintText="Enter your message"
+          //     style={{ padding: 20 }}
+          //     onChange={ this.setMessageText }
+          //   />
+          // </div>
+          // <div expandable={true}>
+          //   <RaisedButton label="Send" onClick={ this.sendMessage } fullWidth={true} icon={<ContentSend />} secondary={true}/>
+          //   { this.props.messages.map((message, index) =>
+          //     <Card key={ index }>
+          //       <CardTitle>{ message.sender ? 'You' : this.props.user.name }</CardTitle>
+          //       <CardText>{ message.text }</CardText>
+          //     </Card>
+          //   )}
+          // </div>
+          // {/* should be deleted end*/}
+          }
+
         </Card>
       </Paper>
     );
