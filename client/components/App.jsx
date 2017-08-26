@@ -35,6 +35,7 @@ import NotFound from './NotFound';
 import MyProjects from './MyProjects';
 import MyPartners from './MyPartners';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -74,8 +75,10 @@ class App extends React.Component {
 
   //gets authentication
   checkAuthenticated() {
+    console.log("am i running??????")
     axios.get('/auth/authenticated')
       .then((res) => {
+        console.log("ami ", res.data)
         this.setState({ loggedIn: res.data });
         this.getMessages();
         this.getProjects();

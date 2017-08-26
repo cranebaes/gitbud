@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import chatBox from './MyPartners';
+
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardMedia, CardText, CardTitle } from 'material-ui/Card';
@@ -18,10 +20,13 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 const customContentStyle = {
   width: '80%',
+  height: '100%',
   maxWidth: 'none',
 };
 /* for Dialog  */
 
+import io from 'socket.io-client';
+const socket = io();
 
 class UserDetails extends React.Component {
 
@@ -29,7 +34,11 @@ class UserDetails extends React.Component {
     super(props);
     this.state = {
       expanded: false,
-      message: '',
+      partnerName: '',
+      message: 'placeholder',
+      chatBox: [],
+      myMessage: 'myMessage',
+      receivedMessage:'receivedMessage',
       //for popUp window
       open: false,
     }
@@ -37,10 +46,17 @@ class UserDetails extends React.Component {
     this.expandCard = () => {
       this.setState({ expanded: true });
     }
+
+    socket.on('chat message', (msg) => this.renderMessages(msg));
+    //receive messages
+
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
       axios.post('/API/messages', {
@@ -99,20 +115,55 @@ class UserDetails extends React.Component {
         onClick={ this.togglePair }
         primary={ true } />
     }
-  }
+  };
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // socket.emit('chat message', );
+    var newMessage = {
+      message: this._message.value,
+      username: this.props.user.name
+    }
+
+    var myMessage = {
+      username: "me: ",
+      message: this._message.value
+    }
+
+    var updatedChatBox = this.state.chatBox
+    updatedChatBox.push(myMessage)
+
+    this.setState({
+      chatBox: updatedChatBox
+    });
+
+    socket.emit('chat message', newMessage); //send msg
+    console.log(newMessage);
+  };
+
+
+  renderMessages(msg) {
+    console.log("asdadadadasd", this.state.chatBox)
+    var updatedChatBox= this.state.chatBox;
+    updatedChatBox.push(msg);
+    this.setState({
+      chatBox: updatedChatBox
+    });
+  };
 
   render() {
      const actions = [
+      <div>
+       <form onSubmit={this.handleSubmit}>
+        <input ref={(message) => this._message = message} id="newMessage" type="text"/>
+        <FlatButton primary={true} type="submit">Send</FlatButton>
+      </form>
+      </div>,
       <FlatButton
         label="Cancel"
         primary={true}
         onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onClick={this.handleClose}
-      />,
+      />
     ];
 
     return (
@@ -141,20 +192,30 @@ class UserDetails extends React.Component {
           <div>
 
           <Dialog
-            title="Dialog With Custom Width"
+            title="Send a message"
             actions={actions}
             modal={true}
             contentStyle={customContentStyle}
             open={this.state.open}
+            autoScrollBodyContent={true}
           >
-            This dialog spans the entire width of the screen.
+            <ul id="messages"></ul>
+              {this.state.chatBox.map((chat, index) => {
+                return(
+                  <div>
+                    <strong>{chat.username}</strong>
+                    <p>{chat.message}</p>
+
+                  </div>
+                )}
+              )}
           </Dialog>
         </div>
         {/*dialog for message end*/}
 
 
           {/* should be deleted */}
-          // {
+          {
           //   <div expandable={true}>
           //   <TextField
           //     floatingLabelText="Ask user to pair up"
