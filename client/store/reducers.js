@@ -22,13 +22,25 @@ const users = (state, action) => {
   } else if (action.type === 'CHANGE_USER_PAIRING') {
     return state.map((user) => {
       if (user.id === action.userId) {
-        return Object.assign({}, user, { paired: user.paired.concat(action.projectId) });
+        const object =  Object.assign({}, user, { paired: user.paired.concat(action.projectId) });
+        return object;
       }
       return user;
     });
   }
   return state;
 };
+
+const pairedUsers = (state, action) => {
+  if (state === undefined) {
+    return [];
+  } else if (action.type === 'ADD_PAIRING') {
+    return state.concat([{name: action.name, language: action.language, experience: action.experience}]);
+    // const object = Object.assign({}, )
+    // return state.concat(action.)
+  }
+  return state;
+}
 
 /*
   first condition is the initial state
@@ -57,7 +69,6 @@ const projects = (state, action) => {
       return project;
     });
   }
-  console.log('this is the state from projects', state)
 
   return state;
 };
@@ -119,5 +130,6 @@ export default combineReducers({
   users,
   projects,
   messages,
+  pairedUsers,
   projectProgress,
 });
