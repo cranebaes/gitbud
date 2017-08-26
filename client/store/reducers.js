@@ -18,6 +18,7 @@ const users = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
+    console.log('ADDING USERS', action);
     return action.users;
   } else if (action.type === 'CHANGE_USER_PAIRING') {
     return state.map((user) => {
@@ -49,7 +50,8 @@ const pairedUsers = (state, action) => {
   inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
-
+  console.log('projects state: ', state);
+  console.log('projects action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'LIST_PROJECTS') {

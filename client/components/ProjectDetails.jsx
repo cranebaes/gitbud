@@ -15,9 +15,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import UserList from './UserList';
 
 class ProjectDetails extends React.Component {
+
   constructor(props) {
     super(props);
-
+    console.log('project details props', props);
     this.state = {
       interest: false,
     };

@@ -1,6 +1,6 @@
 /*
  *  REQUEST HANDLERS FOR AUTHENTICATION ROUTES
- * 
+ *
  *  These handlers deal with the response directly by convenience, not by good design.
  */
 
@@ -14,6 +14,7 @@ module.exports = {
   GET: {
     signout: function signout(req, res) {
       // destroy session and redirect to home
+      console.log('LOGGING OUT', req.logout);
       req.logout();
       res.redirect('/');
     },

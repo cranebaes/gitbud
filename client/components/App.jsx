@@ -39,12 +39,13 @@ import MyPartners from './MyPartners';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    //console.log('App.jsx PROPS', props);
+    //console.log(this);
     this.state = {
       loggedIn: false,
       drawerOpen: false,
       partyMode: false,
     }
-
     this.checkAuthenticated();
 
     this.navTap = this.navTap.bind(this);
@@ -78,9 +79,13 @@ class App extends React.Component {
     console.log("am i running??????")
     axios.get('/auth/authenticated')
       .then((res) => {
-        console.log("ami ", res.data)
+        console.log('SETTInG the STATE', this);
+
+        //console.log('AUTH get Messages');
         this.setState({ loggedIn: res.data });
         this.getMessages();
+
+        //console.log('AUTH get Projects');
         this.getProjects();
       });
   }
@@ -103,6 +108,7 @@ class App extends React.Component {
   }
 
   render() {
+    //console.log('App render this: ', this);
     /*
      Condition:
      If user is registered and logs render all the components.
@@ -110,6 +116,7 @@ class App extends React.Component {
      If user is not logged in (logged out) display landing page
     */
     if (this.state.loggedIn.language) {
+      console.log('App rendering', this.state.loggedIn);
       return (
         <BrowserRouter>
           <div>
@@ -150,6 +157,7 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
+      console.log('LOGGING ON', this.state);
           return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
@@ -159,6 +167,7 @@ class App extends React.Component {
   Allows App component to have message and project state
 */
 const mapStateToProps = (state) => {
+  //console.log('APP state: ', state);
   return {
     message: state.message,
     projects: state.projects,
@@ -170,6 +179,7 @@ const mapStateToProps = (state) => {
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = (dispatch) => {
+  //console.log('APP dispatch: ', dispatch);
   return {
     changeString: () => dispatch({
       type: 'CHANGE_STRING',
