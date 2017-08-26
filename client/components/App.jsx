@@ -76,10 +76,10 @@ class App extends React.Component {
 
   //gets authentication
   checkAuthenticated() {
-    console.log("am i running??????")
+    console.log("Getting authentication")
     axios.get('/auth/authenticated')
       .then((res) => {
-        console.log('SETTInG the STATE', this);
+        console.log('Setting the STATE', this);
 
         //console.log('AUTH get Messages');
         this.setState({ loggedIn: res.data });

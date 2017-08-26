@@ -15,6 +15,8 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 const users = (state, action) => {
+  console.log('users state: ', state);
+  console.log('users action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
@@ -28,13 +30,21 @@ const users = (state, action) => {
       }
       return user;
     });
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Users load');
+    // return action.payload.projects[0];
   }
   return state;
 };
 
 const pairedUsers = (state, action) => {
+  console.log('pairedUsers state: ', state);
+  console.log('pairedUsers action: ', action);
   if (state === undefined) {
     return [];
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('pairedUsers load');
+    // return action.payload.projects[0];
   } else if (action.type === 'ADD_PAIRING') {
     return state.concat([{name: action.name, language: action.language, experience: action.experience}]);
     // const object = Object.assign({}, )
@@ -54,6 +64,9 @@ const projects = (state, action) => {
   console.log('projects action: ', action);
   if (state === undefined) {
     return [];
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Project load');
+    // return action.payload.projects[0];
   } else if (action.type === 'LIST_PROJECTS') {
     return action.projects;
   } else if (action.type === 'CHANGE_PROJECT_INTEREST') {
@@ -84,8 +97,13 @@ const projects = (state, action) => {
   SUGGESTION: implement socket.io
 */
 const messages = (state, action) => {
+  console.log('messages state: ', state);
+  console.log('messages action: ', action);
   if (state === undefined) {
     return {};
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('messages load');
+    // return action.payload.projects[0];
   } else if (action.type === 'MESSAGE_SEND') {
     const newMessages = {};
     newMessages[action.userId] = state[action.userId] ? [action.message].concat(state[action.userId]) : [action.message];
@@ -104,6 +122,9 @@ const messages = (state, action) => {
 const projectProgress = (state, action) => {
   if (state === undefined) {
     return {};
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Project progress load');
+    // return action.payload.projects[0];
   } else if (action.type === 'PROGRESS_LOAD_ITEMS') {
     return action.progress;
   } else if (action.type === 'PROGRESS_CHANGE_ITEM') {
