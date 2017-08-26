@@ -8,12 +8,7 @@ import ProjectStatus from './ProjectStatus';
 class Project extends React.Component {
   constructor(props) {
     super(props);
-    //debugger;
     this.POSTprogress = this.POSTprogress.bind(this);
-    console.log('Project.jsx PROPS: ', this.props);
-    // if (this.props.project === undefined) {
-    //   setTimeout
-    // }
     if (this.props.project.paired.length > 0 && this.props.progress.length < 1) {
       this.GETprogress();
     }

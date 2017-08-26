@@ -39,8 +39,6 @@ import MyPartners from './MyPartners';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    //console.log('App.jsx PROPS', props);
-    //console.log(this);
     this.state = {
       loggedIn: false,
       drawerOpen: false,
@@ -76,16 +74,10 @@ class App extends React.Component {
 
   //gets authentication
   checkAuthenticated() {
-    console.log("Getting authentication")
     axios.get('/auth/authenticated')
       .then((res) => {
-        console.log('Setting the STATE', this);
-
-        //console.log('AUTH get Messages');
         this.setState({ loggedIn: res.data });
         this.getMessages();
-
-        //console.log('AUTH get Projects');
         this.getProjects();
       });
   }

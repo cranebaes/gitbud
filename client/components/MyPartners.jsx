@@ -20,8 +20,6 @@ import {Card, CardText } from 'material-ui/Card';
 
 
 const MyPartners = (props) => {
-  //debugger;
-  console.log('MyPartners props', props);
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
