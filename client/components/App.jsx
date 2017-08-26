@@ -50,6 +50,15 @@ class App extends React.Component {
     this.togglePartyMode = this.togglePartyMode.bind(this);
   }
 
+getPairs() {
+    axios.get('/API/pairs')
+      .then((pairs) => {
+        this.props.addPairsList(pairs.data);
+        console.log(this.props);
+      })
+      .catch(console.error);
+  }
+
   //gets list of projects
   getProjects() {
     axios.get('/API/projects/')
@@ -185,6 +194,10 @@ const mapDispatchToProps = (dispatch) => {
       type: 'MESSAGES_LOAD',
       messages,
     }),
+    addPairsList: pairs => dispatch({
+      type: 'ADD_PAIRING',
+      pairs,
+    })
   };
 };
 

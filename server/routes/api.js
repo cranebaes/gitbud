@@ -2,7 +2,7 @@
  *  Request handlers for API routes.
  *  These are stored on an object for easy lookup in the request-handler module and are indexed
  *  first by method then by route.
- * 
+ *
  *  THINGS TO FIX:
  *  There's a lot of repeated code in the db queries. You may find it helpful to create better helper functions
  *  here, simply modularise the db functionality better or both.
@@ -137,7 +137,7 @@ module.exports = {
             RETURN false as pairs, false as interested, project
          `)
           .then((res) => {
-            resolve(res.records.map(project => 
+            resolve(res.records.map(project =>
               new db.models.Project(project.get('project'), project.get('pairs'), project.get('interested'))
             ));
           })
@@ -159,7 +159,7 @@ module.exports = {
           RETURN pair
          `)
           .then((res) => {
-            resolve(res.records.map(project => 
+            resolve(res.records.map(project =>
               res.records.map(user => new db.models.User(user.get('pair')))
             ));
           })
