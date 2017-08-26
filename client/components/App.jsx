@@ -160,8 +160,7 @@ getPairs() {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      console.log('LOGGING ON', this.state);
-          return <Landing checkAuth={ this.checkAuthenticated } />;
+      return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
 }

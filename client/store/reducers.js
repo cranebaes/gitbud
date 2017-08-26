@@ -15,8 +15,8 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 const users = (state, action) => {
-  console.log('users state: ', state);
-  console.log('users action: ', action);
+  // console.log('users state: ', state);
+  // console.log('users action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
@@ -38,8 +38,8 @@ const users = (state, action) => {
 };
 
 const pairedUsers = (state, action) => {
-  console.log('pairedUsers state: ', state);
-  console.log('pairedUsers action: ', action);
+  // console.log('pairedUsers state: ', state);
+  // console.log('pairedUsers action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
@@ -60,8 +60,8 @@ const pairedUsers = (state, action) => {
   inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
-  console.log('projects state: ', state);
-  console.log('projects action: ', action);
+  // console.log('projects state: ', state);
+  // console.log('projects action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'LIST_PROJECTS') {
@@ -97,8 +97,8 @@ const projects = (state, action) => {
   SUGGESTION: implement socket.io
 */
 const messages = (state, action) => {
-  console.log('messages state: ', state);
-  console.log('messages action: ', action);
+  // console.log('messages state: ', state);
+  // console.log('messages action: ', action);
   if (state === undefined) {
     return {};
   } else if (action.type === 'MESSAGE_SEND') {
@@ -108,7 +108,7 @@ const messages = (state, action) => {
   } else if (action.type === 'MESSAGES_LOAD') {
     return action.messages;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('messages load', action.payload.messages);
+     console.log('Messages load', action.payload.messages);
      return action.payload.messages;
   }
   return state;
