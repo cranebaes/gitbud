@@ -14,6 +14,9 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside ProjectDetails component, we dispatch 'addUsers' to display users at initial load
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
+
+//PUT A CONSOLE LOG HERE TO CHECK THEORY IF ACTION GOES THROUGH EVERY CONST//
+
 const users = (state, action) => {
   // console.log('users state: ', state);
   // console.log('users action: ', action);
