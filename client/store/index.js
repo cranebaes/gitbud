@@ -1,13 +1,26 @@
-import { createStore } from 'redux';
-import reducer from './reducers';
+ import * as storage from 'redux-storage'
 
-/*
-  grabs all the reducer from store/reducers.js and creates a store with it. A store manages state.
- */
-const store = createStore(
-   reducer, /* preloadedState, */
-   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+ import reducers from './reducers';
+ import { createStore, applyMiddleware, combineReducers } from 'redux';
 
+ const reducer = storage.reducer(combineReducers(reducers));
 
-export default store;
+ import createEngine from 'redux-storage-engine-localstorage';
+ const engine = createEngine('my-save-key');
+
+ const middleware = storage.createMiddleware(engine);
+ const createStoreWithMiddleware = applyMiddleware(middleware)(createStore);
+ /*
+   grabs all the reducer from store/reducers.js and creates a store with it. A store manages state.
+  */
+ const store = createStoreWithMiddleware(
+    reducers, /* preloadedState, */
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+ );
+
+ const load = storage.createLoader(engine);
+ load(store)
+   .then((newState) => console.log('Loaded state:', newState))
+   .catch(() => console.log('Failed to load previous state'));
+
+ export default store;

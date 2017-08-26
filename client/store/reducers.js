@@ -15,9 +15,12 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 const users = (state, action) => {
+  console.log('users state: ', state);
+  console.log('users action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
+    console.log('ADDING USERS', action);
     return action.users;
   } else if (action.type === 'CHANGE_USER_PAIRING') {
     return state.map((user) => {
@@ -27,17 +30,25 @@ const users = (state, action) => {
       }
       return user;
     });
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Users load:', action.payload.users);
+     return action.payload.users;
   }
   return state;
 };
 
 const pairedUsers = (state, action) => {
+  console.log('pairedUsers state: ', state);
+  console.log('pairedUsers action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
     return state.concat([{name: action.name, language: action.language, experience: action.experience}]);
     // const object = Object.assign({}, )
     // return state.concat(action.)
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('pairedUsers load:', action.payload.pairedUsers);
+     return action.payload.pairedUsers;
   }
   return state;
 }
@@ -49,7 +60,8 @@ const pairedUsers = (state, action) => {
   inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
-
+  console.log('projects state: ', state);
+  console.log('projects action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'LIST_PROJECTS') {
@@ -68,6 +80,9 @@ const projects = (state, action) => {
       }
       return project;
     });
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Project load:', action.payload.projects);
+     return action.payload.projects;
   }
 
   return state;
@@ -82,6 +97,8 @@ const projects = (state, action) => {
   SUGGESTION: implement socket.io
 */
 const messages = (state, action) => {
+  console.log('messages state: ', state);
+  console.log('messages action: ', action);
   if (state === undefined) {
     return {};
   } else if (action.type === 'MESSAGE_SEND') {
@@ -90,6 +107,9 @@ const messages = (state, action) => {
     return Object.assign({}, state, newMessages);
   } else if (action.type === 'MESSAGES_LOAD') {
     return action.messages;
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('messages load', action.payload.messages);
+     return action.payload.messages;
   }
   return state;
 };
@@ -112,6 +132,9 @@ const projectProgress = (state, action) => {
     updatedProject[action.itemIndex] = Object.assign({}, stateProject[action.itemIndex]);
     updatedProject[action.itemIndex].complete = !updatedProject[action.itemIndex].complete;
     return newProgress;
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+     console.log('Project progress load', action.payload.projectProgress);
+     return action.payload.projectProgress;
   }
   return state;
 };

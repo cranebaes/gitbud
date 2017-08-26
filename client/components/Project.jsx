@@ -9,13 +9,13 @@ class Project extends React.Component {
   constructor(props) {
     super(props);
     this.POSTprogress = this.POSTprogress.bind(this);
-    console.log("paried length..............", this.props)
-
-    this.props.project.paired = this.props.project.paired || []
     if (this.props.project.paired.length > 0 && this.props.progress.length < 1) {
       this.GETprogress();
     }
+
   }
+
+
 
   //post user's progress
   POSTprogress() {
@@ -49,8 +49,11 @@ class Project extends React.Component {
   Allows Project component to have project and projectID state
 */
 const mapStateToProps = (state, props) => {
+  //debugger;
+  console.log('Project.jsx state: ', state);
   const projectId = Number(props.match.params.id);
   const project = state.projects.filter(project => project.id === projectId)[0];
+    console.log('Project.jsx project: ', project);
   return {
     project,
     progress: state.projectProgress[projectId] || [],
