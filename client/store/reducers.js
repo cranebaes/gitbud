@@ -43,7 +43,7 @@ const pairedUsers = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
-    return state.concat([{name: action.name, language: action.language, experience: action.experience}]);
+    return state.concat([{ name: action.name, language: action.language, experience: action.experience, id: action.id }]);
     // const object = Object.assign({}, )
     // return state.concat(action.)
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
