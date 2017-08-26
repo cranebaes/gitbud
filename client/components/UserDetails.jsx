@@ -31,8 +31,10 @@ const socket = io();
 class UserDetails extends React.Component {
 
   constructor(props) {
+    console.log('this is props of UserDetails', props);
     super(props);
     this.state = {
+      buttonClicked: false,
       expanded: false,
       partnerName: '',
       message: 'placeholder',
@@ -80,8 +82,9 @@ class UserDetails extends React.Component {
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
-        this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience);
+        this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
         console.log(response);
+        this.setState({buttonClicked: !this.state.buttonClicked});
       })
       .catch((error) => {
         console.log(error);
@@ -114,7 +117,7 @@ class UserDetails extends React.Component {
   /* dialog  handler end*/
 
   pairButton() {
-    if (this.props.user.paired.length > 0) {
+    if (this.state.buttonClicked) {
       return <RaisedButton
         label='Partnered'
         labelColor={ fullWhite }
@@ -122,8 +125,8 @@ class UserDetails extends React.Component {
         fullWidth={true}
         icon={ <ActionDone
           color={ fullWhite } /> }
-          onClick={ this.togglePair } />
-    } else if (this.props.match.params.projectId) {
+          onClick={ this.addPair } />
+    } else if (!this.state.buttonClicked) {
       return <RaisedButton
         label='Work With Me'
         fullWidth={true}
@@ -271,7 +274,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch =>
   ({
-    createPairing: (name, language, experience) => dispatch({ type: 'ADD_PAIRING', name, language, experience }),
+    createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
   });
