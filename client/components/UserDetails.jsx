@@ -14,7 +14,6 @@ import ActionBuild from 'material-ui/svg-icons/action/build';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import TextField from 'material-ui/TextField';
-
 /* for Dialog  */
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -29,7 +28,6 @@ import io from 'socket.io-client';
 const socket = io();
 
 class UserDetails extends React.Component {
-
   constructor(props) {
     console.log('this is props of UserDetails', props);
     super(props);
@@ -51,7 +49,6 @@ class UserDetails extends React.Component {
 
     socket.on('chat message', (msg) => this.renderMessages(msg));
     //receive messages
-
     this.addPair = this.addPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
@@ -74,7 +71,6 @@ class UserDetails extends React.Component {
         });
     };
   }
-
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
@@ -92,7 +88,6 @@ class UserDetails extends React.Component {
         console.log(error);
       });
   }
-
   togglePair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
@@ -106,18 +101,15 @@ class UserDetails extends React.Component {
         console.log(error);
       });
   }
-
   /* dialog  handler*/
   handleOpen() {
     console.log("clicked")
     this.setState({open: true});
   };
-
   handleClose() {
     this.setState({open: false});
   };
   /* dialog  handler end*/
-
   pairButton() {
     if (this.state.buttonClicked) {
       return <RaisedButton
@@ -186,7 +178,6 @@ class UserDetails extends React.Component {
         onClick={this.handleClose}
       />
     ];
-
     return (
       <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
         <Card expanded={this.state.expanded} style={{ width: '40%', marginLeft: 'auto', marginRight: 'auto', marginBottom: 12 }}>
@@ -208,10 +199,8 @@ class UserDetails extends React.Component {
             { this.pairButton() }
             <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.handleOpen} secondary={true} />
           </div>
-
         {/*dialog for message*/}
           <div>
-
           <Dialog
             title="Send a message"
             actions={actions}
@@ -233,8 +222,6 @@ class UserDetails extends React.Component {
           </Dialog>
         </div>
         {/*dialog for message end*/}
-
-
           {/* should be deleted */}
           {
           //   <div expandable={true}>
@@ -256,13 +243,11 @@ class UserDetails extends React.Component {
           // </div>
           // {/* should be deleted end*/}
           }
-
         </Card>
       </Paper>
     );
   }
 }
-
 const mapStateToProps = (state, props) => {
   const userId = Number(props.match.params.id);
   const user = state.users.filter(user => user.id === userId)[0];
@@ -273,18 +258,13 @@ const mapStateToProps = (state, props) => {
     messages: state.messages[userId] || [],
   };
 };
-
 const mapDispatchToProps = dispatch =>
   ({
     createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
   });
-
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
-
-
-
 /* <CardMedia overlay={ <CardTitle title={ this.props.user.name } subtitle='Experience: n00b'/> }>
   <img src={ this.props.user.avatarUrl } />
 </CardMedia> */

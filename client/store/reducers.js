@@ -1,14 +1,10 @@
 /*
   Reducers - decides how the change a state after receiving an action, and thus can be considered the entrance of a state change. A reducer is comprised of functions and it changes states by taking an action as argument, in which it then returns a new state.
-
   The actions get sent to App component and other parent component where they can be pass through as props.
 */
-
 import { combineReducers } from 'redux';
-
 // does nothing - implemented to test connecting Redux to React
 const changeString = (state = 'some message', action) => action.type === 'CHANGE_STRING' ? action.text : state;
-
 /*
   first condition is the initial state
   inside ProjectDetails component, we dispatch 'addUsers' to display users at initial load
@@ -23,11 +19,13 @@ const users = (state, action) => {
     console.log('ADDING USERS', action);
     return action.users;
   } else if (action.type === 'CHANGE_USER_PAIRING') {
+    console.log('this is state before CHANGE_USER_PAIRING ', state)
     return state.map((user) => {
       if (user.id === action.userId) {
         const object =  Object.assign({}, user, { paired: user.paired.concat(action.projectId) });
         return object;
       }
+      console.log('this is the user from reducers ', user)
       return user;
     });
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
@@ -57,7 +55,7 @@ const pairedUsers = (state, action) => {
   first condition is the initial state
   inside App component we dispatch 'LIST_PROJECTS' to display list of projects
   inside ProjectDetails component we dispatch 'CHANGE_PROJECT_INTEREST' when user selects 'they are interested'
-  inside UserDetails component we dispatch 'CHANGE_USER' when user select 'WORK WITH ME' button
+  inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
   console.log('projects state: ', state);
@@ -84,15 +82,12 @@ const projects = (state, action) => {
      console.log('Project load:', action.payload.projects);
      return action.payload.projects;
   }
-
   return state;
 };
-
 /*
   first condition is the initial state
   inside UserDetails component we dispatch 'MESSAGE_SEND' when user sends a message to pairing user
   inside UserDetails component we dispatch 'MESSAGE_LOAD' when user refreshes page to view new incoming messages
-
   THINGS TO FIX: change messaging features to appear when sent
   SUGGESTION: implement socket.io
 */
@@ -113,7 +108,6 @@ const messages = (state, action) => {
   }
   return state;
 };
-
 /*
   first condition is the initial state
   inside Project component, we dispatch 'PROGRESS_LOAD_ITEMS' to load the user's latest progress on project
@@ -138,7 +132,6 @@ const projectProgress = (state, action) => {
   }
   return state;
 };
-
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
   combineReducers function creates a single object that contains all the reducers

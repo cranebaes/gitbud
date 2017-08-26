@@ -53,6 +53,7 @@ const MyPartners = (props) => {
 };
 
 const mapStateToProps = (state) => {
+  console.log('State is: ', state);
   return {
     // pairedUsers: state.pairedUsers
   };
