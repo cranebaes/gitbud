@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+import chatBox from './MyPartners';
+
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardMedia, CardText, CardTitle } from 'material-ui/Card';
@@ -18,6 +20,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 const customContentStyle = {
   width: '80%',
+  height: '100%',
   maxWidth: 'none',
 };
 /* for Dialog  */
@@ -121,8 +124,17 @@ class UserDetails extends React.Component {
       message: this._message.value,
       username: this.props.user.name
     }
+
+    var myMessage = {
+      username: "me: ",
+      message: this._message.value
+    }
+
+    var updatedChatBox = this.state.chatBox
+    updatedChatBox.push(myMessage)
+
     this.setState({
-      myMessage: 'me:' + newMessage.message
+      chatBox: updatedChatBox
     });
 
     socket.emit('chat message', newMessage); //send msg
@@ -131,23 +143,27 @@ class UserDetails extends React.Component {
 
 
   renderMessages(msg) {
+    console.log("asdadadadasd", this.state.chatBox)
+    var updatedChatBox= this.state.chatBox;
+    updatedChatBox.push(msg);
     this.setState({
-      receivedMessage: msg.username + ":" + msg.message
+      chatBox: updatedChatBox
     });
   };
 
   render() {
      const actions = [
+      <div>
+       <form onSubmit={this.handleSubmit}>
+        <input ref={(message) => this._message = message} id="newMessage" type="text"/>
+        <FlatButton primary={true} type="submit">Send</FlatButton>
+      </form>
+      </div>,
       <FlatButton
         label="Cancel"
         primary={true}
         onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onClick={this.handleClose}
-      />,
+      />
     ];
 
     return (
@@ -181,14 +197,18 @@ class UserDetails extends React.Component {
             modal={true}
             contentStyle={customContentStyle}
             open={this.state.open}
+            autoScrollBodyContent={true}
           >
             <ul id="messages"></ul>
-              <p>{this.state.myMessage}</p><br/>
-              <p>{this.state.receivedMessage}</p><br/>
-              <form onSubmit={this.handleSubmit}>
-                <input ref={(message) => this._message = message} id="newMessage" type="text"/>
-                <button type="submit">Send</button>
-              </form>
+              {this.state.chatBox.map((chat, index) => {
+                return(
+                  <div>
+                    <strong>{chat.username}</strong>
+                    <p>{chat.message}</p>
+
+                  </div>
+                )}
+              )}
           </Dialog>
         </div>
         {/*dialog for message end*/}
