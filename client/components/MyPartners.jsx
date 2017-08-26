@@ -37,7 +37,7 @@ const MyPartners = (props) => {
             </TableRow>
           </TableHeader>
           <TableBody stripedRows={ true } displayRowCheckbox={ false }>
-            {props.users.map(user =>
+            {props.pairedUsers.map(user =>
               (<TableRow key={ user.id }>
                 <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
                 <TableRowColumn>{ user.language }</TableRowColumn>
@@ -53,7 +53,7 @@ const MyPartners = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users.filter(user => user.paired.length > 0)
+    pairedUsers: state.pairedUsers
   };
 };
 

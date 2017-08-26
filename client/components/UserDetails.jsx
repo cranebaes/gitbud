@@ -50,6 +50,7 @@ class UserDetails extends React.Component {
     socket.on('chat message', (msg) => this.renderMessages(msg));
     //receive messages
 
+    this.addPair = this.addPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -70,6 +71,21 @@ class UserDetails extends React.Component {
           });
         });
     };
+  }
+
+  addPair() {
+    axios.post('/API/pair', {
+      partnered: this.props.user.id,
+      project: this.props.match.params.projectId,
+    })
+      .then((response) => {
+        console.log('this is props from clicking', this.props);
+        this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   togglePair() {
@@ -112,7 +128,7 @@ class UserDetails extends React.Component {
         label='Work With Me'
         fullWidth={true}
         icon={ <ActionBuild /> }
-        onClick={ this.togglePair }
+        onClick={ this.addPair }
         primary={ true } />
     }
   };
@@ -255,6 +271,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch =>
   ({
+    createPairing: (name, language, experience) => dispatch({ type: 'ADD_PAIRING', name, language, experience }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
   });
