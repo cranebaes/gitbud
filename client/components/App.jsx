@@ -91,6 +91,7 @@ getPairs() {
         this.setState({ loggedIn: res.data });
         this.getMessages();
         this.getProjects();
+        this.getPairs();
       });
   }
 
