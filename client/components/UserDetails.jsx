@@ -57,8 +57,10 @@ class UserDetails extends React.Component {
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.retrieveProjectId = this.retrieveProjectId.bind(this);
+
+
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
@@ -75,10 +77,11 @@ class UserDetails extends React.Component {
     };
   }
 
+
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,
+      project: this.props.match.params.projectId,  //this is undefined
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
@@ -86,6 +89,7 @@ class UserDetails extends React.Component {
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
         window.location.reload();
+        //window.location.replace(`/projects/${this.props}`)
 
       })
       .catch((error) => {
@@ -176,6 +180,14 @@ class UserDetails extends React.Component {
     });
   };
 
+  retrieveProjectId() {
+    axios.get('/API/project')
+      .then((project) => {
+        console.log('userdetails project', project);
+      })
+      .catch(console.error);
+  };
+
   render() {
      const actions = [
       <div>
@@ -210,7 +222,7 @@ class UserDetails extends React.Component {
           <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
           <div>
             { this.pairButton() }
-            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.handleOpen} secondary={true} />
+            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.retrieveProjectId} secondary={true} />
           </div>
 
         {/*dialog for message*/}
