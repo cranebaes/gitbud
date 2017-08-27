@@ -60,6 +60,7 @@ const addProjects = function addProjects() {
 }
 
 //Create INTERESTED_IN relationships between users and projects
+//Add INTERESTED_IN relationships if you addPairs
 const addInterestedInRelationshipsQueryString = `
   MATCH (robb:User) WHERE robb.name = "Robb Stark"
   MATCH (arya:User) WHERE arya.name = "Arya Stark"
@@ -70,9 +71,7 @@ const addInterestedInRelationshipsQueryString = `
   MATCH (ticTacToe:Project) WHERE ticTacToe.project = "Tic Tac Toe"
   CREATE
     (robb)-[:INTERESTED_IN]->(helloGitBud),
-    (robb)-[:INTERESTED_IN]->(randomQuoteMachine),
     (arya)-[:INTERESTED_IN]->(helloGitBud),
-    (arya)-[:INTERESTED_IN]->(ticTacToe),
     (jon)-[:INTERESTED_IN]->(randomQuoteMachine),
     (bran)-[:INTERESTED_IN]->(randomQuoteMachine)
   `;
@@ -116,7 +115,7 @@ dropGraph()
   .then(addUsers)
   .then(addProjects)
   .then(addInterestedInRelationships)
-  .then(addPair)
+  // .then(addPair)
   .then(() => {
     session.close();
     driver.close();
