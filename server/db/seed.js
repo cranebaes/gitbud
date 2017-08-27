@@ -67,9 +67,12 @@ const addInterestedInRelationshipsQueryString = `
   MATCH (bran:User) WHERE bran.name = "Bran Stark"
   MATCH (helloGitBud:Project) WHERE helloGitBud.project = "Hello GitBud"
   MATCH (randomQuoteMachine:Project) WHERE randomQuoteMachine.project = "Random Quote Machine"
+  MATCH (ticTacToe:Project) WHERE ticTacToe.project = "Tic Tac Toe"
   CREATE
     (robb)-[:INTERESTED_IN]->(helloGitBud),
+    (robb)-[:INTERESTED_IN]->(randomQuoteMachine),
     (arya)-[:INTERESTED_IN]->(helloGitBud),
+    (arya)-[:INTERESTED_IN]->(ticTacToe),
     (jon)-[:INTERESTED_IN]->(randomQuoteMachine),
     (bran)-[:INTERESTED_IN]->(randomQuoteMachine)
   `;

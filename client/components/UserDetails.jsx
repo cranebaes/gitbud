@@ -47,7 +47,6 @@ class UserDetails extends React.Component {
       curProjectId: null,
       curProjectProperty: null,
     }
-    this.paired = false; // ???????????????????/
     this.expandCard = () => {
       this.setState({ expanded: true });
     }
@@ -91,15 +90,20 @@ class UserDetails extends React.Component {
   }
 
   checkIfPaired() {
-    console.log('Check paired their GHid: ', this.props.user.ghId);
     axios.get('/API/pairedProjects', {
       params: {
         userId: this.props.loggedInUserGhId,
         partnerId: this.props.user.ghId
       }
     })
-    .then((res) => {
-      console.log('Checking paired 101 response', res);
+    .then((pairProjects) => {
+      console.log('Checking paired 101 response', pairProjects.data.length);
+      if (pairProjects.data.length > 0) {
+        console.log('THERE ARE PROJECTS HERE');
+        this.setState({
+          buttonClicked: true
+        })
+      }
     })
     .catch((error) => {
       console.log(error);

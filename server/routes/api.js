@@ -181,8 +181,8 @@ module.exports = {
           RETURN group
           `)
           .then((res) => {
-            console.log('Database retrieval of group: ', res);
-            resolve(res);
+            console.log('Database retrieval of group: ', res.records);
+            resolve(res.records);
           })
           .catch(reject)
           .then(() => dbSession.close());
@@ -244,6 +244,8 @@ module.exports = {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
         console.log('POST pair');
+        console.log('POST pair userId: ', req.user.ghInfo.id);
+        console.log('POST pair partnerId: ', req.body.partnered);
         dbSession.run(`
           MATCH (project:Project) WHERE ID(project) = ${Number(req.body.project)}
           MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}

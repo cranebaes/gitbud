@@ -51,9 +51,9 @@ class App extends React.Component {
     // this.handleLogout = this.handleLogout.bind(this);
   }
 
-componentDidMount() {
-  this.getPairs()
-}
+// componentDidMount() {
+//   this.getPairs()
+// }
 
 getPairs() {
     axios.get('/API/pairs')
@@ -89,10 +89,13 @@ getPairs() {
   checkAuthenticated() {
     axios.get('/auth/authenticated')
       .then((res) => {
-        this.setState({ loggedIn: res.data });
-        this.getMessages();
-        this.getProjects();
-        this.props.loggedInUser(res.data);
+        if (res.data !== false) {
+          this.setState({ loggedIn: res.data });
+          this.getMessages();
+          this.getProjects();
+          this.getPairs()
+          this.props.loggedInUser(res.data);
+        }
       });
   }
 
