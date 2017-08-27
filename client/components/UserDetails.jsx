@@ -110,6 +110,10 @@ class UserDetails extends React.Component {
   /* dialog  handler*/
   handleOpen() {
     console.log("clicked")
+    console.log(this.props.loggedInUser)
+    console.log(this.props.loggedInUserGhId)
+    console.log(this.props.user.name)
+    console.log(this.props.user.ghId)
     this.setState({open: true});
   };
 
@@ -143,7 +147,7 @@ class UserDetails extends React.Component {
     // socket.emit('chat message', );
     var newMessage = {
       message: this._message.value,
-      username: this.props.user.name
+      username: this.props.loggedInUser
     }
 
     var myMessage = {
@@ -264,13 +268,18 @@ class UserDetails extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
+  console.log("line 267", state)
   const userId = Number(props.match.params.id);
   const user = state.users.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
+  const loggedInUser = state.loggedInUser.username;
+  const loggedInUserGhId = state.loggedInUser.ghId;
   return {
     user,
     projects,
     messages: state.messages[userId] || [],
+    loggedInUser,
+    loggedInUserGhId,
   };
 };
 
