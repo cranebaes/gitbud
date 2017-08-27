@@ -124,7 +124,7 @@ getPairs() {
      If user is not logged in (logged out) display landing page
     */
     if (this.state.loggedIn.language) {
-      console.log('App rendering', this.state.loggedIn);
+      //console.log('App rendering', this.state.loggedIn);
       return (
         <BrowserRouter>
           <div>
@@ -164,7 +164,7 @@ getPairs() {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      console.log('LOGGING ON', this.state);
+      console.log('Logging on', this.state);
           return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }

@@ -146,7 +146,7 @@ module.exports = {
       });
     },
     //Retrieve the project that two users share
-    //Returns SOMETHING
+    //Returns a project
     project: function getProject(req, res) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
@@ -166,6 +166,27 @@ module.exports = {
           .catch(reject)
           .then(() => dbSession.close());
       });
+    },
+
+    pairedProjects: function findPairProjects(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+
+        const userId = Number(req.query.userId);
+        const partnerId = Number(req.query.partnerId);
+        console.log('paired projects req', partnerId);
+        dbSession.run(`
+          MATCH(user:User {ghId: ${userId}})-[:PAIRED_WITH]->(group)<-
+          [:PAIRED_WITH]-(partner:User {ghId: ${partnerId}})
+          RETURN group
+          `)
+          .then((res) => {
+            console.log('Database retrieval of group: ', res);
+            resolve(res);
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      })
     },
 
     // Returns an array of user objects--one for each

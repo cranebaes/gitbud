@@ -43,10 +43,11 @@ class UserDetails extends React.Component {
       receivedMessage:'receivedMessage',
       //for popUp window
       open: false,
+      isPaired: false,
       curProjectId: null,
       curProjectProperty: null,
     }
-    this.paired = false;
+    this.paired = false; // ???????????????????/
     this.expandCard = () => {
       this.setState({ expanded: true });
     }
@@ -62,7 +63,7 @@ class UserDetails extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
 
-    this.retrieveProjectId();
+    this.initialize();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
@@ -77,6 +78,32 @@ class UserDetails extends React.Component {
           });
         });
     };
+  }
+
+  initialize() {
+    return new Promise((resolve, reject) => {
+      this.retrieveProjectId();
+      resolve();
+    })
+    .then(() => {
+      this.checkIfPaired();
+    })
+  }
+
+  checkIfPaired() {
+    console.log('Check paired their GHid: ', this.props.user.ghId);
+    axios.get('/API/pairedProjects', {
+      params: {
+        userId: this.props.loggedInUserGhId,
+        partnerId: this.props.user.ghId
+      }
+    })
+    .then((res) => {
+      console.log('Checking paired 101 response', res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
 
@@ -183,15 +210,13 @@ class UserDetails extends React.Component {
   };
 
   retrieveProjectId() {
-    const meow = this.props.user.ghId;
-    console.log('retrieve project id meow', meow);
+    const userId = this.props.user.ghId;
     axios.get('/API/project', {
       params: {
-        id: meow
+        id: userId
       }
     })
       .then((project) => {
-        console.log('userdetails project', project);
         this.state.curProjectId = project.data.id;
         this.state.curProjectProperty = project.data;
       })
@@ -290,7 +315,7 @@ class UserDetails extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
-  console.log("line 267", state)
+  //console.log("line 267", state)
   const userId = Number(props.match.params.id);
   const user = state.users.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
