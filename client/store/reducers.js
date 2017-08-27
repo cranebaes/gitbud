@@ -15,8 +15,6 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 
-//PUT A CONSOLE LOG HERE TO CHECK THEORY IF ACTION GOES THROUGH EVERY CONST//
-
 const users = (state, action) => {
   // console.log('users state: ', state);
   // console.log('users action: ', action);
@@ -36,6 +34,8 @@ const users = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Users load:', action.payload.users);
      return action.payload.users;
+  } else if (action.type === 'APP_LOGOUT') {
+    //state = [];
   }
   return state;
 };
@@ -52,6 +52,8 @@ const pairedUsers = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('pairedUsers load:', action.payload.pairedUsers);
      return action.payload.pairedUsers;
+  } else if (action.type === 'APP_LOGOUT') {
+    state = [];
   }
   return state;
 }
@@ -86,6 +88,8 @@ const projects = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Project load:', action.payload.projects);
      return action.payload.projects;
+  } else if (action.type === 'APP_LOGOUT') {
+    //state = [];
   }
 
   return state;
@@ -113,6 +117,8 @@ const messages = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Messages load', action.payload.messages);
      return action.payload.messages;
+  } else if (action.type === 'APP_LOGOUT') {
+    state = {};
   }
   return state;
 };
@@ -138,9 +144,22 @@ const projectProgress = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Project progress load', action.payload.projectProgress);
      return action.payload.projectProgress;
+  } else if (action.type === 'APP_LOGOUT') {
+    state = {};
   }
   return state;
 };
+
+const logout = (state, action) => {
+  console.log('logout action', action);
+  if (state === undefined) {
+    return [];
+  } else if (action.type === 'APP_LOGOUT') {
+    console.log('Reducer: APP_LOGOUT');
+    state = [];
+  }
+  return state;
+}
 
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
@@ -158,4 +177,5 @@ export default combineReducers({
   messages,
   pairedUsers,
   projectProgress,
+  logout
 });

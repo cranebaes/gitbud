@@ -40,8 +40,8 @@ function AppDrawer(props) {
         </div>
       </Card>
       <BottomNavigation style={ { position: "absolute", bottom: 0 } }>
-        <a href="/auth/signout">
-          <BottomNavigationItem label="Sign Out" icon={ <ActionEject/> }/>
+        <a >
+          <BottomNavigationItem onClick={ props.logout } label="Sign Out" icon={ <ActionEject/> }/>
         </a>
         <Link to='/user'><BottomNavigationItem label="My Account" icon={ <ActionAccountCircle/> } onClick={ props.closeDrawer }/></Link>
       </BottomNavigation>

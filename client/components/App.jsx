@@ -46,6 +46,7 @@ class App extends React.Component {
     }
     this.checkAuthenticated();
 
+    this.clickLogout = this.clickLogout.bind(this);
     this.navTap = this.navTap.bind(this);
     this.togglePartyMode = this.togglePartyMode.bind(this);
   }
@@ -93,6 +94,15 @@ getPairs() {
         this.getProjects();
       });
   }
+  //CHANGE THIS TO this.props.userLogout
+  clickLogout() {
+    console.log('Logging out yo');
+    axios.get('/auth/signout')
+    .then((res) => {
+      this.props.userLogout();
+      window.location.replace('/');
+    });
+  }
 
   //party mode
   togglePartyMode() {
@@ -127,7 +137,7 @@ getPairs() {
             <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
 
             {/* opens and closes side menu */}
-            <AppDrawer onClick={this.getPairs} currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer onClick={this.getPairs} logout={ this.clickLogout } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -198,6 +208,9 @@ const mapDispatchToProps = (dispatch) => {
     addPairsList: pairs => dispatch({
       type: 'ADD_PAIRING',
       pairs,
+    }),
+    userLogout: () => dispatch({
+      type: 'APP_LOGOUT'
     })
   };
 };
