@@ -48,6 +48,7 @@ class App extends React.Component {
 
     this.navTap = this.navTap.bind(this);
     this.togglePartyMode = this.togglePartyMode.bind(this);
+    // this.handleLogout = this.handleLogout.bind(this);
   }
 
 componentDidMount() {
@@ -91,6 +92,7 @@ getPairs() {
         this.setState({ loggedIn: res.data });
         this.getMessages();
         this.getProjects();
+        this.props.loggedInUser(res.data);
       });
   }
 
@@ -111,6 +113,8 @@ getPairs() {
     }
   }
 
+
+
   render() {
     //console.log('App render this: ', this);
     /*
@@ -127,7 +131,7 @@ getPairs() {
             <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
 
             {/* opens and closes side menu */}
-            <AppDrawer onClick={this.getPairs} currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer onClick={this.getPairs} logout={ this.props.loggedOut } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -199,6 +203,13 @@ const mapDispatchToProps = (dispatch) => {
     addPairsList: pairs => dispatch({
       type: 'ADD_PAIRING',
       pairs,
+    }),
+    loggedInUser: loggedInUser => dispatch({
+      type: 'UPDATED_LOGGEDIN_USER',
+      loggedInUser,
+    }),
+    loggedOut: () => dispatch({
+      type: 'USER_LOGOUT'
     })
   };
 };
