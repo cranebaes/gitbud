@@ -36,7 +36,6 @@ class Project extends React.Component {
   }
 
   render() {
-       this.props.project.paired = this.props.project.paired || []
       if (this.props.project.paired.length > 0) {
         return <ProjectStatus project={this.props.project} progress={this.props.progress} dispatchProgress={this.props.dispatchProgress} submitProgress={this.POSTprogress} />
       } else {

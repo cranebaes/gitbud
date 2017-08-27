@@ -145,6 +145,28 @@ module.exports = {
           .then(() => dbSession.close());
       });
     },
+    //Retrieve the project that two users share
+    //Returns SOMETHING
+    project: function getProject(req, res) {
+      console.log('running');
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('GET project');
+        const ghId = req.user.ghInfo.id;
+        const userId = req.query.id
+        console.log(req);
+        dbSession.run(`
+          MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
+          RETURN project
+          `)
+          .then((res) => {
+            console.log('GET PROJECT project response', res.records);
+            resolve(res);
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      });
+    },
 
     // Returns an array of user objects--one for each
     // user with which the requesting user is paired

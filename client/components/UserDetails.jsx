@@ -57,8 +57,10 @@ class UserDetails extends React.Component {
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.retrieveProjectId = this.retrieveProjectId.bind(this);
+
+    this.retrieveProjectId();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
@@ -75,10 +77,11 @@ class UserDetails extends React.Component {
     };
   }
 
+
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,
+      project: this.props.match.params.projectId,  //this is undefined
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
@@ -86,6 +89,7 @@ class UserDetails extends React.Component {
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
         window.location.reload();
+        //window.location.replace(`/projects/${this.props}`)
 
       })
       .catch((error) => {
@@ -174,6 +178,19 @@ class UserDetails extends React.Component {
     this.setState({
       chatBox: updatedChatBox
     });
+  };
+
+  retrieveProjectId() {
+    const meow = this.props.user.ghId;
+    axios.get('/API/project', {
+      params: {
+        id: meow
+      }
+    })
+      .then((project) => {
+        console.log('userdetails project', project);
+      })
+      .catch(console.error);
   };
 
   render() {
