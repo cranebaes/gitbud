@@ -20,6 +20,7 @@ const UserList = (props) => {
       { props.users.map((user, index) => {
         return (
           <ListItem
+            disabled = { props.isClickable }
             containerElement={ <Link to={ `/user/${ user.id }${ props.projectId ? '/' + props.projectId : null }` }/> }
             leftAvatar={
               <Avatar src={ user.avatarUrl } />
