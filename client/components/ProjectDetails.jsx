@@ -11,6 +11,8 @@ import {
 import Paper from 'material-ui/Paper';
 import {Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 import UserList from './UserList';
 
@@ -19,11 +21,18 @@ class ProjectDetails extends React.Component {
   constructor(props) {
     super(props);
     console.log('project details props', props);
+    console.log('60', this.props.project.interested)
     this.state = {
       interest: false,
+      open: false,
     };
     this.toggleInterest = this.toggleInterest.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
+    this.handleInterest = this.handleInterest.bind(this);
     this.getUsers();
+
   }
 
   getUsers() {
@@ -38,19 +47,53 @@ class ProjectDetails extends React.Component {
       .catch(console.error);
   }
 
+  /* dialog  handler*/
+  handleOpen() {
+    console.log("clicked")
+    this.setState({open: true});
+  };
+
+  handleClose() {
+    this.setState({open: false});
+  };
+  /* dialog  handler end*/
+
   toggleInterest() {
     axios.post('/API/projects', {
       projectId: this.props.project.id,
     })
       .then((response) => {
-        this.props.dispatchInterest(this.props.project.id, !this.props.project.interested);
+        this.props.dispatchInterest(this.props.project.id, this.props.project.interested);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
+  handleInterest(){
+    this.props.project.interested = !this.props.project.interested;
+    this.toggleInterest();
+  }
+
+  clickHandler() {
+    this.handleInterest();
+    this.handleOpen();
+  }
+
   render() {
+    const actions = [
+      <FlatButton
+        label="Sure thing!"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />
+    ];
+
     return (
       <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
         <Card style={ { marginBottom: 12 } }>
@@ -72,9 +115,17 @@ class ProjectDetails extends React.Component {
               <ToolbarTitle text={`Find a partner for ${ this.props.project.project }`} />
             </ToolbarGroup>
             <ToolbarGroup lastChild={ true }>
-              <RaisedButton primary={ true } onClick={ this.toggleInterest } label={ this.props.project.interested ? 'Project selected' : 'I am interested in this project!'}/>
+              <RaisedButton primary={ true } onClick={ this.clickHandler } label={ this.props.project.interested ? 'No longer interested': 'Interested!' }/>
             </ToolbarGroup>
           </Toolbar>
+          <Dialog
+            actions={actions}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}
+            >
+          {this.props.project.interested? 'Choose a partner!' : 'Are you sure?' }
+        </Dialog>
           <UserList users={ this.props.users } projectId={ this.props.project.id } />
         </Paper>
       </Paper>

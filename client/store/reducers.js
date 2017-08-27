@@ -139,6 +139,16 @@ const projectProgress = (state, action) => {
   return state;
 };
 
+const loggedInUser = (state, action) => {
+  if (state === undefined) {
+    return {};
+  } else if (action.type === 'UPDATED_LOGGEDIN_USER') {
+    return action.loggedInUser;
+  }
+  return state;
+};
+
+
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
   combineReducers function creates a single object that contains all the reducers
@@ -164,7 +174,8 @@ const appReducer = combineReducers({
   projects,
   messages,
   pairedUsers,
-  projectProgress
+  projectProgress,
+  loggedInUser
 });
 
 const rootReducer = (state, action) => {
