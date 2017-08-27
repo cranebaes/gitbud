@@ -52,6 +52,7 @@ class UserDetails extends React.Component {
       this.setState({ expanded: true });
     }
 
+    console.log("line 52", this.props.match.params.projectId)
     socket.on('chat message', (msg) => this.renderMessages(msg));
     //receive messages
 
@@ -112,6 +113,7 @@ class UserDetails extends React.Component {
 
 
   addPair() {
+    console.log("line 80", this.props.match.params.projectId)
     axios.post('/API/pair', {
       partnered: this.props.user.id,
       project: this.state.curProjectId,  //this is undefined
@@ -121,7 +123,6 @@ class UserDetails extends React.Component {
         this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
-        //window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -146,7 +147,7 @@ class UserDetails extends React.Component {
 
   /* dialog  handler*/
   handleOpen() {
-    console.log("clicked")
+    console.log("clicked");
     this.setState({open: true});
   };
 
@@ -174,6 +175,7 @@ class UserDetails extends React.Component {
         href="/my-projects"
         primary={ true } />
           </div>
+
     } else if (!this.state.buttonClicked) {
       return <RaisedButton
         label='Work With Me'
@@ -205,7 +207,6 @@ class UserDetails extends React.Component {
     });
 
     socket.emit('chat message', newMessage); //send msg
-    console.log(newMessage);
   };
 
   getMessages() {
@@ -218,7 +219,6 @@ class UserDetails extends React.Component {
 
 
   renderMessages(msg) {
-    console.log("asdadadadasd", this.state.chatBox)
     var updatedChatBox= this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
