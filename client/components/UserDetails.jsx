@@ -35,7 +35,7 @@ class UserDetails extends React.Component {
     console.log('this is props of UserDetails', props);
     super(props);
     this.state = {
-      buttonClicked: false,
+      // buttonClicked: false,
       expanded: false,
       partnerName: '',
       message: 'placeholder',
@@ -52,20 +52,17 @@ class UserDetails extends React.Component {
       this.setState({ expanded: true });
     }
 
-    console.log("line 52", this.props.match.params.projectId)
-    socket.on('chat message', (msg) => this.renderMessages(msg));
-    //receive messages
 
     this.addPair = this.addPair.bind(this);
-    this.togglePair = this.togglePair.bind(this);
+    // this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.checkIfPaired = this.checkIfPaired.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
 
     this.initialize();
-
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
       axios.post('/API/messages', {
@@ -79,6 +76,36 @@ class UserDetails extends React.Component {
           });
         });
     };
+
+    socket.on('chat message', (msg) => this.renderMessages(msg));
+    //receive messages
+  }
+
+  initialize(){
+    return new Promise ((resolve, reject) => {
+      this.retrieveProjectId();
+      resolve();
+    })
+    .then(() => {
+      this.checkIfPaired();
+    })
+
+  }
+
+
+  checkIfPaired() {
+     axios.get('/API/pairedProjects', {
+      params:{
+        loggedInUserGhId: this.props.loggedInUserGhId,
+        partnerGhId:this.props.user.ghId
+      }
+    })
+    .then((res)=> {
+      console.log('96....96 responseClient', res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   initialize() {
@@ -113,7 +140,9 @@ class UserDetails extends React.Component {
 
 
   addPair() {
-    console.log("line 80", this.props.match.params.projectId)
+    console.log('partneredUserId91', this.props.user.id)
+    console.log('curProjectId92', this.state.curProjectId)
+    console.log('original',this.props.match.params.projectId)
     axios.post('/API/pair', {
       partnered: this.props.user.id,
       project: this.state.curProjectId,  //this is undefined
@@ -130,6 +159,7 @@ class UserDetails extends React.Component {
 
       axios.get('/')
   }
+
 
   togglePair() {
     axios.post('/API/pair', {
@@ -338,12 +368,16 @@ const mapStateToProps = (state, props) => {
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
+  // const curProjectId = state.curProjectId;
+  // const curProjectProperty = state.curProjectProperty;
   return {
     user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
     loggedInUserGhId,
+    // curProjectId,
+    // curProjectProperty,
   };
 };
 
