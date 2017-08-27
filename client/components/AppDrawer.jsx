@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 import { Card, CardHeader } from 'material-ui/Card';
 // menus and toolbars etc.
@@ -35,7 +35,7 @@ function AppDrawer(props) {
         <div style={ {width:'90%', margin: 'auto'} }>
           <RaisedButton label="Find A Partner" fullWidth={ true } secondary={ true } onClick={ props.closeDrawer } icon={ <ActionFace/> }/>
           <Link to="/my-partners">
-            <RaisedButton label="My Partners" fullWidth={ true } onClick={ props.closeDrawer }/>
+            <RaisedButton label="My Partners"fullWidth={ true } onClick={ props.closeDrawer } />
           </Link>
         </div>
       </Card>

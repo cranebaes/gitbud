@@ -42,12 +42,24 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       drawerOpen: false,
-      partyMode: false,
+      partyMode: false
     }
     this.checkAuthenticated();
 
     this.navTap = this.navTap.bind(this);
     this.togglePartyMode = this.togglePartyMode.bind(this);
+  }
+
+componentDidMount() {
+  this.getPairs()
+}
+
+getPairs() {
+    axios.get('/API/pairs')
+      .then((pairs) => {
+        this.setState({myPartners: pairs.data})
+      })
+      .catch(console.error);
   }
 
   //gets list of projects
@@ -115,7 +127,7 @@ class App extends React.Component {
             <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
 
             {/* opens and closes side menu */}
-            <AppDrawer open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer onClick={this.getPairs} currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -128,8 +140,7 @@ class App extends React.Component {
               <Route path="/projects/:id" component={Project} />
               <Route path="/status" component={ProjectStatus} />
               <Route path="/my-projects" component={MyProjects} />
-              <Route path="/my-partners" component={MyPartners} />
-
+              <Route path="/my-partners" render={props => (<MyPartners currentPartners={this.state.myPartners} />)} />
               {/*
                 given this path render this component and pass down the loggedIn state as user props
               */}
@@ -185,6 +196,10 @@ const mapDispatchToProps = (dispatch) => {
       type: 'MESSAGES_LOAD',
       messages,
     }),
+    addPairsList: pairs => dispatch({
+      type: 'ADD_PAIRING',
+      pairs,
+    })
   };
 };
 
