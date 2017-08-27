@@ -16,6 +16,7 @@ import ActionFace from 'material-ui/svg-icons/action/face';
 import DeviceDeveloperMode from 'material-ui/svg-icons/device/developer-mode';
 
 function AppDrawer(props) {
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', props);
   return (
     <Drawer open={ props.open } docked={ false } onRequestChange={ props.changeOpenState }>
       <AppBar title="GitPal" showMenuIconButton={ false }/>
