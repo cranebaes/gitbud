@@ -43,6 +43,8 @@ class UserDetails extends React.Component {
       receivedMessage:'receivedMessage',
       //for popUp window
       open: false,
+      curProjectId: null,
+      curProjectProperty: null,
     }
     this.paired = false;
     this.expandCard = () => {
@@ -81,7 +83,7 @@ class UserDetails extends React.Component {
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,  //this is undefined
+      project: this.state.curProjectId,  //this is undefined
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
@@ -100,10 +102,10 @@ class UserDetails extends React.Component {
   togglePair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,
+      project: this.state.curProjectId,
     })
       .then((response) => {
-        this.props.dispatchPairing(this.props.user.id, Number(this.props.match.params.projectId));
+        this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
         console.log(response);
       })
       .catch((error) => {
@@ -182,6 +184,7 @@ class UserDetails extends React.Component {
 
   retrieveProjectId() {
     const meow = this.props.user.ghId;
+    console.log('retrieve project id meow', meow);
     axios.get('/API/project', {
       params: {
         id: meow
@@ -189,6 +192,8 @@ class UserDetails extends React.Component {
     })
       .then((project) => {
         console.log('userdetails project', project);
+        this.state.curProjectId = project.data.id;
+        this.state.curProjectProperty = project.data;
       })
       .catch(console.error);
   };
