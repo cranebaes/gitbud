@@ -60,7 +60,7 @@ class UserDetails extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
 
-
+    this.retrieveProjectId();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
@@ -181,7 +181,12 @@ class UserDetails extends React.Component {
   };
 
   retrieveProjectId() {
-    axios.get('/API/project')
+    const meow = this.props.user.ghId;
+    axios.get('/API/project', {
+      params: {
+        id: meow
+      }
+    })
       .then((project) => {
         console.log('userdetails project', project);
       })
@@ -222,7 +227,7 @@ class UserDetails extends React.Component {
           <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
           <div>
             { this.pairButton() }
-            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.retrieveProjectId} secondary={true} />
+            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.handleOpen} secondary={true} />
           </div>
 
         {/*dialog for message*/}

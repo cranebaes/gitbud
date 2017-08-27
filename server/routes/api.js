@@ -153,12 +153,14 @@ module.exports = {
         const dbSession = dbDriver.session();
         console.log('GET project');
         const ghId = req.user.ghInfo.id;
-        console.log(ghId);
+        const userId = req.query.id
+        console.log(req);
         dbSession.run(`
-          MATCH (user:User {ghId:
-          ${ghId}})
+          MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
+          RETURN project
           `)
           .then((res) => {
+            console.log('GET PROJECT project response', res.records);
             resolve(res);
           })
           .catch(reject)
