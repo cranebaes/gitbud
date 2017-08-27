@@ -162,7 +162,6 @@ module.exports = {
             const project = res.records[0];
             resolve(new db.models.Project(project.get('project'))
             );
-
           })
           .catch(reject)
           .then(() => dbSession.close());
