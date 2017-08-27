@@ -34,8 +34,6 @@ const users = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Users load:', action.payload.users);
      return action.payload.users;
-  } else if (action.type === 'APP_LOGOUT') {
-    //state = [];
   }
   return state;
 };
@@ -52,8 +50,6 @@ const pairedUsers = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('pairedUsers load:', action.payload.pairedUsers);
      return action.payload.pairedUsers;
-  } else if (action.type === 'APP_LOGOUT') {
-    state = [];
   }
   return state;
 }
@@ -88,10 +84,7 @@ const projects = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Project load:', action.payload.projects);
      return action.payload.projects;
-  } else if (action.type === 'APP_LOGOUT') {
-    //state = [];
   }
-
   return state;
 };
 
@@ -117,8 +110,6 @@ const messages = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Messages load', action.payload.messages);
      return action.payload.messages;
-  } else if (action.type === 'APP_LOGOUT') {
-    state = {};
   }
   return state;
 };
@@ -144,22 +135,9 @@ const projectProgress = (state, action) => {
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
      console.log('Project progress load', action.payload.projectProgress);
      return action.payload.projectProgress;
-  } else if (action.type === 'APP_LOGOUT') {
-    state = {};
   }
   return state;
 };
-
-const logout = (state, action) => {
-  console.log('logout action', action);
-  if (state === undefined) {
-    return [];
-  } else if (action.type === 'APP_LOGOUT') {
-    console.log('Reducer: APP_LOGOUT');
-    state = [];
-  }
-  return state;
-}
 
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
@@ -170,12 +148,30 @@ const logout = (state, action) => {
   code--they don't have to worry about every other part of the state.
   what we are doing here is using ES6 destructuring, so key and value are named the same.
 */
-export default combineReducers({
+// export default combineReducers({
+//   message: changeString,
+//   users,
+//   projects,
+//   messages,
+//   pairedUsers,
+//   projectProgress,
+//   logout
+// });
+
+const appReducer = combineReducers({
   message: changeString,
   users,
   projects,
   messages,
   pairedUsers,
-  projectProgress,
-  logout
+  projectProgress
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'APP_LOGOUT') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+}
+
+export default rootReducer

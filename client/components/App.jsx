@@ -46,9 +46,9 @@ class App extends React.Component {
     }
     this.checkAuthenticated();
 
-    this.clickLogout = this.clickLogout.bind(this);
     this.navTap = this.navTap.bind(this);
     this.togglePartyMode = this.togglePartyMode.bind(this);
+    // this.handleLogout = this.handleLogout.bind(this);
   }
 
 componentDidMount() {
@@ -92,16 +92,8 @@ getPairs() {
         this.setState({ loggedIn: res.data });
         this.getMessages();
         this.getProjects();
+        this.props.loggedInUser(res.data);
       });
-  }
-  //CHANGE THIS TO this.props.userLogout
-  clickLogout() {
-    console.log('Logging out yo');
-    axios.get('/auth/signout')
-    .then((res) => {
-      this.props.userLogout();
-      window.location.replace('/');
-    });
   }
 
   //party mode
@@ -121,6 +113,8 @@ getPairs() {
     }
   }
 
+
+
   render() {
     //console.log('App render this: ', this);
     /*
@@ -137,7 +131,7 @@ getPairs() {
             <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
 
             {/* opens and closes side menu */}
-            <AppDrawer onClick={this.getPairs} logout={ this.clickLogout } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer onClick={this.getPairs} logout={ this.props.loggedOut } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -170,7 +164,8 @@ getPairs() {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      return <Landing checkAuth={ this.checkAuthenticated } />;
+      console.log('LOGGING ON', this.state);
+          return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
 }
@@ -209,8 +204,12 @@ const mapDispatchToProps = (dispatch) => {
       type: 'ADD_PAIRING',
       pairs,
     }),
-    userLogout: () => dispatch({
-      type: 'APP_LOGOUT'
+    loggedInUser: loggedInUser => dispatch({
+      type: 'UPDATED_LOGGEDIN_USER',
+      loggedInUser,
+    }),
+    loggedOut: () => dispatch({
+      type: 'USER_LOGOUT'
     })
   };
 };
