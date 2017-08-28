@@ -360,7 +360,7 @@ const mapDispatchToProps = dispatch =>
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
 
-
+//WORK HERE
 
 /* <CardMedia overlay={ <CardTitle title={ this.props.user.name } subtitle='Experience: n00b'/> }>
   <img src={ this.props.user.avatarUrl } />
