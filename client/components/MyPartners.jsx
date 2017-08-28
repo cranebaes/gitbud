@@ -65,7 +65,7 @@ render() {
           {
             tests.map(user =>
               (<TableRow key={ user.id }>
-                <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
+                <TableRowColumn><Link to={`/user/${ user.id }`} params={{ currentUserId: user.id }}>{ user.name }</Link></TableRowColumn>
                 <TableRowColumn>{ user.language }</TableRowColumn>
                 <TableRowColumn>{ user.experience }</TableRowColumn>
               </TableRow>)

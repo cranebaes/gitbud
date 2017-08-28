@@ -100,7 +100,7 @@ class UserDetails extends React.Component {
    //    }
    //  })
    // })
-
+ // userId: this.props.loggedInUserGhId,
    console.log('line545454', projectList)
    this.setState({projectList: projectList})
    return projectList
@@ -109,7 +109,7 @@ class UserDetails extends React.Component {
   checkIfPaired() {
     axios.get('/API/pairedProjects', {
       params: {
-        userId: this.props.loggedInUserGhId,
+        userId: this.props.userId,
         partnerId: this.props.user.ghId
       }
     })
@@ -339,10 +339,10 @@ const mapStateToProps = (state, props) => {
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
-  const loggedInUser = state.loggedInUser.username;
+  // const loggedInUser = state.loggedInUser.username;
  // const  projectsIDs = state.loggedInUser.projects
   return {
-     user,
+    user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
