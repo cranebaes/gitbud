@@ -122,14 +122,12 @@ class UserDetails extends React.Component {
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
         //window.location.reload();
-        //window.location.replace(`/projects/${this.props}`)
-
       })
       .catch((error) => {
         console.log(error);
       });
 
-      //POSSIBLY ADD GET REQUEST HERE
+      axios.get('/')
   }
 
   togglePair() {
@@ -209,6 +207,14 @@ class UserDetails extends React.Component {
     socket.emit('chat message', newMessage); //send msg
     console.log(newMessage);
   };
+
+  getMessages() {
+    axios.get('API/messages')
+      .then((res) => {
+        this.props.loadMessages(res.data)
+      })
+      .catch(console.error);
+  }
 
 
   renderMessages(msg) {
@@ -343,6 +349,10 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch =>
   ({
+    loadMessages: messages => dispatch({
+      type: 'MESSAGES_LOAD',
+      messages,
+    }),
     createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
