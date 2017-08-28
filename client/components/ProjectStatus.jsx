@@ -199,7 +199,7 @@ class ProjectStatus extends React.Component {
             open={this.state.dialogOpen}
             autoScrollBodyContent={true}
           >
-           <ul id="messages">hey</ul>
+           <ul id="messages"></ul>
               {
                 this.state.chatBox.map((chat, index) => {
                 return(
