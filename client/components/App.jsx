@@ -54,7 +54,9 @@ class App extends React.Component {
   getPairs() {
     axios.get('/API/pairs')
       .then((pairs) => {
-        this.setState({myPartners: pairs.data})
+        console.log('APP.jsx get pairs', pairs);
+        this.setState({myPartners: pairs.data});
+        this.props.addPairsList(pairs.data);
       })
       .catch(console.error);
   }

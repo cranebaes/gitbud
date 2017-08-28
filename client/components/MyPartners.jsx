@@ -23,7 +23,6 @@ import Subheader from 'material-ui/Subheader';
 class MyPartners extends React.Component {
   constructor(props) {
     super(props);
-    console.log('props', Array.isArray(this.props.currentPartners))
     this.state = {
       isMounted: false,
       userLists: [],
@@ -34,7 +33,6 @@ class MyPartners extends React.Component {
   }
 
   componentDidMount(){
-    console.log('i mounted', this.props.pairedUsers)
     // this.handleMounted()
     let tests = this.props.pairedUsers;
 
@@ -76,8 +74,6 @@ class MyPartners extends React.Component {
   // console.log('test', test)
 render() {
   let tests = this.state.userLists
-  console.log('hehehehhehe', Array.isArray(tests))
-  console.log('hsdsdwe3e23234', tests)
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>

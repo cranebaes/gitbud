@@ -234,6 +234,7 @@ class UserDetails extends React.Component {
   };
 
   render() {
+    console.log('USER DETAILS props', this.props);
      const actions = [
       <div>
        <form onSubmit={this.handleSubmit}>

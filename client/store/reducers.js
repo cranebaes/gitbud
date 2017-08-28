@@ -14,6 +14,7 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
 */
 
 const users = (state, action) => {
+  console.log('Reducer action', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
@@ -42,14 +43,18 @@ const pairedUsers = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
-    return state.concat([
-      {
-        name: action.name,
-        language: action.language,
-        experience: action.experience,
-        id: action.id
-      }
-    ]);
+    console.log('ADD PAIRING state', state);
+    //console.log('ADD PAIRING action', action.pairs[0]);
+    //return action.pairs[0];
+    // return state.map((pair) => {
+    //   if (pair.id === action.userId) {
+    //     const object = Object.assign({}, pair, {
+    //       paired: pair.paired.concat(action.projectId)
+    //     });
+    //     return object;
+    //   }
+    //   return pair;
+    // });
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     console.log('pairedUsers load:', action.payload.pairedUsers);
     return action.payload.pairedUsers;
