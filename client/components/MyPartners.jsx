@@ -20,8 +20,64 @@ import Subheader from 'material-ui/Subheader';
 
 
 
-const MyPartners = (props) => {
-  console.log('My Partners props', props);
+class MyPartners extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('props', Array.isArray(this.props.currentPartners))
+    this.state = {
+      isMounted: false,
+      userLists: [],
+    }
+
+    // this.handleMounted = this.handleMounted.bind(this);
+    // this.handlePatners = this.handlePatners.bind(this);
+  }
+
+  componentDidMount(){
+    console.log('i mounted', this.props.pairedUsers)
+    // this.handleMounted()
+    let tests = this.props.pairedUsers;
+
+    if(tests) {
+      this.setState({
+        userLists:this.props.pairedUsers
+      })
+    } else {
+      this.setState({
+        userLists:[]
+      })
+    }
+
+  }
+
+  handleMounted(){
+    // this.setState({isMounted : true})
+  }
+
+
+  handlePatners(){
+    // console.log('working');
+
+    //   console.log("48", this.props.currentPartners)
+    //   if (Aarray.isArray(this.props.currentPartners)) {
+    //     console.log('am i running')
+    //     (this.props.currentPartners[0] ? this.props.currentPartners[0] : []).map(user =>
+    //     (<TableRow key={ user.id }>
+    //       <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
+    //       <TableRowColumn>{ user.language }</TableRowColumn>
+    //       <TableRowColumn>{ user.experience }</TableRowColumn>
+    //     </TableRow>)
+    //     )
+    //   }
+
+  }
+
+  // var test = Array.prototype.slice.call(props.currentPartners)
+  // console.log('test', test)
+render() {
+  let tests = this.state.userLists
+  console.log('hehehehhehe', Array.isArray(tests))
+  console.log('hsdsdwe3e23234', tests)
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
@@ -40,26 +96,37 @@ const MyPartners = (props) => {
             </TableRow>
           </TableHeader>
           <TableBody stripedRows={ true } displayRowCheckbox={ false }>
-            {(props.currentPartners[0] ? props.currentPartners[0] : []).map(user =>
+          {
+            tests.map(user =>
               (<TableRow key={ user.id }>
                 <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
                 <TableRowColumn>{ user.language }</TableRowColumn>
                 <TableRowColumn>{ user.experience }</TableRowColumn>
               </TableRow>)
-            )}
+            )
+          }
+
           </TableBody>
         </Table>
       </Card>
     </Paper>
   );
-};
+  }
+}
+
+
 
 const mapStateToProps = (state) => {
-  console.log('State is: ', state);
+  console.log('state', state.pairedUsers)
+  const pairedUsers = state.pairedUsers;
   return {
-    // pairedUsers: state.pairedUsers
+     pairedUsers: pairedUsers
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
 
-export default connect(mapStateToProps)(MyPartners);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPartners);

@@ -15,6 +15,9 @@ module.exports = {
     signout: function signout(req, res) {
       // destroy session and redirect to home
       console.log('LOGGING OUT');
+      // req.session.destroy(function (err) {
+      //   res.redirect('/');
+      // });
       req.logout();
       res.redirect('/');
     },
