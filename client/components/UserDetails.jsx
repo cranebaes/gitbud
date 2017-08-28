@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ActionFace from 'material-ui/svg-icons/action/face';
 import ActionBuild from 'material-ui/svg-icons/action/build';
 import ActionDone from 'material-ui/svg-icons/action/done';
+import ActionAdd from 'material-ui/svg-icons/social/person';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import TextField from 'material-ui/TextField';
 
@@ -97,7 +98,6 @@ class UserDetails extends React.Component {
       }
     })
     .then((pairProjects) => {
-      console.log('Checking paired 101 response', pairProjects.data.length);
       if (pairProjects.data.length > 0) {
         console.log('THERE ARE PROJECTS HERE');
         this.setState({
@@ -128,6 +128,8 @@ class UserDetails extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+
+      //POSSIBLY ADD GET REQUEST HERE
   }
 
   togglePair() {
@@ -147,10 +149,6 @@ class UserDetails extends React.Component {
   /* dialog  handler*/
   handleOpen() {
     console.log("clicked")
-    console.log(this.props.loggedInUser)
-    console.log(this.props.loggedInUserGhId)
-    console.log(this.props.user.name)
-    console.log(this.props.user.ghId)
     this.setState({open: true});
   };
 
@@ -161,19 +159,28 @@ class UserDetails extends React.Component {
 
   pairButton() {
     if (this.state.buttonClicked) {
-      return <RaisedButton
-        label='Partnered'
-        labelColor={ fullWhite }
-        backgroundColor='#a4c639'
+      console.log('these are the props for UserDetails', this);
+      return <div>
+      <RaisedButton
+      label='Partnered'
+      labelColor={ fullWhite }
+      backgroundColor='#a4c639'
+      fullWidth={true}
+      icon={ <ActionDone
+        color={ fullWhite } /> }
+        onClick={ this.addPair } />
+      <RaisedButton
+        label="Let's Work!"
         fullWidth={true}
-        icon={ <ActionDone
-          color={ fullWhite } /> }
-          onClick={ this.addPair } />
+        icon={ <ActionBuild /> }
+        href={`/projects/${this.state.curProjectId}`}
+        primary={ true } />
+          </div>
     } else if (!this.state.buttonClicked) {
       return <RaisedButton
         label='Work With Me'
         fullWidth={true}
-        icon={ <ActionBuild /> }
+        icon={ <ActionAdd /> }
         onClick={ this.addPair }
         primary={ true } />
     }

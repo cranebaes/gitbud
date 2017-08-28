@@ -4,10 +4,12 @@
   The actions get sent to App component and other parent component where they can be pass through as props.
 */
 
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 
 // does nothing - implemented to test connecting Redux to React
-const changeString = (state = 'some message', action) => action.type === 'CHANGE_STRING' ? action.text : state;
+const changeString = (state = 'some message', action) => action.type === 'CHANGE_STRING'
+  ? action.text
+  : state;
 
 /*
   first condition is the initial state
@@ -26,14 +28,16 @@ const users = (state, action) => {
   } else if (action.type === 'CHANGE_USER_PAIRING') {
     return state.map((user) => {
       if (user.id === action.userId) {
-        const object =  Object.assign({}, user, { paired: user.paired.concat(action.projectId) });
+        const object = Object.assign({}, user, {
+          paired: user.paired.concat(action.projectId)
+        });
         return object;
       }
       return user;
     });
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('Users load:', action.payload.users);
-     return action.payload.users;
+    console.log('Users load:', action.payload.users);
+    return action.payload.users;
   }
   return state;
 };
@@ -44,12 +48,19 @@ const pairedUsers = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
-    return state.concat([{ name: action.name, language: action.language, experience: action.experience, id: action.id }]);
+    return state.concat([
+      {
+        name: action.name,
+        language: action.language,
+        experience: action.experience,
+        id: action.id
+      }
+    ]);
     // const object = Object.assign({}, )
     // return state.concat(action.)
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('pairedUsers load:', action.payload.pairedUsers);
-     return action.payload.pairedUsers;
+    console.log('pairedUsers load:', action.payload.pairedUsers);
+    return action.payload.pairedUsers;
   }
   return state;
 }
@@ -70,20 +81,22 @@ const projects = (state, action) => {
   } else if (action.type === 'CHANGE_PROJECT_INTEREST') {
     return state.map((project) => {
       if (project.id === action.projectId) {
-        return Object.assign({}, project, { interested: action.value });
+        return Object.assign({}, project, {interested: action.value});
       }
       return project;
     });
   } else if (action.type === 'CHANGE_USER_PAIRING') {
     return state.map((project) => {
       if (project.id === action.projectId) {
-        return Object.assign({}, project, { paired: project.paired.concat(action.userId) });
+        return Object.assign({}, project, {
+          paired: project.paired.concat(action.userId)
+        });
       }
       return project;
     });
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('Project load:', action.payload.projects);
-     return action.payload.projects;
+    console.log('Project load:', action.payload.projects);
+    return action.payload.projects;
   }
   return state;
 };
@@ -103,13 +116,15 @@ const messages = (state, action) => {
     return {};
   } else if (action.type === 'MESSAGE_SEND') {
     const newMessages = {};
-    newMessages[action.userId] = state[action.userId] ? [action.message].concat(state[action.userId]) : [action.message];
+    newMessages[action.userId] = state[action.userId]
+      ? [action.message].concat(state[action.userId])
+      : [action.message];
     return Object.assign({}, state, newMessages);
   } else if (action.type === 'MESSAGES_LOAD') {
     return action.messages;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('Messages load', action.payload.messages);
-     return action.payload.messages;
+    console.log('Messages load', action.payload.messages);
+    return action.payload.messages;
   }
   return state;
 };
@@ -133,8 +148,8 @@ const projectProgress = (state, action) => {
     updatedProject[action.itemIndex].complete = !updatedProject[action.itemIndex].complete;
     return newProgress;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
-     console.log('Project progress load', action.payload.projectProgress);
-     return action.payload.projectProgress;
+    console.log('Project progress load', action.payload.projectProgress);
+    return action.payload.projectProgress;
   }
   return state;
 };
@@ -148,7 +163,6 @@ const loggedInUser = (state, action) => {
   return state;
 };
 
-
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
   combineReducers function creates a single object that contains all the reducers
@@ -158,15 +172,6 @@ const loggedInUser = (state, action) => {
   code--they don't have to worry about every other part of the state.
   what we are doing here is using ES6 destructuring, so key and value are named the same.
 */
-// export default combineReducers({
-//   message: changeString,
-//   users,
-//   projects,
-//   messages,
-//   pairedUsers,
-//   projectProgress,
-//   logout
-// });
 
 const appReducer = combineReducers({
   message: changeString,
