@@ -63,6 +63,7 @@ class App extends React.Component {
   getProjects() {
     axios.get('/API/projects/')
       .then((project) => {
+        console.log('GEt PROJECTS', project.data);
         this.props.addProjectsList(project.data);
       })
       .catch(console.error);

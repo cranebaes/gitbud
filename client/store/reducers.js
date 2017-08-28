@@ -14,8 +14,6 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
 */
 
 const users = (state, action) => {
-  // console.log('users state: ', state);
-  // console.log('users action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'USERS_ADD') {
@@ -41,8 +39,6 @@ const users = (state, action) => {
 };
 
 const pairedUsers = (state, action) => {
-  // console.log('pairedUsers state: ', state);
-  // console.log('pairedUsers action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'ADD_PAIRING') {
@@ -54,8 +50,6 @@ const pairedUsers = (state, action) => {
         id: action.id
       }
     ]);
-    // const object = Object.assign({}, )
-    // return state.concat(action.)
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     console.log('pairedUsers load:', action.payload.pairedUsers);
     return action.payload.pairedUsers;
@@ -79,8 +73,6 @@ const pairingStatus = (state, action) => {
   inside UserDetails component we dispatch 'CHANGE_USER' when user select 'they want to pair' button
 */
 const projects = (state, action) => {
-  // console.log('projects state: ', state);
-  // console.log('projects action: ', action);
   if (state === undefined) {
     return [];
   } else if (action.type === 'LIST_PROJECTS') {
@@ -88,7 +80,7 @@ const projects = (state, action) => {
   } else if (action.type === 'CHANGE_PROJECT_INTEREST') {
     return state.map((project) => {
       if (project.id === action.projectId) {
-        return Object.assign({}, project, {interested: action.value});
+        return Object.assign({}, project, { interested: action.value });
       }
       return project;
     });
@@ -115,8 +107,6 @@ const projects = (state, action) => {
   SUGGESTION: implement socket.io
 */
 const messages = (state, action) => {
-  // console.log('messages state: ', state);
-  // console.log('messages action: ', action);
   if (state === undefined) {
     return {};
   } else if (action.type === 'MESSAGE_SEND') {

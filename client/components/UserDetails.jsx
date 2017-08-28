@@ -30,8 +30,8 @@ const socket = io();
 
 class UserDetails extends React.Component {
   constructor(props) {
-    console.log('this is props of UserDetails', props);
     super(props);
+    console.log('this is props of UserDetails', props);
     this.state = {
       buttonClicked: false,
       expanded: false,
@@ -319,7 +319,7 @@ class UserDetails extends React.Component {
   }
 }
 const mapStateToProps = (state, props) => {
-  //console.log("line 267", state)
+  console.log("line 267", state)
   const userId = Number(props.match.params.id);
   const user = state.users.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)

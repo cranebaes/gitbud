@@ -21,7 +21,7 @@ import Subheader from 'material-ui/Subheader';
 
 
 const MyPartners = (props) => {
-  console.log('This is the props from MyPartners ', props);
+  console.log('My Partners props', props);
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
