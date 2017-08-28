@@ -45,6 +45,7 @@ class UserDetails extends React.Component {
       isPaired: false,
       curProjectId: null,
       curProjectProperty: null,
+      projectList:[],
     }
     this.expandCard = () => {
       this.setState({ expanded: true });
@@ -85,6 +86,24 @@ class UserDetails extends React.Component {
     .then(() => {
       this.checkIfPaired();
     })
+  }
+
+  handlePorjectMapping() {
+   // var projectList = [];
+   // var idList =  this.props.projectsIDs;
+   var projects = this.props.projects
+
+   // idList.forEach(function(element){
+   //  projects.forEach(function(cur){
+   //    if(cur.id === element) {
+   //      projectList.push(cur)
+   //    }
+   //  })
+   // })
+
+   console.log('line545454', projectList)
+   this.setState({projectList: projectList})
+   return projectList
   }
 
   checkIfPaired() {
@@ -259,7 +278,7 @@ class UserDetails extends React.Component {
           <CardTitle title={ this.props.user.name } subtitle={'Experience: ' + this.props.user.experience} />
           <CardTitle title="Description" subtitle={this.props.user.description} />
           <CardTitle title="Language" subtitle={this.props.user.language}/>
-          <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
+          <CardTitle title="Projects" subtitle={this.state.projectList.map(project => project).join(' ')}/>
           <div>
             { this.pairButton() }
             <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.expandCard} secondary={true} />
@@ -320,12 +339,15 @@ const mapStateToProps = (state, props) => {
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
+  const loggedInUser = state.loggedInUser.username;
+ // const  projectsIDs = state.loggedInUser.projects
   return {
-    user,
+     user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
     loggedInUserGhId,
+   // projectsIDs,
   };
 };
 const mapDispatchToProps = dispatch =>
