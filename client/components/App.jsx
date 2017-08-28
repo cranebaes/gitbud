@@ -34,56 +34,58 @@ import NotFound from './NotFound';
 import MyProjects from './MyProjects';
 import MyPartners from './MyPartners';
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loggedIn: false,
       drawerOpen: false,
-    }
+    };
 
-    this.checkAuthenticated= this.checkAuthenticated.bind(this);
+    this.checkAuthenticated = this.checkAuthenticated.bind(this);
     this.navTap = this.navTap.bind(this);
-
   }
   componentDidUpdate() {
-    if(this.state.loggedIn) {
+    if (this.state.loggedIn) {
       this.getAllUsers();
     }
   }
 
   getAllUsers() {
-    axios.get('/API/allUsers')
-      .then((allUsers) => {
+    axios
+      .get('/API/allUsers')
+      .then(allUsers => {
         this.props.addAllUsers(allUsers.data);
       })
       .catch(console.error);
   }
 
   getPairs() {
-    axios.get('/API/pairs')
-      .then((pairs) => {
+    axios
+      .get('/API/pairs')
+      .then(pairs => {
         this.props.loadPairedUsers(pairs.data);
       })
       .catch(console.error);
   }
 
-  //gets list of projects
+  // gets list of projects
   getProjects() {
-    axios.get('/API/projects/')
-      .then((project) => {
+    axios
+      .get('/API/projects/')
+      .then(project => {
         this.props.addProjectsList(project.data);
       })
       .catch(console.error);
   }
 
-  //gets messages
+  // gets messages
   getMessages() {
-    axios.get('/API/messages')
-      .then((res) => {
-        console.log(91)
-        this.props.loadMessages(res.data)
+    axios
+      .get('/API/messages')
+      .then(res => {
+        console.log(91);
+        this.props.loadMessages(res.data);
       })
       .catch(console.error);
   }
@@ -92,52 +94,44 @@ class App extends React.Component {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   }
 
-  handleClick(){
-   // console.log('clicked');
-
+  handleClick() {
+    // console.log('clicked');
   }
-  //gets authentication
+  // gets authentication
   checkAuthenticated() {
-    console.log('clickedauthen')
-    axios.get('/auth/authenticated')
-      .then((res) => {
-        if (res.data !== false) {
-          this.setState({ loggedIn: res.data });
-          console.log('111')
-          this.getMessages();
-           console.log('112')
-          this.getProjects();
-<<<<<<< HEAD
-          this.getPairs();
-=======
-           console.log('113')
-          this.getPairs()
-           console.log('114')
->>>>>>> Update alluser state in redux store
-          this.props.loggedInUser(res.data);
-          this.getAllUsers();
-        }
-      });
+    console.log('clickedauthen');
+    axios.get('/auth/authenticated').then(res => {
+      if (res.data !== false) {
+        this.setState({ loggedIn: res.data });
+        console.log('111');
+        this.getMessages();
+        console.log('112');
+        this.getProjects();
+        console.log('113');
+        this.getPairs();
+        console.log('114');
+        this.props.loggedInUser(res.data);
+        this.getAllUsers();
+      }
+    });
   }
 
-  //party mode
+  // party mode
   togglePartyMode() {
     const colors = ['blue', 'green', 'red', 'yellow', 'lilac'];
     if (this.state.partyMode) {
       clearInterval(this.state.partyMode);
-      document.body.setAttribute('style', `background-color:white`);
+      document.body.setAttribute('style', 'background-color:white');
       this.setState({ partyMode: false });
     } else {
-      this.setState({partyMode:
-        setInterval(() => {
+      this.setState({
+        partyMode: setInterval(() => {
           const randomNum = Math.floor(Math.random() * colors.length);
           document.body.setAttribute('style', `background-color:${colors[randomNum]}`);
         }, 200),
       });
     }
   }
-
-
 
   render() {
     /*
@@ -150,10 +144,27 @@ class App extends React.Component {
       return (
         <BrowserRouter>
           <div>
-            <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
+            <AppBar
+              title="GitPal"
+              onLeftIconButtonTouchTap={this.navTap}
+              iconElementRight={
+                <Link to="/">
+                  <IconButton>
+                    <ActionHome color={fullWhite} />
+                  </IconButton>
+                </Link>
+              }
+            />
 
             {/* opens and closes side menu */}
-            <AppDrawer onClick={this.getPairs} logout={ this.props.loggedOut } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer
+              onClick={this.getPairs}
+              logout={this.props.loggedOut}
+              currentPartners={this.state.myPartners}
+              open={this.state.drawerOpen}
+              changeOpenState={open => this.setState({ drawerOpen: open })}
+              closeDrawer={() => this.setState({ drawerOpen: false })}
+            />
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -166,12 +177,14 @@ class App extends React.Component {
               <Route path="/projects/:id" component={Project} />
               <Route path="/status" component={ProjectStatus} />
               <Route path="/my-projects" component={MyProjects} />
-              <Route path="/my-partners" render={props => (<MyPartners currentPartners={this.state.myPartners} />)} />
+              <Route
+                path="/my-partners"
+                render={props => <MyPartners currentPartners={this.state.myPartners} />}
+              />
               {/*
                 given this path render this component and pass down the loggedIn state as user props
               */}
-              <Route exact path='/user'
-                render={() => (<UserProfile user={this.state.loggedIn} />) } />
+              <Route exact path="/user" render={() => <UserProfile user={this.state.loggedIn} />} />
 
               <Route path="/user/:id/:projectId?" component={UserDetails} />
               <Route path="/user/:id" component={UserDetails} />
@@ -182,54 +195,55 @@ class App extends React.Component {
       );
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
-    } else {
-          return <Landing checkAuth={ this.checkAuthenticated } />;
     }
+    return <Landing checkAuth={this.checkAuthenticated} />;
   }
 }
 
 /*
   Allows App component to have message and project state
 */
-const mapStateToProps = (state) => {
-  return {
-    message: state.message,
-    projects: state.projects,
-    pairedUsers: state.pairedUsers,
-  };
-};
+const mapStateToProps = state => ({
+  message: state.message,
+  projects: state.projects,
+  pairedUsers: state.pairedUsers,
+});
 
 /*
   Map our dispatch to App component as props
   Dispatch can be found in store/reducers.js
 */
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addAllUsers: (allUsers) => dispatch({
+const mapDispatchToProps = dispatch => ({
+  addAllUsers: allUsers =>
+    dispatch({
       type: 'LOAD_ALL_USERS',
       allUsers,
     }),
-    addProjectsList: projects => dispatch({
+  addProjectsList: projects =>
+    dispatch({
       type: 'LIST_PROJECTS',
       projects,
     }),
-    loadMessages: messages => dispatch({
+  loadMessages: messages =>
+    dispatch({
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    loadPairedUsers: pairedUsers => dispatch({
+  loadPairedUsers: pairedUsers =>
+    dispatch({
       type: 'LOAD_PAIRING',
       pairedUsers,
     }),
-    loggedInUser: loggedInUser => dispatch({
+  loggedInUser: loggedInUser =>
+    dispatch({
       type: 'UPDATED_LOGGEDIN_USER',
       loggedInUser,
     }),
-    loggedOut: () => dispatch({
-      type: 'USER_LOGOUT'
-    })
-  };
-};
+  loggedOut: () =>
+    dispatch({
+      type: 'USER_LOGOUT',
+    }),
+});
 
-//connects the Store to App component
+// connects the Store to App component
 export default connect(mapStateToProps, mapDispatchToProps)(App);
