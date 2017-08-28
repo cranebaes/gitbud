@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ActionFace from 'material-ui/svg-icons/action/face';
 import ActionBuild from 'material-ui/svg-icons/action/build';
 import ActionDone from 'material-ui/svg-icons/action/done';
+import ActionAdd from 'material-ui/svg-icons/social/person';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import TextField from 'material-ui/TextField';
 
@@ -43,8 +44,10 @@ class UserDetails extends React.Component {
       receivedMessage:'receivedMessage',
       //for popUp window
       open: false,
+      isPaired: false,
+      curProjectId: null,
+      curProjectProperty: null,
     }
-    this.paired = false;
     this.expandCard = () => {
       this.setState({ expanded: true });
     }
@@ -60,7 +63,7 @@ class UserDetails extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
 
-    this.retrieveProjectId();
+    this.initialize();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
@@ -77,33 +80,63 @@ class UserDetails extends React.Component {
     };
   }
 
+  initialize() {
+    return new Promise((resolve, reject) => {
+      this.retrieveProjectId();
+      resolve();
+    })
+    .then(() => {
+      this.checkIfPaired();
+    })
+  }
+
+  checkIfPaired() {
+    axios.get('/API/pairedProjects', {
+      params: {
+        userId: this.props.loggedInUserGhId,
+        partnerId: this.props.user.ghId
+      }
+    })
+    .then((pairProjects) => {
+      if (pairProjects.data.length > 0) {
+        console.log('THERE ARE PROJECTS HERE');
+        this.setState({
+          buttonClicked: true
+        })
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+
 
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,  //this is undefined
+      project: this.state.curProjectId,  //this is undefined
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
         this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
-        window.location.reload();
-        //window.location.replace(`/projects/${this.props}`)
-
+        //window.location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
+
+      axios.get('/')
   }
 
   togglePair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.props.match.params.projectId,
+      project: this.state.curProjectId,
     })
       .then((response) => {
-        this.props.dispatchPairing(this.props.user.id, Number(this.props.match.params.projectId));
+        this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
         console.log(response);
       })
       .catch((error) => {
@@ -114,10 +147,6 @@ class UserDetails extends React.Component {
   /* dialog  handler*/
   handleOpen() {
     console.log("clicked")
-    console.log(this.props.loggedInUser)
-    console.log(this.props.loggedInUserGhId)
-    console.log(this.props.user.name)
-    console.log(this.props.user.ghId)
     this.setState({open: true});
   };
 
@@ -128,19 +157,28 @@ class UserDetails extends React.Component {
 
   pairButton() {
     if (this.state.buttonClicked) {
-      return <RaisedButton
-        label='Partnered'
-        labelColor={ fullWhite }
-        backgroundColor='#a4c639'
+      console.log('these are the props for UserDetails', this);
+      return <div>
+      <RaisedButton
+      label='Partnered'
+      labelColor={ fullWhite }
+      backgroundColor='#a4c639'
+      fullWidth={true}
+      icon={ <ActionDone
+        color={ fullWhite } /> }
+        onClick={ this.addPair } />
+      <RaisedButton
+        label="Let's Work!"
         fullWidth={true}
-        icon={ <ActionDone
-          color={ fullWhite } /> }
-          onClick={ this.addPair } />
+        icon={ <ActionBuild /> }
+        href={`/projects/${this.state.curProjectId}`}
+        primary={ true } />
+          </div>
     } else if (!this.state.buttonClicked) {
       return <RaisedButton
         label='Work With Me'
         fullWidth={true}
-        icon={ <ActionBuild /> }
+        icon={ <ActionAdd /> }
         onClick={ this.addPair }
         primary={ true } />
     }
@@ -170,6 +208,14 @@ class UserDetails extends React.Component {
     console.log(newMessage);
   };
 
+  getMessages() {
+    axios.get('API/messages')
+      .then((res) => {
+        this.props.loadMessages(res.data)
+      })
+      .catch(console.error);
+  }
+
 
   renderMessages(msg) {
     console.log("asdadadadasd", this.state.chatBox)
@@ -181,14 +227,15 @@ class UserDetails extends React.Component {
   };
 
   retrieveProjectId() {
-    const meow = this.props.user.ghId;
+    const userId = this.props.user.ghId;
     axios.get('/API/project', {
       params: {
-        id: meow
+        id: userId
       }
     })
       .then((project) => {
-        console.log('userdetails project', project);
+        this.state.curProjectId = project.data.id;
+        this.state.curProjectProperty = project.data;
       })
       .catch(console.error);
   };
@@ -285,7 +332,7 @@ class UserDetails extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
-  console.log("line 267", state)
+  //console.log("line 267", state)
   const userId = Number(props.match.params.id);
   const user = state.users.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
@@ -302,6 +349,10 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch =>
   ({
+    loadMessages: messages => dispatch({
+      type: 'MESSAGES_LOAD',
+      messages,
+    }),
     createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
