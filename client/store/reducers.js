@@ -61,7 +61,7 @@ const pairedUsers = (state, action) => {
   } else if (action.type === 'ADD_PAIRING') {
     if (state.length !== 0) {
       const idCollection = state[0].map((user) => {
-	      return user.ghId;
+        return user.ghId;
       });
       if (idCollection.indexOf(action.pairs.ghId) === -1) {
         state[0].push(action.pairs);

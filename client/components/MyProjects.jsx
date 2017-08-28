@@ -20,42 +20,50 @@ import {
 import {Card, CardText } from 'material-ui/Card';
 
 const MyProjects = (props) => {
-  return (
-    <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
-      <Card>
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarTitle text="My Projects"/>
-          </ToolbarGroup>
-        </Toolbar>
-        <Subheader>Projects you have a partner with</Subheader>
-        <Table style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
-          <TableHeader displaySelectAll={ false }>
-            <TableRow>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Language</TableHeaderColumn>
-              <TableHeaderColumn>Experience</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody stripedRows={ true } displayRowCheckbox={ false }>
-            {props.projects.map(project =>
-              (<TableRow key={ project.id }>
-                <TableRowColumn><Link to={`/projects/${ project.id }`}>{ project.project }</Link></TableRowColumn>
-                <TableRowColumn>{ project.language }</TableRowColumn>
-                <TableRowColumn>{ project.experience }</TableRowColumn>
-              </TableRow>)
-            )}
-          </TableBody>
-        </Table>
-    </Card>
-    </Paper>
-  );
+//   return (
+//     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
+//       <Card>
+//         <Toolbar>
+//           <ToolbarGroup>
+//             <ToolbarTitle text="My Projects"/>
+//           </ToolbarGroup>
+//         </Toolbar>
+//         <Subheader>Projects you have a partner with</Subheader>
+//         <Table style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
+//           <TableHeader displaySelectAll={ false }>
+//             <TableRow>
+//               <TableHeaderColumn>Name</TableHeaderColumn>
+//               <TableHeaderColumn>Language</TableHeaderColumn>
+//               <TableHeaderColumn>Experience</TableHeaderColumn>
+//             </TableRow>
+//           </TableHeader>
+//           <TableBody stripedRows={ true } displayRowCheckbox={ false }>
+//             {props.projects.map(project =>
+//               (<TableRow key={ project.id }>
+//                 <TableRowColumn><Link to={`/projects/${ project.id }`}>{ project.project }</Link></TableRowColumn>
+//                 <TableRowColumn>{ project.language }</TableRowColumn>
+//                 <TableRowColumn>{ project.experience }</TableRowColumn>
+//               </TableRow>)
+//             )}
+//           </TableBody>
+//         </Table>
+//     </Card>
+//     </Paper>
+//   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+  console.log('56565656565',state)
+  const userId = state.loggedInUser.id;
+  console.log(userId)
+  const user = state.users.filter(user => user.id === userId)[0];
+  const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   return {
-    projects: state.projects.filter(project => project.paired.length > 0),
-  };
+   userId,
+   user,
+   projects,
+  }
+
 };
 
 //connects the Store to MyProjects component

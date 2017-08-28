@@ -42,9 +42,10 @@ class App extends React.Component {
       loggedIn: false,
       drawerOpen: false,
     }
-    this.checkAuthenticated();
 
+    this.checkAuthenticated= this.checkAuthenticated.bind(this);
     this.navTap = this.navTap.bind(this);
+
   }
   componentDidUpdate() {
     if(this.state.loggedIn) {
@@ -81,6 +82,7 @@ class App extends React.Component {
   getMessages() {
     axios.get('/API/messages')
       .then((res) => {
+        console.log(91)
         this.props.loadMessages(res.data)
       })
       .catch(console.error);
@@ -90,16 +92,30 @@ class App extends React.Component {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   }
 
+  handleClick(){
+   // console.log('clicked');
+
+  }
   //gets authentication
   checkAuthenticated() {
+    console.log('clickedauthen')
     axios.get('/auth/authenticated')
       .then((res) => {
         if (res.data !== false) {
           this.setState({ loggedIn: res.data });
+          console.log('111')
           this.getMessages();
+           console.log('112')
           this.getProjects();
+<<<<<<< HEAD
           this.getPairs();
+=======
+           console.log('113')
+          this.getPairs()
+           console.log('114')
+>>>>>>> Update alluser state in redux store
           this.props.loggedInUser(res.data);
+          this.getAllUsers();
         }
       });
   }

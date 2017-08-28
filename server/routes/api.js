@@ -73,6 +73,22 @@ module.exports = {
       });
     },
 
+    allusers: function getAllusers(req){
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        dbSession.run(
+          `MATCH (users:User) RETURN users`
+          )
+          .then((res)=>{
+           resolve(res.records.map(user =>
+                new db.models.User(user.get('users'))
+            ));
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      })
+    },
+
     // Returns an array of user objects interested in the given project id
     // NOTE: The relative xp is a relationship between users
     // calculated and stored for new users in the profliing module.

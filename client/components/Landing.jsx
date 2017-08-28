@@ -20,7 +20,7 @@ function Landing(props) {
       </CardMedia>
       <div style={ { width: '90%', margin: 'auto' } }>
         <a href="/auth/github">
-          <RaisedButton label="Sign in with GitHub" secondary={ true }  fullWidth={ true } />
+          <RaisedButton label="Sign in with GitHub" onClick={props.checkAuth} secondary={ true }  fullWidth={ true } />
         </a>
       </div>
     </Card>
