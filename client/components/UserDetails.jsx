@@ -274,10 +274,10 @@ class UserDetails extends React.Component {
           <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
           <div>
             { this.pairButton() }
-            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.handleOpen} secondary={true} />
+            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.expandCard} secondary={true} />
           </div>
 
-        {/*dialog for message*/}
+        {/*dialog for message
           <div>
 
           <Dialog
@@ -304,26 +304,26 @@ class UserDetails extends React.Component {
 
 
           {/* should be deleted */}
-          {
-          //   <div expandable={true}>
-          //   <TextField
-          //     floatingLabelText="Ask user to pair up"
-          //     hintText="Enter your message"
-          //     style={{ padding: 20 }}
-          //     onChange={ this.setMessageText }
-          //   />
-          // </div>
-          // <div expandable={true}>
-          //   <RaisedButton label="Send" onClick={ this.sendMessage } fullWidth={true} icon={<ContentSend />} secondary={true}/>
-          //   { this.props.messages.map((message, index) =>
-          //     <Card key={ index }>
-          //       <CardTitle>{ message.sender ? 'You' : this.props.user.name }</CardTitle>
-          //       <CardText>{ message.text }</CardText>
-          //     </Card>
-          //   )}
-          // </div>
-          // {/* should be deleted end*/}
-          }
+
+            <div expandable={true}>
+            <TextField
+              floatingLabelText="Ask user to pair up"
+              hintText="Enter your message"
+              style={{ padding: 20 }}
+              onChange={ this.setMessageText }
+            />
+          </div>
+          <div expandable={true}>
+            <RaisedButton label="Send" onClick={ this.sendMessage } fullWidth={true} icon={<ContentSend />} secondary={true}/>
+            { this.props.messages.map((message, index) =>
+              <Card key={ index }>
+                <CardTitle>{ message.sender ? 'You' : this.props.user.name }</CardTitle>
+                <CardText>{ message.text }</CardText>
+              </Card>
+            )}
+          </div>
+          {/* should be deleted end*/}
+
 
         </Card>
       </Paper>
