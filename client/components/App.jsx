@@ -48,12 +48,7 @@ class App extends React.Component {
 
     this.navTap = this.navTap.bind(this);
     this.togglePartyMode = this.togglePartyMode.bind(this);
-    // this.handleLogout = this.handleLogout.bind(this);
   }
-
-// componentDidMount() {
-//   this.getPairs()
-// }
 
 getPairs() {
     axios.get('/API/pairs')
