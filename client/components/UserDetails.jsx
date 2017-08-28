@@ -81,12 +81,16 @@ class UserDetails extends React.Component {
     //receive messages
   }
 
+
+
+
   initialize(){
     return new Promise ((resolve, reject) => {
       this.retrieveProjectId();
       resolve();
     })
     .then(() => {
+      this.props.checkPairingStatus(false);
       this.checkIfPaired();
     })
 
@@ -102,6 +106,13 @@ class UserDetails extends React.Component {
     })
     .then((res)=> {
       console.log('96....96 responseClient', res);
+      console.log('110', this.props.isPaired)
+      if(res.data.records.length !== 0) {
+        this.props.checkPairingStatus(true);
+      } else if (res.data.records.length > 0) {
+        this.props.checkPairingStatus(false);
+      }
+      console.log('line 115', this.props.isPaired)
     })
     .catch((error) => {
       console.log(error);
@@ -142,7 +153,6 @@ class UserDetails extends React.Component {
   addPair() {
     console.log('partneredUserId91', this.props.user.id)
     console.log('curProjectId92', this.state.curProjectId)
-    console.log('original',this.props.match.params.projectId)
     axios.post('/API/pair', {
       partnered: this.props.user.id,
       project: this.state.curProjectId,  //this is undefined
@@ -368,16 +378,15 @@ const mapStateToProps = (state, props) => {
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
-  // const curProjectId = state.curProjectId;
-  // const curProjectProperty = state.curProjectProperty;
+  const isPaired = state.pairingStatus;
+  console.log('346', state.pairingStatus)
   return {
     user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
     loggedInUserGhId,
-    // curProjectId,
-    // curProjectProperty,
+    isPaired,
   };
 };
 
@@ -390,6 +399,7 @@ const mapDispatchToProps = dispatch =>
     createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
+    checkPairingStatus: (isPaired) => dispatch({type: 'ADD_PAIRING_STATUS', isPaired}),
   });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

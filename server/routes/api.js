@@ -215,7 +215,7 @@ module.exports = {
     pairedProjects: function findPair(req, res) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
-      console.log('197.....197 recived req', req.query);
+        console.log('197.....197 recived req', req.query);
         const loggedInUserGhId = req.query.loggedInUserGhId;
         const partnerGhId = req.query.partnerGhId;
 

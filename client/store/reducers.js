@@ -63,6 +63,15 @@ const pairedUsers = (state, action) => {
     return action.payload.pairedUsers;
   }
   return state;
+};
+
+const pairingStatus = (state, action) => {
+  if (state === undefined) {
+    return null;
+  } else if (action.type === 'ADD_PAIRING_STATUS') {
+    return action.isPaired
+  }
+  return state;
 }
 
 /*
@@ -180,7 +189,8 @@ const appReducer = combineReducers({
   messages,
   pairedUsers,
   projectProgress,
-  loggedInUser
+  loggedInUser,
+  pairingStatus,
 });
 
 const rootReducer = (state, action) => {
