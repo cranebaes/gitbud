@@ -172,7 +172,13 @@ const loggedInUser = (state, action) => {
   if (state === undefined) {
     return {};
   } else if (action.type === 'UPDATED_LOGGEDIN_USER') {
+    console.log('hahahahahahahahha', action.loggedInUser)
     return action.loggedInUser;
+  } else if (action.type === 'ADD_CUR_PAIR_STATUS'){
+    console.log('yoyoyoyoyoyoyoyoyoy', action.pair)
+    state = Object.assign({}, state, {
+    paired:state.paired.concat(action.pair)});
+    return state
   }
   return state;
 };
