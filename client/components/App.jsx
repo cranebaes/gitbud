@@ -153,9 +153,6 @@ getPairs() {
               <Route path="/user/:id" component={UserDetails} />
               <Route component={NotFound} />
             </Switch>
-            <FloatingActionButton secondary={ true } style={ { position: "absolute", bottom: 20, left: 20 } } onClick={ this.togglePartyMode } >
-              <SocialPartyMode />
-            </FloatingActionButton >
           </div>
         </BrowserRouter>
       );

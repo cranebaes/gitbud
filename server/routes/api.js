@@ -161,13 +161,12 @@ module.exports = {
             console.log('GET PROJECT project response', res);
             const project = res.records[0];
             resolve(new db.models.Project(project.get('project'))
-            );
+          );
           })
           .catch(reject)
           .then(() => dbSession.close());
       });
     },
-
 
     pairedProjects: function findPairProjects(req, res) {
       return new Promise((resolve, reject) => {
@@ -201,7 +200,6 @@ module.exports = {
           RETURN pair
          `)
           .then((res) => {
-            console.log('185', res)
             resolve(res.records.map(project =>
               res.records.map(user => new db.models.User(user.get('pair')))
             ));
@@ -209,29 +207,7 @@ module.exports = {
           .catch(reject)
           .then(() => dbSession.close());
       });
-    },
-
-
-    pairedProjects: function findPair(req, res) {
-      return new Promise((resolve, reject) => {
-        const dbSession = dbDriver.session();
-        console.log('197.....197 recived req', req.query);
-        const loggedInUserGhId = req.query.loggedInUserGhId;
-        const partnerGhId = req.query.partnerGhId;
-
-        dbSession.run(`
-          MATCH (cur:User{ghId:${loggedInUserGhId}})-[:PAIRED_WITH]->(group)<-[:PAIRED_WITH]-(paired:User{ghId:${partnerGhId}})
-          RETURN group
-          `)
-        .then((res) => {
-          console.log('205 response for group', res);
-          resolve(res);
-        })
-        .catch(reject)
-        .then(()=> dbSession.close());
-      });
-    },
-
+    }
 
   },
 
@@ -265,6 +241,7 @@ module.exports = {
     pair: function addPair(req) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
+        console.log('POST pair');
         dbSession.run(`
           MATCH (project:Project) WHERE ID(project) = ${Number(req.body.project)}
           MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
@@ -274,15 +251,11 @@ module.exports = {
           SET group.progress = project.structure
           return user, pair, group, project
         `)
-          .then((res)=> {
-            resolve(res);
-          })
+          .then(resolve)
           .catch(reject)
           .then(() => dbSession.close());
       });
     },
-
-
 
     // Adds a new message from the requesting user to the database
     messages: function sendMessage(req) {

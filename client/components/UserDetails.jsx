@@ -35,7 +35,7 @@ class UserDetails extends React.Component {
     console.log('this is props of UserDetails', props);
     super(props);
     this.state = {
-      // buttonClicked: false,
+      buttonClicked: false,
       expanded: false,
       partnerName: '',
       message: 'placeholder',
@@ -52,17 +52,19 @@ class UserDetails extends React.Component {
       this.setState({ expanded: true });
     }
 
+    socket.on('chat message', (msg) => this.renderMessages(msg));
+    //receive messages
 
     this.addPair = this.addPair.bind(this);
-    // this.togglePair = this.togglePair.bind(this);
+    this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.checkIfPaired = this.checkIfPaired.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
 
     this.initialize();
+
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
       axios.post('/API/messages', {
@@ -76,47 +78,6 @@ class UserDetails extends React.Component {
           });
         });
     };
-
-    socket.on('chat message', (msg) => this.renderMessages(msg));
-    //receive messages
-  }
-
-
-
-
-  initialize(){
-    return new Promise ((resolve, reject) => {
-      this.retrieveProjectId();
-      resolve();
-    })
-    .then(() => {
-      this.props.checkPairingStatus(false);
-      this.checkIfPaired();
-    })
-
-  }
-
-
-  checkIfPaired() {
-     axios.get('/API/pairedProjects', {
-      params:{
-        loggedInUserGhId: this.props.loggedInUserGhId,
-        partnerGhId:this.props.user.ghId
-      }
-    })
-    .then((res)=> {
-      console.log('96....96 responseClient', res);
-      console.log('110', this.props.isPaired)
-      if(res.data.records.length !== 0) {
-        this.props.checkPairingStatus(true);
-      } else if (res.data.records.length > 0) {
-        this.props.checkPairingStatus(false);
-      }
-      console.log('line 115', this.props.isPaired)
-    })
-    .catch((error) => {
-      console.log(error);
-    })
   }
 
   initialize() {
@@ -151,8 +112,6 @@ class UserDetails extends React.Component {
 
 
   addPair() {
-    console.log('partneredUserId91', this.props.user.id)
-    console.log('curProjectId92', this.state.curProjectId)
     axios.post('/API/pair', {
       partnered: this.props.user.id,
       project: this.state.curProjectId,  //this is undefined
@@ -162,6 +121,7 @@ class UserDetails extends React.Component {
         this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
         console.log(response);
         this.setState({buttonClicked: !this.state.buttonClicked});
+        //window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -169,7 +129,6 @@ class UserDetails extends React.Component {
 
       axios.get('/')
   }
-
 
   togglePair() {
     axios.post('/API/pair', {
@@ -187,7 +146,7 @@ class UserDetails extends React.Component {
 
   /* dialog  handler*/
   handleOpen() {
-    console.log("clicked");
+    console.log("clicked")
     this.setState({open: true});
   };
 
@@ -215,7 +174,6 @@ class UserDetails extends React.Component {
         href="/my-projects"
         primary={ true } />
           </div>
-
     } else if (!this.state.buttonClicked) {
       return <RaisedButton
         label='Work With Me'
@@ -247,6 +205,7 @@ class UserDetails extends React.Component {
     });
 
     socket.emit('chat message', newMessage); //send msg
+    console.log(newMessage);
   };
 
   getMessages() {
@@ -259,6 +218,7 @@ class UserDetails extends React.Component {
 
 
   renderMessages(msg) {
+    console.log("asdadadadasd", this.state.chatBox)
     var updatedChatBox= this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
@@ -378,15 +338,12 @@ const mapStateToProps = (state, props) => {
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
-  const isPaired = state.pairingStatus;
-  console.log('346', state.pairingStatus)
   return {
     user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
     loggedInUserGhId,
-    isPaired,
   };
 };
 
@@ -399,7 +356,6 @@ const mapDispatchToProps = dispatch =>
     createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
-    checkPairingStatus: (isPaired) => dispatch({type: 'ADD_PAIRING_STATUS', isPaired}),
   });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

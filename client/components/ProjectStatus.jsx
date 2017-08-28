@@ -7,10 +7,12 @@ import {
   ToolbarTitle
 } from 'material-ui/Toolbar';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
+import SocialPartyMode from 'material-ui/svg-icons/social/party-mode';
 
 const style = {
   margin: 12,
@@ -58,6 +60,7 @@ class ProjectStatus extends React.Component {
 
   render() {
     return (
+      <div>
       <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
         <Card style={ { marginBottom: 12 } }>
           <Toolbar>
@@ -108,6 +111,12 @@ class ProjectStatus extends React.Component {
           </Dialog>
         </Card>
       </Paper>
+       <FloatingActionButton secondary={ true } style={ { position: "absolute", bottom: 20, left: 20 } }  >
+       <SocialPartyMode />
+
+            </FloatingActionButton >
+      </div>
+
     )
   }
 }
