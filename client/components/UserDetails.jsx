@@ -171,7 +171,7 @@ class UserDetails extends React.Component {
         label="Let's Work!"
         fullWidth={true}
         icon={ <ActionBuild /> }
-        href={`/projects/${this.state.curProjectId}`}
+        href="/my-projects"
         primary={ true } />
           </div>
     } else if (!this.state.buttonClicked) {
