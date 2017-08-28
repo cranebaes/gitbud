@@ -14,10 +14,10 @@ module.exports = {
   GET: {
     signout: function signout(req, res) {
       // destroy session and redirect to home
-      console.log('LOGGING OUT');
-      req.session.destroy();
-      req.logout();
-      res.redirect('/');
+        console.log('LOGGING OUT');
+        req.session.destroy()
+        req.logout();
+        res.redirect('/');
     },
     authenticated: function checkAuthenticated(req, res) {
       // If user signed in, send account details
