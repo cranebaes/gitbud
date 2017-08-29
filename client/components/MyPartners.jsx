@@ -27,29 +27,25 @@ class MyPartners extends React.Component {
       isMounted: false,
       userLists: [],
     }
-
+    console.log('My Partners props 1', props);
+      // this.setState({
+      //   userLists:this.props.pairedUsers
+      // })
     // this.handleMounted = this.handleMounted.bind(this);
     // this.handlePatners = this.handlePatners.bind(this);
   }
 
   componentDidMount(){
-    // this.handleMounted()
-    let tests = this.props.pairedUsers;
-
-    if(tests) {
+    console.log('My Partners props 2', this.props);
+    if(this.props.pairedUsers) {
       this.setState({
-        userLists:this.props.pairedUsers
+        userLists: this.props.pairedUsers
       })
     } else {
       this.setState({
         userLists:[]
       })
     }
-
-  }
-
-  handleMounted(){
-    // this.setState({isMounted : true})
   }
 
 
@@ -70,10 +66,9 @@ class MyPartners extends React.Component {
 
   }
 
-  // var test = Array.prototype.slice.call(props.currentPartners)
-  // console.log('test', test)
 render() {
-  let tests = this.state.userLists
+  console.log('My Partners state 1', this.props);
+  let tests = this.props.pairedUsers[0];
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
@@ -113,10 +108,9 @@ render() {
 
 
 const mapStateToProps = (state) => {
-  console.log('state', state.pairedUsers)
-  const pairedUsers = state.pairedUsers;
+  //console.log('My Partners state 2', state);
   return {
-     pairedUsers: pairedUsers
+     pairedUsers: state.pairedUsers
   };
 };
 

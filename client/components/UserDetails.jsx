@@ -115,8 +115,9 @@ class UserDetails extends React.Component {
     })
       .then((response) => {
         console.log('this is props from clicking', this.props);
+        console.log('Add Pair response', response);
         this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
-        console.log(response);
+        console.log('Add pair response: ', response);
         this.setState({buttonClicked: !this.state.buttonClicked});
         //window.location.reload();
       })

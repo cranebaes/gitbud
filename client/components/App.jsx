@@ -55,8 +55,8 @@ class App extends React.Component {
     axios.get('/API/pairs')
       .then((pairs) => {
         console.log('APP.jsx get pairs', pairs);
-        this.setState({myPartners: pairs.data});
-        this.props.addPairsList(pairs.data);
+        //this.setState({myPartners: pairs.data});
+        this.props.loadPairedUsers(pairs.data);
       })
       .catch(console.error);
   }
@@ -173,10 +173,11 @@ class App extends React.Component {
   Allows App component to have message and project state
 */
 const mapStateToProps = (state) => {
-  //console.log('APP state: ', state);
+  console.log('APP state: ', state);
   return {
     message: state.message,
     projects: state.projects,
+    pairedUsers: state.pairedUsers,
   };
 };
 
@@ -185,7 +186,7 @@ const mapStateToProps = (state) => {
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = (dispatch) => {
-  //console.log('APP dispatch: ', dispatch);
+  //console.log('APP dispatch: ', projects);
   return {
     changeString: () => dispatch({
       type: 'CHANGE_STRING',
@@ -198,6 +199,10 @@ const mapDispatchToProps = (dispatch) => {
     loadMessages: messages => dispatch({
       type: 'MESSAGES_LOAD',
       messages,
+    }),
+    loadPairedUsers: pairedUsers => dispatch({
+      type: 'LOAD_PAIRING',
+      pairedUsers,
     }),
     addPairsList: pairs => dispatch({
       type: 'ADD_PAIRING',
