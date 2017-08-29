@@ -252,7 +252,6 @@ module.exports = {
           return user, pair, group, project
         `)
           .then((res) => {
-            console.log('POST PAIR project response', res);
             const pair = res.records[0];
             resolve(new db.models.User(pair.get('pair')));
           })

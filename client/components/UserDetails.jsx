@@ -116,8 +116,7 @@ class UserDetails extends React.Component {
       .then((response) => {
         console.log('this is props from clicking', this.props);
         console.log('Add Pair response', response);
-        this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
-        console.log('Add pair response: ', response);
+        this.props.createPairing(response.data);
         this.setState({buttonClicked: !this.state.buttonClicked});
         //window.location.reload();
       })
@@ -341,7 +340,7 @@ const mapDispatchToProps = dispatch =>
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
+    createPairing: (pairs) => dispatch({ type: 'ADD_PAIRING', pairs }),
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
   });
