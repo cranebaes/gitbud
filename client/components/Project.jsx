@@ -48,7 +48,6 @@ class Project extends React.Component {
   Allows Project component to have project and projectID state
 */
 const mapStateToProps = (state, props) => {
-  //debugger;
   console.log('Project.jsx state: ', state);
   const projectId = Number(props.match.params.id);
   const project = state.projects.filter(project => project.id === projectId)[0];

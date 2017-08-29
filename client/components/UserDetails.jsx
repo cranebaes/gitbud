@@ -337,12 +337,19 @@ const mapDispatchToProps = dispatch =>
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    createPairing: (pairs) => dispatch({ type: 'ADD_PAIRING', pairs }),
-    dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
-    dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
+    createPairing: (pairs) => dispatch({
+      type: 'ADD_PAIRING',
+      pairs,
+    }),
+    dispatchPairing: (userId, projectId) => dispatch({
+      type: 'CHANGE_USER_PAIRING',
+      userId,
+      projectId,
+    }),
+    dispatchMessage: (userId, message) => dispatch({
+      type: 'MESSAGE_SEND',
+      userId,
+      message,
+    }),
   });
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
-    
-/* <CardMedia overlay={ <CardTitle title={ this.props.user.name } subtitle='Experience: n00b'/> }>
-  <img src={ this.props.user.avatarUrl } />
-</CardMedia> */
