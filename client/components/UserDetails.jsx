@@ -96,7 +96,6 @@ class UserDetails extends React.Component {
     })
     .then((pairProjects) => {
       if (pairProjects.data.length > 0) {
-        console.log('THERE ARE PROJECTS HERE');
         this.setState({
           buttonClicked: true
         })
@@ -114,8 +113,6 @@ class UserDetails extends React.Component {
       project: this.state.curProjectId,  //this is undefined
     })
       .then((response) => {
-        console.log('this is props from clicking', this.props);
-        console.log('Add Pair response', response);
         this.props.createPairing(response.data);
         this.setState({buttonClicked: !this.state.buttonClicked});
         //window.location.reload();
@@ -132,7 +129,7 @@ class UserDetails extends React.Component {
       project: this.state.curProjectId,
     })
       .then((response) => {
-        this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
+        //this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
         console.log(response);
       })
       .catch((error) => {
@@ -141,7 +138,7 @@ class UserDetails extends React.Component {
   }
   /* dialog  handler*/
   handleOpen() {
-    console.log("clicked")
+    //console.log("clicked")
     this.setState({open: true});
   };
   handleClose() {

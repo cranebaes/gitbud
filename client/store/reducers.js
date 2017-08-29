@@ -50,18 +50,16 @@ const pairedUsers = (state, action) => {
     console.log('ADD PAIRING state 1', state);
     console.log('ADD PAIRING action', action);
     if (state.length !== 0) {
-      let idCollection = state[0].map(function(id) {
-        return state.id;
+      const idCollection = state[0].map((user) => {
+	      return user.ghId;
       });
-
-      if (idCollection.indexOf(action.id) === -1) {
-        state[0].push(action);
+      if (idCollection.indexOf(action.pairs.ghId) === -1) {
+        state[0].push(action.pairs);
       }
-
-      console.log('ADD PAIRING state 2', state);
-      return state;
+    } else {
+      state.push(action.pairs);
     }
-    return action;
+    return state;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     console.log('pairedUsers load:', action.payload.pairedUsers);
     return action.payload.pairedUsers;
