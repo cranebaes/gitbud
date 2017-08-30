@@ -16,6 +16,7 @@ import {
   ToolbarTitle
 } from 'material-ui/Toolbar';
 import {Card, CardText } from 'material-ui/Card';
+import Subheader from 'material-ui/Subheader';
 
 
 
@@ -29,6 +30,7 @@ const MyPartners = (props) => {
             <ToolbarTitle text="My Partners"/>
           </ToolbarGroup>
         </Toolbar>
+        <Subheader>Click on a user to chat and start working!</Subheader>
         <Table style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
           <TableHeader displaySelectAll={ false }>
             <TableRow>

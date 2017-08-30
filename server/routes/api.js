@@ -145,6 +145,47 @@ module.exports = {
           .then(() => dbSession.close());
       });
     },
+    //Retrieve the project that two users share
+    //Returns a project
+    project: function getProject(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('GET project');
+        const ghId = req.user.ghInfo.id;
+        const userId = req.query.id
+        dbSession.run(`
+          MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
+          RETURN project
+          `)
+          .then((res) => {
+            console.log('GET PROJECT project response', res);
+            const project = res.records[0];
+            resolve(new db.models.Project(project.get('project'))
+          );
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      });
+    },
+
+    pairedProjects: function findPairProjects(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('GET paired projects');
+        const userId = Number(req.query.userId);
+        const partnerId = Number(req.query.partnerId);
+        dbSession.run(`
+          MATCH(user:User {ghId: ${userId}})-[:PAIRED_WITH]->(group)<-
+          [:PAIRED_WITH]-(partner:User {ghId: ${partnerId}})
+          RETURN group
+          `)
+          .then((res) => {
+            resolve(res.records);
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      })
+    },
 
     // Returns an array of user objects--one for each
     // user with which the requesting user is paired

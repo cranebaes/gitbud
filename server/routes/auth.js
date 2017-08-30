@@ -14,7 +14,7 @@ module.exports = {
   GET: {
     signout: function signout(req, res) {
       // destroy session and redirect to home
-      console.log('LOGGING OUT', req.logout);
+      console.log('LOGGING OUT');
       req.logout();
       res.redirect('/');
     },

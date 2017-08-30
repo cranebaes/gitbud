@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import Subheader from 'material-ui/Subheader';
 import {
   Table,
   TableBody,
@@ -27,6 +28,7 @@ const MyProjects = (props) => {
             <ToolbarTitle text="My Projects"/>
           </ToolbarGroup>
         </Toolbar>
+        <Subheader>Projects you have a partner with</Subheader>
         <Table style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
           <TableHeader displaySelectAll={ false }>
             <TableRow>

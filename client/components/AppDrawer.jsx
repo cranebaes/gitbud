@@ -15,6 +15,13 @@ import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionFace from 'material-ui/svg-icons/action/face';
 import DeviceDeveloperMode from 'material-ui/svg-icons/device/developer-mode';
 
+/*
+Deprecated FindUsers button
+Add this to AppDrawer when user functionality expands
+
+          <RaisedButton label="Find A Partner" fullWidth={ true } secondary={ true } onClick={ props.closeDrawer } icon={ <ActionFace/> }/>
+*/
+
 function AppDrawer(props) {
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', props);
   return (
@@ -35,13 +42,13 @@ function AppDrawer(props) {
         <CardHeader title="Users"/>
         <div style={ {width:'90%', margin: 'auto'} }>
           <Link to="/my-partners">
-            <RaisedButton label="My Partners"fullWidth={ true } onClick={ props.closeDrawer } />
+            <RaisedButton label="My Partners"fullWidth={ true } onClick={ props.closeDrawer } secondary={ true }icon={ <ActionFace/> }/>
           </Link>
         </div>
       </Card>
       <BottomNavigation style={ { position: "absolute", bottom: 0 } }>
-        <a href="/auth/signout">
-          <BottomNavigationItem label="Sign Out" icon={ <ActionEject/> }/>
+        <a href='/auth/signout'>
+          <BottomNavigationItem onClick={ props.logout } label="Sign Out" icon={ <ActionEject/> }/>
         </a>
         <Link to='/user'><BottomNavigationItem label="My Account" icon={ <ActionAccountCircle/> } onClick={ props.closeDrawer }/></Link>
       </BottomNavigation>

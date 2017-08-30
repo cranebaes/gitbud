@@ -85,12 +85,34 @@ class App extends React.Component {
   checkAuthenticated() {
     axios.get('/auth/authenticated')
       .then((res) => {
-        this.setState({ loggedIn: res.data });
-        this.getMessages();
-        this.getProjects();
-        this.getPairs();
+        if (res.data !== false) {
+          this.setState({ loggedIn: res.data });
+          this.getMessages();
+          this.getProjects();
+          this.getPairs()
+          this.props.loggedInUser(res.data);
+        }
       });
   }
+
+  //party mode
+  togglePartyMode() {
+    const colors = ['blue', 'green', 'red', 'yellow', 'lilac'];
+    if (this.state.partyMode) {
+      clearInterval(this.state.partyMode);
+      document.body.setAttribute('style', `background-color:white`);
+      this.setState({ partyMode: false });
+    } else {
+      this.setState({partyMode:
+        setInterval(() => {
+          const randomNum = Math.floor(Math.random() * colors.length);
+          document.body.setAttribute('style', `background-color:${colors[randomNum]}`);
+        }, 200),
+      });
+    }
+  }
+
+
 
   render() {
     //console.log('App render this: ', this);
@@ -101,14 +123,14 @@ class App extends React.Component {
      If user is not logged in (logged out) display landing page
     */
     if (this.state.loggedIn.language) {
-      console.log('App rendering', this.state.loggedIn);
+      //console.log('App rendering', this.state.loggedIn);
       return (
         <BrowserRouter>
           <div>
             <AppBar title='GitPal' onLeftIconButtonTouchTap={ this.navTap } iconElementRight={ <Link to='/'><IconButton><ActionHome color={ fullWhite }/></IconButton></Link> }/>
 
             {/* opens and closes side menu */}
-            <AppDrawer onClick={this.getPairs} currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
+            <AppDrawer onClick={this.getPairs} logout={ this.props.loggedOut } currentPartners={this.state.myPartners} open={ this.state.drawerOpen } changeOpenState={ open => this.setState({ drawerOpen: open }) } closeDrawer={ () => this.setState({ drawerOpen: false}) }/>
 
             {/*
               Switch renders a route exclusively. Without it, it would route inclusively
@@ -132,15 +154,13 @@ class App extends React.Component {
               <Route path="/user/:id" component={UserDetails} />
               <Route component={NotFound} />
             </Switch>
-            <FloatingActionButton secondary={ true } style={ { position: "absolute", bottom: 20, left: 20 } }>
-            </FloatingActionButton >
           </div>
         </BrowserRouter>
       );
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      console.log('LOGGING ON', this.state);
+      console.log('Logging on', this.state);
           return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
@@ -176,10 +196,17 @@ const mapDispatchToProps = (dispatch) => {
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    // addPairsList: pairs => dispatch({
-    //   type: 'ADD_PAIRING',
-    //   pairs,
-    // })
+    addPairsList: pairs => dispatch({
+      type: 'ADD_PAIRING',
+      pairs,
+    }),
+    loggedInUser: loggedInUser => dispatch({
+      type: 'UPDATED_LOGGEDIN_USER',
+      loggedInUser,
+    }),
+    loggedOut: () => dispatch({
+      type: 'USER_LOGOUT'
+    })
   };
 };
 
