@@ -87,4 +87,4 @@ exports.handler = function handler(req, res) {
     res.statusCode = 404;
     res.end(exports.index);
   }
-}
+};

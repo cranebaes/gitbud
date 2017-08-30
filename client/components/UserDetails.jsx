@@ -15,7 +15,6 @@ import ActionDone from 'material-ui/svg-icons/action/done';
 import ActionAdd from 'material-ui/svg-icons/social/person';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import TextField from 'material-ui/TextField';
-
 /* for Dialog  */
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -30,7 +29,6 @@ import io from 'socket.io-client';
 const socket = io();
 
 class UserDetails extends React.Component {
-
   constructor(props) {
     console.log('this is props of UserDetails', props);
     super(props);
@@ -54,7 +52,6 @@ class UserDetails extends React.Component {
 
     socket.on('chat message', (msg) => this.renderMessages(msg));
     //receive messages
-
     this.addPair = this.addPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
@@ -129,7 +126,6 @@ class UserDetails extends React.Component {
 
       axios.get('/')
   }
-
   togglePair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
@@ -143,18 +139,15 @@ class UserDetails extends React.Component {
         console.log(error);
       });
   }
-
   /* dialog  handler*/
   handleOpen() {
     console.log("clicked")
     this.setState({open: true});
   };
-
   handleClose() {
     this.setState({open: false});
   };
   /* dialog  handler end*/
-
   pairButton() {
     if (this.state.buttonClicked) {
       console.log('these are the props for UserDetails', this);
@@ -254,7 +247,6 @@ class UserDetails extends React.Component {
         onClick={this.handleClose}
       />
     ];
-
     return (
       <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
         <Card expanded={this.state.expanded} style={{ width: '40%', marginLeft: 'auto', marginRight: 'auto', marginBottom: 12 }}>
@@ -276,10 +268,8 @@ class UserDetails extends React.Component {
             { this.pairButton() }
             <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.expandCard} secondary={true} />
           </div>
-
-        {/*dialog for message
+        {/*dialog for message*/}
           <div>
-
           <Dialog
             title="Send a message"
             actions={actions}
@@ -301,8 +291,6 @@ class UserDetails extends React.Component {
           </Dialog>
         </div>
         {/*dialog for message end*/}
-
-
           {/* should be deleted */}
 
             <div expandable={true}>
@@ -330,7 +318,6 @@ class UserDetails extends React.Component {
     );
   }
 }
-
 const mapStateToProps = (state, props) => {
   //console.log("line 267", state)
   const userId = Number(props.match.params.id);
@@ -346,7 +333,6 @@ const mapStateToProps = (state, props) => {
     loggedInUserGhId,
   };
 };
-
 const mapDispatchToProps = dispatch =>
   ({
     loadMessages: messages => dispatch({
@@ -357,11 +343,8 @@ const mapDispatchToProps = dispatch =>
     dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
     dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
   });
-
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
-
-//WORK HERE
-
+    
 /* <CardMedia overlay={ <CardTitle title={ this.props.user.name } subtitle='Experience: n00b'/> }>
   <img src={ this.props.user.avatarUrl } />
 </CardMedia> */
