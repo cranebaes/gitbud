@@ -23,7 +23,6 @@ Add this to AppDrawer when user functionality expands
 */
 
 function AppDrawer(props) {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', props);
   return (
     <Drawer open={ props.open } docked={ false } onRequestChange={ props.changeOpenState }>
       <AppBar title="GitPal" showMenuIconButton={ false }/>

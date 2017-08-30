@@ -104,15 +104,12 @@ class ProjectStatus extends React.Component {
 
     var updatedChatBox = this.state.chatBox
     updatedChatBox.push(myMessage);
-    console.log('chatbox', this.state.chatBox)
 
     this.setState({
       chatBox: updatedChatBox
     });
 
     socket.emit('chat message', newMessage); //send msg
-    console.log(newMessage);
-    console.log('chatbox',this.state.chatBox)
   };
 
 
@@ -237,15 +234,3 @@ const mapDispatchToProps = dispatch =>
   });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectStatus);
-
-
-
-
-
-
-
-
-
-
-
-

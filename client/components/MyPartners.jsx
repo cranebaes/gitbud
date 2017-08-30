@@ -20,8 +20,30 @@ import Subheader from 'material-ui/Subheader';
 
 
 
-const MyPartners = (props) => {
-  console.log('This is the props from MyPartners ', props);
+class MyPartners extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMounted: false,
+      userLists: [],
+    }
+  }
+
+  componentDidMount(){
+    if(this.props.pairedUsers) {
+      this.setState({
+        userLists: this.props.pairedUsers
+      })
+    } else {
+      this.setState({
+        userLists:[]
+      })
+    }
+  }
+
+
+render() {
+  let tests = this.props.pairedUsers[0];
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
@@ -40,26 +62,35 @@ const MyPartners = (props) => {
             </TableRow>
           </TableHeader>
           <TableBody stripedRows={ true } displayRowCheckbox={ false }>
-            {(props.currentPartners[0] ? props.currentPartners[0] : []).map(user =>
+          {
+            tests.map(user =>
               (<TableRow key={ user.id }>
                 <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
                 <TableRowColumn>{ user.language }</TableRowColumn>
                 <TableRowColumn>{ user.experience }</TableRowColumn>
               </TableRow>)
-            )}
+            )
+          }
+
           </TableBody>
         </Table>
       </Card>
     </Paper>
   );
-};
+  }
+}
 
-const mapStateToProps = (state) => {
-  console.log('State is: ', state);
+
+
+const mapStateToProps = (state, props) => {
   return {
-    // pairedUsers: state.pairedUsers
+     pairedUsers: state.pairedUsers
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
 
-export default connect(mapStateToProps)(MyPartners);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPartners);

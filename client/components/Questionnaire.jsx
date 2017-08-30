@@ -38,7 +38,6 @@ class Questionnaire extends React.Component {
 
     axios.post('/API/users', userInfo)
       .then((response) => {
-        console.log(response);
         // redirect to home after successful submission
         window.location.href = '/projects';
       })
@@ -51,7 +50,6 @@ class Questionnaire extends React.Component {
     return (
       <Card style={ { width: '50%', margin: 'auto', padding: 12, marginTop: 12 } }>
         <h1>Welcome, {this.props.user.name}</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius quam id quam aliquot, quis varius est euismod.</p>
         <br />
         <p>Select your preferred language to use with other GitPal members:</p>
         <DropDownMenu value={this.state.selectedLanguage} onChange={(e, idx, val) => this.onLanguageSelect(val)}>

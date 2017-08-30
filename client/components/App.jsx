@@ -46,15 +46,24 @@ class App extends React.Component {
 
     this.navTap = this.navTap.bind(this);
   }
+  componentDidUpdate() {
+    if(this.state.loggedIn) {
+      this.getAllUsers();
+    }
+  }
 
-  componentDidMount() {
-    this.getPairs()
+  getAllUsers() {
+    axios.get('/API/allUsers')
+      .then((allUsers) => {
+        this.props.addAllUsers(allUsers.data);
+      })
+      .catch(console.error);
   }
 
   getPairs() {
     axios.get('/API/pairs')
       .then((pairs) => {
-        this.setState({myPartners: pairs.data})
+        this.props.loadPairedUsers(pairs.data);
       })
       .catch(console.error);
   }
@@ -115,7 +124,6 @@ class App extends React.Component {
 
 
   render() {
-    //console.log('App render this: ', this);
     /*
      Condition:
      If user is registered and logs render all the components.
@@ -160,7 +168,6 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      console.log('Logging on', this.state);
           return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
@@ -170,10 +177,10 @@ class App extends React.Component {
   Allows App component to have message and project state
 */
 const mapStateToProps = (state) => {
-  //console.log('APP state: ', state);
   return {
     message: state.message,
     projects: state.projects,
+    pairedUsers: state.pairedUsers,
   };
 };
 
@@ -182,8 +189,11 @@ const mapStateToProps = (state) => {
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = (dispatch) => {
-  //console.log('APP dispatch: ', dispatch);
   return {
+    addAllUsers: (allUsers) => dispatch({
+      type: 'LOAD_ALL_USERS',
+      allUsers,
+    }),
     changeString: () => dispatch({
       type: 'CHANGE_STRING',
       text: 'some other message'
@@ -195,6 +205,10 @@ const mapDispatchToProps = (dispatch) => {
     loadMessages: messages => dispatch({
       type: 'MESSAGES_LOAD',
       messages,
+    }),
+    loadPairedUsers: pairedUsers => dispatch({
+      type: 'LOAD_PAIRING',
+      pairedUsers,
     }),
     addPairsList: pairs => dispatch({
       type: 'ADD_PAIRING',

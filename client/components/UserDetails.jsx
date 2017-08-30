@@ -30,8 +30,8 @@ const socket = io();
 
 class UserDetails extends React.Component {
   constructor(props) {
-    console.log('this is props of UserDetails', props);
     super(props);
+    console.log('this is props of UserDetails', props);
     this.state = {
       buttonClicked: false,
       expanded: false,
@@ -96,7 +96,6 @@ class UserDetails extends React.Component {
     })
     .then((pairProjects) => {
       if (pairProjects.data.length > 0) {
-        console.log('THERE ARE PROJECTS HERE');
         this.setState({
           buttonClicked: true
         })
@@ -111,14 +110,12 @@ class UserDetails extends React.Component {
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.state.curProjectId,  //this is undefined
+      project: this.state.curProjectId,
     })
       .then((response) => {
-        console.log('this is props from clicking', this.props);
-        this.props.createPairing(this.props.user.name, this.props.user.language, this.props.user.experience, this.props.user.id);
-        console.log(response);
+        this.props.createPairing(response.data);
         this.setState({buttonClicked: !this.state.buttonClicked});
-        //window.location.reload();
+        window.location.reload();  //REACT needs this after a POST
       })
       .catch((error) => {
         console.log(error);
@@ -132,7 +129,7 @@ class UserDetails extends React.Component {
       project: this.state.curProjectId,
     })
       .then((response) => {
-        this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
+        //this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
         console.log(response);
       })
       .catch((error) => {
@@ -141,7 +138,7 @@ class UserDetails extends React.Component {
   }
   /* dialog  handler*/
   handleOpen() {
-    console.log("clicked")
+    //console.log("clicked")
     this.setState({open: true});
   };
   handleClose() {
@@ -211,7 +208,6 @@ class UserDetails extends React.Component {
 
 
   renderMessages(msg) {
-    console.log("asdadadadasd", this.state.chatBox)
     var updatedChatBox= this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
@@ -319,9 +315,8 @@ class UserDetails extends React.Component {
   }
 }
 const mapStateToProps = (state, props) => {
-  //console.log("line 267", state)
   const userId = Number(props.match.params.id);
-  const user = state.users.filter(user => user.id === userId)[0];
+  const user = state.allUsers.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
@@ -339,12 +334,19 @@ const mapDispatchToProps = dispatch =>
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    createPairing: (name, language, experience, id) => dispatch({ type: 'ADD_PAIRING', name, language, experience, id }),
-    dispatchPairing: (userId, projectId) => dispatch({ type: 'CHANGE_USER_PAIRING', userId, projectId }),
-    dispatchMessage: (userId, message) => dispatch({ type: 'MESSAGE_SEND', userId, message }),
+    createPairing: (pairs) => dispatch({
+      type: 'ADD_PAIRING',
+      pairs,
+    }),
+    dispatchPairing: (userId, projectId) => dispatch({
+      type: 'CHANGE_USER_PAIRING',
+      userId,
+      projectId,
+    }),
+    dispatchMessage: (userId, message) => dispatch({
+      type: 'MESSAGE_SEND',
+      userId,
+      message,
+    }),
   });
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
-    
-/* <CardMedia overlay={ <CardTitle title={ this.props.user.name } subtitle='Experience: n00b'/> }>
-  <img src={ this.props.user.avatarUrl } />
-</CardMedia> */

@@ -158,7 +158,6 @@ module.exports = {
           RETURN project
           `)
           .then((res) => {
-            console.log('GET PROJECT project response', res);
             const project = res.records[0];
             resolve(new db.models.Project(project.get('project'))
           );
@@ -167,7 +166,7 @@ module.exports = {
           .then(() => dbSession.close());
       });
     },
-
+    //Retrieves all projects that a user is paired with other users
     pairedProjects: function findPairProjects(req, res) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
@@ -181,6 +180,22 @@ module.exports = {
           `)
           .then((res) => {
             resolve(res.records);
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      })
+    },
+    //Retrieves all users
+    allUsers: function getAllUsers(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        dbSession.run(
+          `MATCH (users:User) RETURN users`
+        )
+          .then((res) => {
+            resolve(res.records.map(user =>
+              new db.models.User(user.get('users'))
+            ));
           })
           .catch(reject)
           .then(() => dbSession.close());
@@ -251,7 +266,10 @@ module.exports = {
           SET group.progress = project.structure
           return user, pair, group, project
         `)
-          .then(resolve)
+          .then((res) => {
+            const pair = res.records[0];
+            resolve(new db.models.User(pair.get('pair')));
+          })
           .catch(reject)
           .then(() => dbSession.close());
       });
