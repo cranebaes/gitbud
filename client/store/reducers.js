@@ -13,11 +13,11 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 
+//Returns all users in the database
 const allUsers = (state, action) => {
   if(state === undefined) {
     return [];
   } else if (action.type === 'LOAD_ALL_USERS') {
-    console.log('LOAD ALL USERS', action);
     return action.allUsers;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     console.log('AllUsers load:', action.payload.allUsers);
@@ -57,12 +57,8 @@ const pairedUsers = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'LOAD_PAIRING') {
-    console.log('LOAD PAIRING STATE', state);
-    console.log('LOAD PAIRING ACTION', action.pairedUsers);
     return action.pairedUsers;
   } else if (action.type === 'ADD_PAIRING') {
-    console.log('ADD PAIRING state 1', state);
-    console.log('ADD PAIRING action', action);
     if (state.length !== 0) {
       const idCollection = state[0].map((user) => {
 	      return user.ghId;

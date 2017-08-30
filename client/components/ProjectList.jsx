@@ -52,7 +52,6 @@ const ProjectList = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  //console.log('project list state: ', state);
   return {
     projects: state.projects,
   };

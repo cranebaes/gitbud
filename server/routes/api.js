@@ -158,7 +158,6 @@ module.exports = {
           RETURN project
           `)
           .then((res) => {
-            console.log('GET PROJECT project response', res);
             const project = res.records[0];
             resolve(new db.models.Project(project.get('project'))
           );
@@ -167,7 +166,7 @@ module.exports = {
           .then(() => dbSession.close());
       });
     },
-
+    //Retrieves all projects that a user is paired with other users
     pairedProjects: function findPairProjects(req, res) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
@@ -186,7 +185,7 @@ module.exports = {
           .then(() => dbSession.close());
       })
     },
-
+    //Retrieves all users
     allUsers: function getAllUsers(req, res) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();

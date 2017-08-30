@@ -27,16 +27,9 @@ class MyPartners extends React.Component {
       isMounted: false,
       userLists: [],
     }
-    console.log('My Partners props 1', props);
-      // this.setState({
-      //   userLists:this.props.pairedUsers
-      // })
-    // this.handleMounted = this.handleMounted.bind(this);
-    // this.handlePatners = this.handlePatners.bind(this);
   }
 
   componentDidMount(){
-    console.log('My Partners props 2', this.props);
     if(this.props.pairedUsers) {
       this.setState({
         userLists: this.props.pairedUsers
@@ -49,25 +42,7 @@ class MyPartners extends React.Component {
   }
 
 
-  handlePatners(){
-    // console.log('working');
-
-    //   console.log("48", this.props.currentPartners)
-    //   if (Aarray.isArray(this.props.currentPartners)) {
-    //     console.log('am i running')
-    //     (this.props.currentPartners[0] ? this.props.currentPartners[0] : []).map(user =>
-    //     (<TableRow key={ user.id }>
-    //       <TableRowColumn><Link to={`/user/${ user.id }`}>{ user.name }</Link></TableRowColumn>
-    //       <TableRowColumn>{ user.language }</TableRowColumn>
-    //       <TableRowColumn>{ user.experience }</TableRowColumn>
-    //     </TableRow>)
-    //     )
-    //   }
-
-  }
-
 render() {
-  console.log('My Partners state 1', this.props);
   let tests = this.props.pairedUsers[0];
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>

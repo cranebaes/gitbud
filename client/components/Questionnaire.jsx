@@ -38,7 +38,6 @@ class Questionnaire extends React.Component {
 
     axios.post('/API/users', userInfo)
       .then((response) => {
-        console.log(response);
         // redirect to home after successful submission
         window.location.href = '/projects';
       })

@@ -20,8 +20,6 @@ class ProjectDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log('project details props', props);
-    console.log('60', this.props.project.interested)
     this.state = {
       interest: false,
       open: false,
@@ -32,8 +30,8 @@ class ProjectDetails extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.handleInterest = this.handleInterest.bind(this);
-    this.getUsers();
 
+    this.getUsers();
   }
 
   getUsers() {

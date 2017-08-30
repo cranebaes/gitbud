@@ -110,12 +110,12 @@ class UserDetails extends React.Component {
   addPair() {
     axios.post('/API/pair', {
       partnered: this.props.user.id,
-      project: this.state.curProjectId,  //this is undefined
+      project: this.state.curProjectId,
     })
       .then((response) => {
         this.props.createPairing(response.data);
         this.setState({buttonClicked: !this.state.buttonClicked});
-        //window.location.reload();
+        window.location.reload();  //REACT needs this after a POST
       })
       .catch((error) => {
         console.log(error);
@@ -208,7 +208,6 @@ class UserDetails extends React.Component {
 
 
   renderMessages(msg) {
-    console.log("asdadadadasd", this.state.chatBox)
     var updatedChatBox= this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
@@ -231,7 +230,6 @@ class UserDetails extends React.Component {
   };
 
   render() {
-    console.log('USER DETAILS props', this.props);
      const actions = [
       <div>
        <form onSubmit={this.handleSubmit}>
@@ -317,8 +315,6 @@ class UserDetails extends React.Component {
   }
 }
 const mapStateToProps = (state, props) => {
-  console.log("line 267", props);
-  console.log("line 334", state);
   const userId = Number(props.match.params.id);
   const user = state.allUsers.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)

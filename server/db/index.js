@@ -3,10 +3,10 @@
  *  (Exports a connected DB object which is used in many places, but
  *  primarily, you will see it in the routes module, which handles
  *  all the endpoints that require db functionality)
- * 
- *  This module prorvides a connected db object for making queries
+ *
+ *  This module provides a connected db object for making queries
  *  and a set of models to parse the results of those queries.
- * 
+ *
  *  We use the neo4j BOLT driver which is good (and fast), but has
  *  its quirks. The workflow we have followed has meant creating a new
  *  session for each query, which may well not be necessary--indeed,

@@ -47,11 +47,9 @@ class App extends React.Component {
     this.navTap = this.navTap.bind(this);
   }
   componentDidUpdate() {
-    console.log('component Updated');
     if(this.state.loggedIn) {
       this.getAllUsers();
     }
-
   }
 
   getAllUsers() {
@@ -65,8 +63,6 @@ class App extends React.Component {
   getPairs() {
     axios.get('/API/pairs')
       .then((pairs) => {
-        console.log('APP.jsx get pairs', pairs);
-        //this.setState({myPartners: pairs.data});
         this.props.loadPairedUsers(pairs.data);
       })
       .catch(console.error);
@@ -76,7 +72,6 @@ class App extends React.Component {
   getProjects() {
     axios.get('/API/projects/')
       .then((project) => {
-        console.log('GET PROJECTS', project.data);
         this.props.addProjectsList(project.data);
       })
       .catch(console.error);
@@ -129,7 +124,6 @@ class App extends React.Component {
 
 
   render() {
-    //console.log('App render this: ', this);
     /*
      Condition:
      If user is registered and logs render all the components.
@@ -174,7 +168,6 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return <Questionnaire user={this.state.loggedIn} />;
     } else {
-      console.log('Logging on', this.state);
           return <Landing checkAuth={ this.checkAuthenticated } />;
     }
   }
@@ -196,7 +189,6 @@ const mapStateToProps = (state) => {
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = (dispatch) => {
-  //console.log('APP dispatch: ', projects);
   return {
     addAllUsers: (allUsers) => dispatch({
       type: 'LOAD_ALL_USERS',
