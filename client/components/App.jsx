@@ -184,7 +184,6 @@ class App extends React.Component {
   Allows App component to have message and project state
 */
 const mapStateToProps = (state) => {
-  console.log('APP state: ', state);
   return {
     message: state.message,
     projects: state.projects,

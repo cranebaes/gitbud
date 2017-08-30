@@ -108,8 +108,6 @@ render() {
 
 
 const mapStateToProps = (state, props) => {
-  console.log('My Partners state 2', state);
-  console.log('My partner mapStateToProps props', props);
   return {
      pairedUsers: state.pairedUsers
   };
