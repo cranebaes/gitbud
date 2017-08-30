@@ -13,6 +13,20 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 
+const allUsers = (state, action) => {
+  if(state === undefined) {
+    return [];
+  } else if (action.type === 'LOAD_ALL_USERS') {
+    console.log('LOAD ALL USERS', action);
+    return action.allUsers;
+  } else if (action.type === 'REDUX_STORAGE_LOAD') {
+    console.log('AllUsers load:', action.payload.allUsers);
+    return action.payload.allUsers;
+  }
+  return state;
+};
+
+
 const users = (state, action) => {
   console.log('Reducer action', action);
   if (state === undefined) {
@@ -185,6 +199,7 @@ const appReducer = combineReducers({
   projectProgress,
   loggedInUser,
   pairingStatus,
+  allUsers,
 });
 
 const rootReducer = (state, action) => {

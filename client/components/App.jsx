@@ -46,9 +46,20 @@ class App extends React.Component {
 
     this.navTap = this.navTap.bind(this);
   }
+  componentDidUpdate() {
+    console.log('component Updated');
+    if(this.state.loggedIn) {
+      this.getAllUsers();
+    }
 
-  componentDidMount() {
-    this.getPairs()
+  }
+
+  getAllUsers() {
+    axios.get('/API/allUsers')
+      .then((allUsers) => {
+        this.props.addAllUsers(allUsers.data);
+      })
+      .catch(console.error);
   }
 
   getPairs() {
@@ -65,7 +76,7 @@ class App extends React.Component {
   getProjects() {
     axios.get('/API/projects/')
       .then((project) => {
-        console.log('GEt PROJECTS', project.data);
+        console.log('GET PROJECTS', project.data);
         this.props.addProjectsList(project.data);
       })
       .catch(console.error);
@@ -188,6 +199,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   //console.log('APP dispatch: ', projects);
   return {
+    addAllUsers: (allUsers) => dispatch({
+      type: 'LOAD_ALL_USERS',
+      allUsers,
+    }),
     changeString: () => dispatch({
       type: 'CHANGE_STRING',
       text: 'some other message'

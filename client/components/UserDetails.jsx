@@ -317,9 +317,10 @@ class UserDetails extends React.Component {
   }
 }
 const mapStateToProps = (state, props) => {
-  console.log("line 267", props)
+  console.log("line 267", props);
+  console.log("line 334", state);
   const userId = Number(props.match.params.id);
-  const user = state.users.filter(user => user.id === userId)[0];
+  const user = state.allUsers.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
