@@ -1,12 +1,13 @@
 # GitPal
 
-> GitPal is an application that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
+> GitPal is an application forked from GitBud that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
 
 ## Team
 
-  - __Product Owner__: Shaikat Haque
-  - __Scrum Master__: Francis Ngo
-  - __Development Team Members__: Peter Warner-Medley, Brian Kim
+  - __Product Owner__: Scott Schaefer
+  - __Scrum Master__: Rick Gallegos
+  - __Development Team Members__: Christine Zimmerman, Scott Mitchell, Sonrisa Chen
+
 
 ## Table of Contents
 
@@ -63,8 +64,12 @@ npm install
 
 ### Roadmap
 
-View the project roadmap [here](https://github.com/cranebaes/GitPal/issues)
+View the project roadmap [here](https://github.com/Toucans456/GitPal/issues)
 
+## GitBud Repo
+
+View the original Repo
+[here](https://github.com/cranebaes/gitbud/)
 
 ## Contributing
 

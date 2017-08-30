@@ -98,7 +98,7 @@ class App extends React.Component {
           this.setState({ loggedIn: res.data });
           this.getMessages();
           this.getProjects();
-          this.getPairs()
+          this.getPairs();
           this.props.loggedInUser(res.data);
         }
       });
@@ -131,7 +131,6 @@ class App extends React.Component {
      If user is not logged in (logged out) display landing page
     */
     if (this.state.loggedIn.language) {
-      //console.log('App rendering', this.state.loggedIn);
       return (
         <BrowserRouter>
           <div>
@@ -194,10 +193,6 @@ const mapDispatchToProps = (dispatch) => {
       type: 'LOAD_ALL_USERS',
       allUsers,
     }),
-    changeString: () => dispatch({
-      type: 'CHANGE_STRING',
-      text: 'some other message'
-    }),
     addProjectsList: projects => dispatch({
       type: 'LIST_PROJECTS',
       projects,
@@ -209,10 +204,6 @@ const mapDispatchToProps = (dispatch) => {
     loadPairedUsers: pairedUsers => dispatch({
       type: 'LOAD_PAIRING',
       pairedUsers,
-    }),
-    addPairsList: pairs => dispatch({
-      type: 'ADD_PAIRING',
-      pairs,
     }),
     loggedInUser: loggedInUser => dispatch({
       type: 'UPDATED_LOGGEDIN_USER',
