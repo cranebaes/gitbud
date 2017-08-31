@@ -43,7 +43,7 @@ class MyPartners extends React.Component {
 
 
 render() {
-  let tests = this.props.pairedUsers[0];
+  let tests = this.props.pairedUsers[0] || [];
   return (
     <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
       <Card>
