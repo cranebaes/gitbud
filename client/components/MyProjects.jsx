@@ -1,3 +1,4 @@
+/* eslint no-console:0 */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,51 +13,47 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarTitle
-} from 'material-ui/Toolbar';
-import {Card, CardText } from 'material-ui/Card';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import { Card, CardText } from 'material-ui/Card';
 
-const MyProjects = (props) => {
-  return (
-    <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
-      <Card>
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarTitle text="My Projects"/>
-          </ToolbarGroup>
-        </Toolbar>
-        <Subheader>Projects you have a partner with</Subheader>
-        <Table style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
-          <TableHeader displaySelectAll={ false }>
-            <TableRow>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Language</TableHeaderColumn>
-              <TableHeaderColumn>Experience</TableHeaderColumn>
+const MyProjects = props => (
+  <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
+    <Card>
+      <Toolbar>
+        <ToolbarGroup>
+          <ToolbarTitle text="My Projects" />
+        </ToolbarGroup>
+      </Toolbar>
+      <Subheader>Projects you have a partner with</Subheader>
+      <Table
+        style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}
+      >
+        <TableHeader displaySelectAll={false}>
+          <TableRow>
+            <TableHeaderColumn>Name</TableHeaderColumn>
+            <TableHeaderColumn>Language</TableHeaderColumn>
+            <TableHeaderColumn>Experience</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody stripedRows displayRowCheckbox={false}>
+          {props.projects.map(project => (
+            <TableRow key={project.id}>
+              <TableRowColumn>
+                <Link to={`/projects/${project.id}`}>{project.project}</Link>
+              </TableRowColumn>
+              <TableRowColumn>{project.language}</TableRowColumn>
+              <TableRowColumn>{project.experience}</TableRowColumn>
             </TableRow>
-          </TableHeader>
-          <TableBody stripedRows={ true } displayRowCheckbox={ false }>
-            {props.projects.map(project =>
-              (<TableRow key={ project.id }>
-                <TableRowColumn><Link to={`/projects/${ project.id }`}>{ project.project }</Link></TableRowColumn>
-                <TableRowColumn>{ project.language }</TableRowColumn>
-                <TableRowColumn>{ project.experience }</TableRowColumn>
-              </TableRow>)
-            )}
-          </TableBody>
-        </Table>
+          ))}
+        </TableBody>
+      </Table>
     </Card>
-    </Paper>
-  );
-};
+  </Paper>
+);
 
-const mapStateToProps = (state) => {
-  return {
-    projects: state.projects.filter(project => project.paired.length > 0),
-  };
-};
+const mapStateToProps = state => ({
+  projects: state.projects.filter(project => project.paired.length > 0),
+});
 
-//connects the Store to MyProjects component
+// connects the Store to MyProjects component
 export default connect(mapStateToProps)(MyProjects);
