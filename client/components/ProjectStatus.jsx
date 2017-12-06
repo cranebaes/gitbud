@@ -1,5 +1,6 @@
 /* eslint no-console:0 */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
@@ -16,13 +17,13 @@ import io from 'socket.io-client';
 const socket = io();
 
 const style = {
-  margin: 12,
+  margin: 12
 };
 
 const customContentStyle = {
   width: '80%',
   height: '100%',
-  maxWidth: 'none',
+  maxWidth: 'none'
 };
 // renders a progress item component inside ProjectStatus
 const ProgressItem = props => {
@@ -42,7 +43,7 @@ class ProjectStatus extends React.Component {
     this.state = {
       open: false,
       dialogOpen: false,
-      chatBox: [],
+      chatBox: []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,7 +51,7 @@ class ProjectStatus extends React.Component {
     this.handleDiaLogOpen = this.handleDiaLogOpen.bind(this);
     this.handleDiaLogClose = this.handleDiaLogClose.bind(this);
     this.handleMessegeSubmit = this.handleMessegeSubmit.bind(this);
-
+    // this.handlePartenerList = this.handlePartenerList.bind(this);
     socket.on('chat message', msg => this.renderMessages(msg));
   }
 
@@ -69,7 +70,7 @@ class ProjectStatus extends React.Component {
   // handles opening the dialog alert and submits the project's progress
   handleSubmit() {
     this.setState({
-      open: true,
+      open: true
     });
     this.props.submitProgress();
   }
@@ -77,7 +78,7 @@ class ProjectStatus extends React.Component {
   // handles the closing of dialog alert
   handleClose() {
     this.setState({
-      open: false,
+      open: false
     });
   }
 
@@ -86,19 +87,19 @@ class ProjectStatus extends React.Component {
 
     const newMessage = {
       message: this._message.value,
-      username: this.props.loggedInUser,
+      username: this.props.loggedInUser
     };
 
     const myMessage = {
       username: 'me: ',
-      message: this._message.value,
+      message: this._message.value
     };
 
     const updatedChatBox = this.state.chatBox;
     updatedChatBox.push(myMessage);
 
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
 
     socket.emit('chat message', newMessage); // send msg
@@ -109,7 +110,7 @@ class ProjectStatus extends React.Component {
     console.log('line 119', msg);
     updatedChatBox.push(msg);
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
   }
 
@@ -127,7 +128,7 @@ class ProjectStatus extends React.Component {
           </FlatButton>
         </form>
       </div>,
-      <FlatButton label="Close" primary onClick={this.handleDiaLogClose} />,
+      <FlatButton label="Close" primary onClick={this.handleDiaLogClose} />
     ];
     return (
       <div>
@@ -146,6 +147,13 @@ class ProjectStatus extends React.Component {
                   href={this.props.project.link}
                   target="_blank"
                 />
+                <Link to="/my-partners">
+                  <RaisedButton
+                    secondary
+                    label="See parteners"
+                    target="_blank"
+                  />
+                </Link>
               </ToolbarGroup>
             </Toolbar>
             <CardHeader title={this.props.project.project} />
@@ -217,7 +225,7 @@ const mapStateToProps = (state, props) => {
   const loggedInUserGhId = state.loggedInUser.ghId;
   return {
     loggedInUser,
-    loggedInUserGhId,
+    loggedInUserGhId
   };
 };
 

@@ -293,6 +293,32 @@ module.exports = {
       });
     },
 
+    deleteInterest: function deleteInterest(req) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('298 userGhid', req.user.ghInfo.id);
+        console.log('299 req.body.project', req.body.projectId);
+        dbSession
+          .run(
+            `
+            MATCH (project:Project)
+            WHERE ID(project) = ${req.body.projectId}
+            MATCH (user:User) WHERE user.ghId = ${req.user.ghInfo.id}
+            MATCH  (user)-[r:INTERESTED_IN]->(project:Project)
+            DELETE r
+          `
+          )
+          .then(() => {
+            resolve();
+            dbSession.close();
+          })
+          .catch(err => {
+            reject(err);
+            dbSession.close();
+          });
+      });
+    },
+
     // Sets requesting user as working on the project with project ID
     // with the user with the given user ID
     pair: function addPair(req) {
