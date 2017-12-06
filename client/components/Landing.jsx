@@ -13,14 +13,31 @@ const style = {
 
 function Landing(props) {
   return (
-    <Card style={ { maxWidth: '300px', width: '75%', margin: 'auto', paddingBottom: 12, marginTop: 12 } }>
-      <AppBar title="Welcome to GitPal!" style={style} showMenuIconButton={ false }/>
+    <Card
+      style={{
+        maxWidth: '300px',
+        width: '75%',
+        margin: 'auto',
+        paddingBottom: 12,
+        marginTop: 12,
+      }}
+    >
+      <AppBar
+        title="Welcome to GitPal!"
+        style={style}
+        showMenuIconButton={false}
+      />
       <CardMedia>
-        <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/>
+        <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" />
       </CardMedia>
-      <div style={ { width: '90%', margin: 'auto' } }>
+      <div style={{ width: '90%', margin: 'auto' }}>
         <a href="/auth/github">
-          <RaisedButton label="Sign in with GitHub" secondary={ true }  fullWidth={ true } />
+          <RaisedButton
+            label="Sign in with GitHub"
+            onClick={props.checkAuth}
+            secondary
+            fullWidth
+          />
         </a>
       </div>
     </Card>

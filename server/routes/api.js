@@ -73,6 +73,22 @@ module.exports = {
       });
     },
 
+    allusers: function getAllusers(req){
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        dbSession.run(
+          `MATCH (users:User) RETURN users`
+          )
+          .then((res)=>{
+           resolve(res.records.map(user =>
+                new db.models.User(user.get('users'))
+            ));
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      })
+    },
+
     // Returns an array of user objects interested in the given project id
     // NOTE: The relative xp is a relationship between users
     // calculated and stored for new users in the profliing module.
@@ -244,12 +260,21 @@ module.exports = {
           `
         )
           .then((res) => {
+            console.log('line263....263',res)
             resolve(res);
           })
           .catch(reject)
           .then(() => dbSession.close());
       });
     },
+
+// `
+// MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
+// MATCH (project:Project) WHERE ID(project) = ${Number(req.body.projectId)}
+// MATCH(user)-[r:INTERESTED_IN]->(project)
+// DELETE r
+// `
+
 
     // Sets requesting user as working on the project with project ID
     // with the user with the given user ID

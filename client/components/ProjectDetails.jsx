@@ -3,13 +3,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarTitle
-} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import Paper from 'material-ui/Paper';
-import {Card, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,7 +13,6 @@ import FlatButton from 'material-ui/FlatButton';
 import UserList from './UserList';
 
 class ProjectDetails extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -34,90 +29,119 @@ class ProjectDetails extends React.Component {
     this.getUsers();
   }
 
+  componentDidMount() {
+    // console.log('line38...', this.props.project.interested);
+    if (this.props.project.interested) {
+      console.log('line37 running');
+      this.setState({
+        disableUsers: false,
+      });
+    }
+  }
+
   getUsers() {
-    axios.get('/API/users', {
-      params: {
-        projectId: this.props.project.id
-      }
-    })
-      .then((users) => {
+    axios
+      .get('/API/users', {
+        params: {
+          projectId: this.props.project.id,
+        },
+      })
+      .then(users => {
         this.props.addUsers(users.data);
       })
       .catch(console.error);
   }
 
-  /* dialog  handler*/
+  /* dialog  handler */
   handleOpen() {
-    console.log("clicked")
-    this.setState({open: true});
-  };
+    console.log('clicked');
+    this.setState({ open: true });
+  }
 
   handleClose() {
-    this.setState({open: false});
-  };
-  /* dialog  handler end*/
+    this.setState({ open: false });
+  }
+  /* dialog  handler end */
 
   toggleInterest() {
-    axios.post('/API/projects', {
-      projectId: this.props.project.id,
-    })
-      .then((response) => {
-        this.props.dispatchInterest(this.props.project.id, this.props.project.interested);
+    axios
+      .post('/API/projects', {
+        projectId: this.props.project.id,
       })
-      .catch((error) => {
+      .then(response => {
+        this.props.dispatchInterest(
+          this.props.project.id,
+          this.props.project.interested,
+        );
+      })
+      .catch(error => {
         console.log(error);
       });
   }
 
-  handleInterest(){
+  handleInterest() {
     this.props.project.interested = !this.props.project.interested;
+    console.log('line90', this.props.project.interested);
+    if (this.props.project.interested) {
+      console.log('line37 running');
+      this.setState({
+        disableUsers: false,
+      });
+    }
     this.toggleInterest();
   }
 
   clickHandler() {
-    this.setState({
-      disableUsers: false,
-    });
     this.handleInterest();
     this.handleOpen();
   }
 
   render() {
     const actions = [
-      <FlatButton
-        label="Sure thing!"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.handleClose}
-      />
+      <FlatButton label="Sure thing!" primary onClick={this.handleClose} />,
+      <FlatButton label="Cancel" primary onClick={this.handleClose} />,
     ];
 
     return (
-      <Paper style={ {width: '95%', margin: 'auto', marginTop: 12, padding: 12 } }>
-        <Card style={ { marginBottom: 12 } }>
+      <Paper
+        style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}
+      >
+        <Card style={{ marginBottom: 12 }}>
           <Toolbar>
             <ToolbarGroup>
-              <ToolbarTitle text={ this.props.project.project } />
+              <ToolbarTitle text={this.props.project.project} />
             </ToolbarGroup>
-            <ToolbarGroup lastChild={ true }>
-              <RaisedButton secondary={ true } label="See on GitHub" href={this.props.project.link} target="_blank"/>
+            <ToolbarGroup lastChild>
+              <RaisedButton
+                secondary
+                label="See on GitHub"
+                href={this.props.project.link}
+                target="_blank"
+              />
             </ToolbarGroup>
           </Toolbar>
           <CardText>
-            { this.props.project.description || 'This project has no description.' }
+            {this.props.project.description ||
+              'This project has no description.'}
           </CardText>
         </Card>
         <Paper>
           <Toolbar>
             <ToolbarGroup>
-              <ToolbarTitle text={`Find a partner for ${ this.props.project.project }`} />
+              <ToolbarTitle
+                text={`Find a partner for ${this.props.project.project}`}
+              />
             </ToolbarGroup>
-            <ToolbarGroup lastChild={ true }>
-              <RaisedButton primary={ true } onClick={ this.clickHandler } label={ this.props.project.interested ? 'No longer interested': 'I\'m Interested!' }/>
+            <ToolbarGroup lastChild>
+              <RaisedButton
+                primary
+                onClick={this.clickHandler}
+                label={
+                  this.props.project.interested
+                    ? 'No longer interested'
+                    : "I'm Interested!"
+                }
+              />
             </ToolbarGroup>
           </Toolbar>
           <Dialog
@@ -125,13 +149,19 @@ class ProjectDetails extends React.Component {
             modal={false}
             open={this.state.open}
             onRequestClose={this.handleClose}
-            >
-          {this.props.project.interested? 'Choose a partner!' : 'Are you sure?' }
-        </Dialog>
-          <UserList users={ this.props.users } projectId={ this.props.project.id } isClickable={ this.state.disableUsers }/>
+          >
+            {this.props.project.interested
+              ? 'Choose a partner!'
+              : 'Are you sure?'}
+          </Dialog>
+          <UserList
+            users={this.props.users}
+            projectId={this.props.project.id}
+            isClickable={this.state.disableUsers}
+          />
         </Paper>
       </Paper>
-    )
+    );
   }
 }
 
@@ -143,19 +173,19 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addUsers: users => dispatch({
+const mapDispatchToProps = dispatch => ({
+  addUsers: users =>
+    dispatch({
       type: 'USERS_ADD',
-      users: users
+      users,
     }),
-    dispatchInterest: (projectId, value) => dispatch({
+  dispatchInterest: (projectId, value) =>
+    dispatch({
       type: 'CHANGE_PROJECT_INTEREST',
       projectId,
       value,
-    })
-  };
-};
+    }),
+});
 
-//connects the Store to ProjectDetails component
+// connects the Store to ProjectDetails component
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetails);

@@ -18,6 +18,7 @@ import TextField from 'material-ui/TextField';
 /* for Dialog  */
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+
 const customContentStyle = {
   width: '80%',
   height: '100%',
@@ -26,6 +27,7 @@ const customContentStyle = {
 /* for Dialog  */
 
 import io from 'socket.io-client';
+
 const socket = io();
 
 class UserDetails extends React.Component {
@@ -39,19 +41,20 @@ class UserDetails extends React.Component {
       message: 'placeholder',
       chatBox: [],
       myMessage: 'myMessage',
-      receivedMessage:'receivedMessage',
-      //for popUp window
+      receivedMessage: 'receivedMessage',
+      // for popUp window
       open: false,
       isPaired: false,
       curProjectId: null,
       curProjectProperty: null,
-    }
+      projectList: [],
+    };
     this.expandCard = () => {
       this.setState({ expanded: true });
-    }
+    };
 
-    socket.on('chat message', (msg) => this.renderMessages(msg));
-    //receive messages
+    socket.on('chat message', msg => this.renderMessages(msg));
+    // receive messages
     this.addPair = this.addPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
@@ -64,10 +67,11 @@ class UserDetails extends React.Component {
 
     this.setMessageText = (_, text) => this.setState({ message: text });
     this.sendMessage = () => {
-      axios.post('/API/messages', {
-        text: this.state.message,
-        recipient: this.props.user.id,
-      })
+      axios
+        .post('/API/messages', {
+          text: this.state.message,
+          recipient: this.props.user.id,
+        })
         .then(() => {
           this.props.dispatchMessage(this.props.user.id, {
             text: this.state.message,
@@ -81,171 +85,209 @@ class UserDetails extends React.Component {
     return new Promise((resolve, reject) => {
       this.retrieveProjectId();
       resolve();
-    })
-    .then(() => {
+    }).then(() => {
       this.checkIfPaired();
-    })
+    });
+  }
+
+  handlePorjectMapping() {
+    // var projectList = [];
+    // var idList =  this.props.projectsIDs;
+    const projects = this.props.projects;
+
+    // idList.forEach(function(element){
+    //  projects.forEach(function(cur){
+    //    if(cur.id === element) {
+    //      projectList.push(cur)
+    //    }
+    //  })
+    // })
+    // userId: this.props.loggedInUserGhId,
+    console.log('line545454', projectList);
+    this.setState({ projectList });
+    return projectList;
   }
 
   checkIfPaired() {
-    axios.get('/API/pairedProjects', {
-      params: {
-        userId: this.props.loggedInUserGhId,
-        partnerId: this.props.user.ghId
-      }
-    })
-    .then((pairProjects) => {
-      if (pairProjects.data.length > 0) {
-        this.setState({
-          buttonClicked: true
-        })
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+    axios
+      .get('/API/pairedProjects', {
+        params: {
+          userId: this.props.userId,
+          partnerId: this.props.user.ghId,
+        },
+      })
+      .then(pairProjects => {
+        if (pairProjects.data.length > 0) {
+          this.setState({
+            buttonClicked: true,
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
-
 
   addPair() {
-    axios.post('/API/pair', {
-      partnered: this.props.user.id,
-      project: this.state.curProjectId,
-    })
-      .then((response) => {
-        this.props.createPairing(response.data);
-        this.setState({buttonClicked: !this.state.buttonClicked});
-        window.location.reload();  //REACT needs this after a POST
+    axios
+      .post('/API/pair', {
+        partnered: this.props.user.id,
+        project: this.state.curProjectId,
       })
-      .catch((error) => {
+      .then(response => {
+        this.props.createPairing(response.data);
+        this.setState({ buttonClicked: !this.state.buttonClicked });
+        window.location.reload(); // REACT needs this after a POST
+      })
+      .catch(error => {
         console.log(error);
       });
 
-      axios.get('/')
+    axios.get('/');
   }
   togglePair() {
-    axios.post('/API/pair', {
-      partnered: this.props.user.id,
-      project: this.state.curProjectId,
-    })
-      .then((response) => {
-        //this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
+    axios
+      .post('/API/pair', {
+        partnered: this.props.user.id,
+        project: this.state.curProjectId,
+      })
+      .then(response => {
+        // this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
         console.log(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }
-  /* dialog  handler*/
+  /* dialog  handler */
   handleOpen() {
-    //console.log("clicked")
-    this.setState({open: true});
-  };
+    // console.log("clicked")
+    this.setState({ open: true });
+  }
   handleClose() {
-    this.setState({open: false});
-  };
-  /* dialog  handler end*/
+    this.setState({ open: false });
+  }
+  /* dialog  handler end */
   pairButton() {
     if (this.state.buttonClicked) {
       console.log('these are the props for UserDetails', this);
-      return <div>
-      <RaisedButton
-      label='Partnered'
-      labelColor={ fullWhite }
-      backgroundColor='#a4c639'
-      fullWidth={true}
-      icon={ <ActionDone
-        color={ fullWhite } /> }
-        onClick={ this.addPair } />
-      <RaisedButton
-        label="Let's Work!"
-        fullWidth={true}
-        icon={ <ActionBuild /> }
-        href="/my-projects"
-        primary={ true } />
-          </div>
+      return (
+        <div>
+          <RaisedButton
+            label="Partnered"
+            labelColor={fullWhite}
+            backgroundColor="#a4c639"
+            fullWidth
+            icon={<ActionDone color={fullWhite} />}
+            onClick={this.addPair}
+          />
+          <RaisedButton
+            label="Let's Work!"
+            fullWidth
+            icon={<ActionBuild />}
+            href="/my-projects"
+            primary
+          />
+        </div>
+      );
     } else if (!this.state.buttonClicked) {
-      return <RaisedButton
-        label='Work With Me'
-        fullWidth={true}
-        icon={ <ActionAdd /> }
-        onClick={ this.addPair }
-        primary={ true } />
+      return (
+        <RaisedButton
+          label="Work With Me"
+          fullWidth
+          icon={<ActionAdd />}
+          onClick={this.addPair}
+          primary
+        />
+      );
     }
-  };
+  }
 
   handleSubmit(event) {
     event.preventDefault();
     // socket.emit('chat message', );
-    var newMessage = {
+    const newMessage = {
       message: this._message.value,
-      username: this.props.loggedInUser
-    }
+      username: this.props.loggedInUser,
+    };
 
-    var myMessage = {
-      username: "me: ",
-      message: this._message.value
-    }
+    const myMessage = {
+      username: 'me: ',
+      message: this._message.value,
+    };
 
-    var updatedChatBox = this.state.chatBox
-    updatedChatBox.push(myMessage)
+    const updatedChatBox = this.state.chatBox;
+    updatedChatBox.push(myMessage);
 
     this.setState({
-      chatBox: updatedChatBox
+      chatBox: updatedChatBox,
     });
 
-    socket.emit('chat message', newMessage); //send msg
+    socket.emit('chat message', newMessage); // send msg
     console.log(newMessage);
-  };
+  }
 
   getMessages() {
-    axios.get('API/messages')
-      .then((res) => {
-        this.props.loadMessages(res.data)
+    axios
+      .get('API/messages')
+      .then(res => {
+        this.props.loadMessages(res.data);
       })
       .catch(console.error);
   }
 
-
   renderMessages(msg) {
-    var updatedChatBox= this.state.chatBox;
+    const updatedChatBox = this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
-      chatBox: updatedChatBox
+      chatBox: updatedChatBox,
     });
-  };
+  }
 
   retrieveProjectId() {
     const userId = this.props.user.ghId;
-    axios.get('/API/project', {
-      params: {
-        id: userId
-      }
-    })
-      .then((project) => {
+    axios
+      .get('/API/project', {
+        params: {
+          id: userId,
+        },
+      })
+      .then(project => {
         this.state.curProjectId = project.data.id;
         this.state.curProjectProperty = project.data;
       })
       .catch(console.error);
-  };
+  }
 
   render() {
-     const actions = [
+    const actions = [
       <div>
-       <form onSubmit={this.handleSubmit}>
-        <input ref={(message) => this._message = message} id="newMessage" type="text"/>
-        <FlatButton primary={true} type="submit">Send</FlatButton>
-      </form>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            ref={message => (this._message = message)}
+            id="newMessage"
+            type="text"
+          />
+          <FlatButton primary type="submit">
+            Send
+          </FlatButton>
+        </form>
       </div>,
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.handleClose}
-      />
+      <FlatButton label="Cancel" primary onClick={this.handleClose} />,
     ];
     return (
-      <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
-        <Card expanded={this.state.expanded} style={{ width: '40%', marginLeft: 'auto', marginRight: 'auto', marginBottom: 12 }}>
+      <Paper
+        style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}
+      >
+        <Card
+          expanded={this.state.expanded}
+          style={{
+            width: '40%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginBottom: 12,
+          }}
+        >
           <Toolbar>
             <ToolbarGroup>
               <ToolbarTitle text="User Profile" />
@@ -253,62 +295,84 @@ class UserDetails extends React.Component {
           </Toolbar>
           <CardMedia>
             <div className="img-container">
-              <img className="img-circle" src={this.props.user.avatarUrl} alt="" />
+              <img
+                className="img-circle"
+                src={this.props.user.avatarUrl}
+                alt=""
+              />
             </div>
           </CardMedia>
-          <CardTitle title={ this.props.user.name } subtitle={'Experience: ' + this.props.user.experience} />
-          <CardTitle title="Description" subtitle={this.props.user.description} />
-          <CardTitle title="Language" subtitle={this.props.user.language}/>
-          <CardTitle title="Projects" subtitle={this.props.projects.map(project => project.project).join(' ')}/>
+          <CardTitle
+            title={this.props.user.name}
+            subtitle={`Experience: ${this.props.user.experience}`}
+          />
+          <CardTitle
+            title="Description"
+            subtitle={this.props.user.description}
+          />
+          <CardTitle title="Language" subtitle={this.props.user.language} />
+          <CardTitle
+            title="Projects"
+            subtitle={this.state.projectList.map(project => project).join(' ')}
+          />
           <div>
-            { this.pairButton() }
-            <RaisedButton label='Message Me' fullWidth={true} icon={<ActionFace />} onClick={this.expandCard} secondary={true} />
+            {this.pairButton()}
+            <RaisedButton
+              label="Message Me"
+              fullWidth
+              icon={<ActionFace />}
+              onClick={this.expandCard}
+              secondary
+            />
           </div>
-        {/*dialog for message*/}
+          {/* dialog for message */}
           <div>
-          <Dialog
-            title="Send a message"
-            actions={actions}
-            modal={true}
-            contentStyle={customContentStyle}
-            open={this.state.open}
-            autoScrollBodyContent={true}
-          >
-            <ul id="messages"></ul>
-              {this.state.chatBox.map((chat, index) => {
-                return(
-                  <div>
-                    <strong>{chat.username}</strong>
-                    <p>{chat.message}</p>
-
-                  </div>
-                )}
-              )}
-          </Dialog>
-        </div>
-        {/*dialog for message end*/}
+            <Dialog
+              title="Send a message"
+              actions={actions}
+              modal
+              contentStyle={customContentStyle}
+              open={this.state.open}
+              autoScrollBodyContent
+            >
+              <ul id="messages" />
+              {this.state.chatBox.map((chat, index) => (
+                <div>
+                  <strong>{chat.username}</strong>
+                  <p>{chat.message}</p>
+                </div>
+              ))}
+            </Dialog>
+          </div>
+          {/* dialog for message end */}
           {/* should be deleted */}
 
-            <div expandable={true}>
+          <div expandable>
             <TextField
               floatingLabelText="Ask user to pair up"
               hintText="Enter your message"
               style={{ padding: 20 }}
-              onChange={ this.setMessageText }
+              onChange={this.setMessageText}
             />
           </div>
-          <div expandable={true}>
-            <RaisedButton label="Send" onClick={ this.sendMessage } fullWidth={true} icon={<ContentSend />} secondary={true}/>
-            { this.props.messages.map((message, index) =>
-              <Card key={ index }>
-                <CardTitle>{ message.sender ? 'You' : this.props.user.name }</CardTitle>
-                <CardText>{ message.text }</CardText>
+          <div expandable>
+            <RaisedButton
+              label="Send"
+              onClick={this.sendMessage}
+              fullWidth
+              icon={<ContentSend />}
+              secondary
+            />
+            {this.props.messages.map((message, index) => (
+              <Card key={index}>
+                <CardTitle>
+                  {message.sender ? 'You' : this.props.user.name}
+                </CardTitle>
+                <CardText>{message.text}</CardText>
               </Card>
-            )}
+            ))}
           </div>
-          {/* should be deleted end*/}
-
-
+          {/* should be deleted end */}
         </Card>
       </Paper>
     );
@@ -317,36 +381,44 @@ class UserDetails extends React.Component {
 const mapStateToProps = (state, props) => {
   const userId = Number(props.match.params.id);
   const user = state.allUsers.filter(user => user.id === userId)[0];
-  const projects = state.projects.filter(project => user.projects.indexOf(project.id) > -1)
+  const projects = state.projects.filter(
+    project => user.projects.indexOf(project.id) > -1,
+  );
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
+  // const loggedInUser = state.loggedInUser.username;
+  // const  projectsIDs = state.loggedInUser.projects
   return {
     user,
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
     loggedInUserGhId,
+    // projectsIDs,
   };
 };
-const mapDispatchToProps = dispatch =>
-  ({
-    loadMessages: messages => dispatch({
+const mapDispatchToProps = dispatch => ({
+  loadMessages: messages =>
+    dispatch({
       type: 'MESSAGES_LOAD',
       messages,
     }),
-    createPairing: (pairs) => dispatch({
+  createPairing: pairs =>
+    dispatch({
       type: 'ADD_PAIRING',
       pairs,
     }),
-    dispatchPairing: (userId, projectId) => dispatch({
+  dispatchPairing: (userId, projectId) =>
+    dispatch({
       type: 'CHANGE_USER_PAIRING',
       userId,
       projectId,
     }),
-    dispatchMessage: (userId, message) => dispatch({
+  dispatchMessage: (userId, message) =>
+    dispatch({
       type: 'MESSAGE_SEND',
       userId,
       message,
     }),
-  });
+});
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);
