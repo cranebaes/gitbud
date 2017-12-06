@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
+  TableRowColumn
 } from 'material-ui/Table';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardText } from 'material-ui/Card';
@@ -20,18 +20,18 @@ class MyPartners extends React.Component {
     super(props);
     this.state = {
       isMounted: false,
-      userLists: [],
+      userLists: []
     };
   }
 
   componentDidMount() {
     if (this.props.pairedUsers) {
       this.setState({
-        userLists: this.props.pairedUsers,
+        userLists: this.props.pairedUsers
       });
     } else {
       this.setState({
-        userLists: [],
+        userLists: []
       });
     }
   }
@@ -78,7 +78,7 @@ class MyPartners extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  pairedUsers: state.pairedUsers,
+  pairedUsers: state.pairedUsers
 });
 
 const mapDispatchToProps = dispatch => ({});

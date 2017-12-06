@@ -56,6 +56,7 @@ class UserDetails extends React.Component {
     socket.on('chat message', msg => this.renderMessages(msg));
     // receive messages
     this.addPair = this.addPair.bind(this);
+    this.unPair = this.unPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -127,6 +128,25 @@ class UserDetails extends React.Component {
 
     axios.get('/');
   }
+
+  unPair() {
+    axios
+      .post('/API/unpair', {
+        partnered: this.props.user.id,
+        project: this.state.curProjectId
+      })
+      .then(response => {
+        // this.props.createPairing(response.data);
+        this.setState({ buttonClicked: !this.state.buttonClicked });
+        window.location.reload(); // REACT needs this after a POST
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    axios.get('/');
+  }
+
   togglePair() {
     axios
       .post('/API/pair', {
@@ -156,12 +176,12 @@ class UserDetails extends React.Component {
       return (
         <div>
           <RaisedButton
-            label="Partnered"
+            label="un Partnered"
             labelColor={fullWhite}
             backgroundColor="#a4c639"
             fullWidth
             icon={<ActionDone color={fullWhite} />}
-            onClick={this.addPair}
+            onClick={this.unPair}
           />
           <RaisedButton
             label="Let's Work!"

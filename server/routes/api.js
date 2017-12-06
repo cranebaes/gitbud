@@ -32,10 +32,10 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (:User {ghId: ${req.user.ghInfo
-            .id}})-->(group:Group)-->(project:Project)
-          RETURN group, project
-        `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -->(group:Group)-->(project:Project)
+            RETURN group, project
+            `
           )
           .then(res => {
             const projectProgress = {};
@@ -60,8 +60,11 @@ module.exports = {
         const dbSession = dbDriver.session();
         dbSession
           .run(
-            `MATCH (:User {ghId: ${req.user.ghInfo
-              .id}})-[to_user]-(message:Message)--(other:User) RETURN message, to_user, other ORDER BY message.created_at DESC`
+            `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -[to_user]-(message:Message)--(other:User)
+            RETURN message, to_user, other ORDER BY message.created_at DESC
+            `
           )
           .then(res => {
             const messages = {};
@@ -96,22 +99,22 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
-          WITH user, pair, xp
-          MATCH (pair)-->(group:Group)<--(user),
-            (group)-->(pairedProject:Project),
-            (pair)-[:INTERESTED_IN]->(project:Project)
-          WHERE ID(project) = ${projectId}
-          OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
-          RETURN pair, COLLECT(ID(pairedProject)) as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
-          UNION
-          MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
-          WITH user, xp, pair
-          MATCH (pair)-[:INTERESTED_IN]->(project:Project)
-          WHERE ID(project) = ${projectId} AND NOT (pair)-->(:Group)<--(:User {ghId: ${ghId}})
-          OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
-          RETURN pair, false as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
-        `
+            MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
+            WITH user, pair, xp
+            MATCH (pair)-->(group:Group)<--(user),
+              (group)-->(pairedProject:Project),
+              (pair)-[:INTERESTED_IN]->(project:Project)
+            WHERE ID(project) = ${projectId}
+            OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
+            RETURN pair, COLLECT(ID(pairedProject)) as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
+            UNION
+            MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
+            WITH user, xp, pair
+            MATCH (pair)-[:INTERESTED_IN]->(project:Project)
+            WHERE ID(project) = ${projectId} AND NOT (pair)-->(:Group)<--(:User {ghId: ${ghId}})
+            OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
+            RETURN pair, false as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
+            `
           )
           .then(res => {
             resolve(
@@ -156,7 +159,7 @@ module.exports = {
             MATCH (user:User {ghId: ${ghId}}), (project:Project)
             WHERE NOT (user)-->(:Group)-->(project) AND NOT (user)-[:INTERESTED_IN]->(project)
             RETURN false as pairs, false as interested, project
-         `
+           `
           )
           .then(res => {
             resolve(
@@ -185,9 +188,9 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
-          RETURN project
-          `
+            MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
+            RETURN project
+            `
           )
           .then(res => {
             const project = res.records[0];
@@ -245,10 +248,10 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (pair:User)-->(group:Group)<--(user:User)
-          WHERE user.ghId = ${Number(ghId)}
-          RETURN pair
-         `
+            MATCH (pair:User)-->(group:Group)<--(user:User)
+            WHERE user.ghId = ${Number(ghId)}
+            RETURN pair
+           `
           )
           .then(res => {
             resolve(
@@ -275,12 +278,12 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
-          MATCH (project:Project)
-          WHERE ID(project) = ${Number(req.body.projectId)}
-          MERGE (user)-[:INTERESTED_IN]->(project)
-          return user, project
-          `
+            MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.projectId)}
+            MERGE (user)-[:INTERESTED_IN]->(project)
+            return user, project
+            `
           )
           .then(res => {
             resolve(res);
@@ -299,15 +302,15 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (project:Project)
-          WHERE ID(project) = ${Number(req.body.project)}
-          MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
-          MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
-          MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
-          MERGE (group)-[:WORKING_ON]->(project)
-          SET group.progress = project.structure
-          return user, pair, group, project
-        `
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.project)}
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
+            MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
+            MERGE (group)-[:WORKING_ON]->(project)
+            SET group.progress = project.structure
+            return user, pair, group, project
+          `
           )
           .then(res => {
             const pair = res.records[0];
@@ -315,6 +318,34 @@ module.exports = {
           })
           .catch(reject)
           .then(() => dbSession.close());
+      });
+    },
+
+    unpair: function unPair(req) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('327 userGhid', req.user.ghInfo.id);
+        console.log('328 partnered', req.body.partnered);
+        console.log('329req.body.project', req.body.project);
+        dbSession
+          .run(
+            `
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.project)}
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
+            MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
+            DETACH DELETE group
+          `
+          )
+          .then(() => {
+            resolve();
+            dbSession.close();
+          })
+          .catch(err => {
+            reject(err);
+            dbSession.close();
+          });
       });
     },
 
@@ -327,13 +358,13 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (user:User {ghId: ${req.user.ghInfo.id}}), (recipient:User)
-          WHERE ID(recipient) = ${req.body.recipient}
-          CREATE (user)-[:SENT]->
-          (:Message
-            {text: '${req.body.text.replace("'", "\\'")}',
-           created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
-        `
+            MATCH (user:User {ghId: ${req.user.ghInfo.id}}), (recipient:User)
+            WHERE ID(recipient) = ${req.body.recipient}
+            CREATE (user)-[:SENT]->
+            (:Message
+              {text: '${req.body.text.replace("'", "\\'")}',
+            created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
+            `
           )
           .then(() => {
             resolve();
@@ -358,12 +389,12 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (:User {ghId: ${req.user.ghInfo.id}})
-          -->(group:Group)-->(project:Project)
-          WHERE ID(project) = ${req.body.projectId}
-          SET group.progress =
-          '${JSON.stringify(req.body.progress).replace("'", "\\'")}'
-        `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -->(group:Group)-->(project:Project)
+            WHERE ID(project) = ${req.body.projectId}
+            SET group.progress =
+            '${JSON.stringify(req.body.progress).replace("'", "\\'")}'
+            `
           )
           .then(resolve)
           .catch(reject)
@@ -379,11 +410,11 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
-          SET user.description = '${req.body.description}'
-          SET user.language = '${req.body.language}'
-          SET user.experience = '${req.body.experience}'
-        `
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            SET user.description = '${req.body.description}'
+            SET user.language = '${req.body.language}'
+            SET user.experience = '${req.body.experience}'
+            `
           )
           .then(() => resolve())
           .catch(reject);

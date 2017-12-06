@@ -7,29 +7,40 @@
 // Required to create a db session and run a query.
 // For info on how to do this better, check the hints in the db module.
 const db = require('../db');
-const dbDriver = db.driver;
 const passport = require('../authentication');
+
+const dbDriver = db.driver;
 
 module.exports = {
   GET: {
     signout: function signout(req, res) {
       // destroy session and redirect to home
-        console.log('Logging out');
-        req.session.destroy()
-        req.logout();
-        res.redirect('/');
+      console.log('Logging out');
+      req.session.destroy();
+      req.logout();
+      res.redirect('/');
     },
     authenticated: function checkAuthenticated(req, res) {
       // If user signed in, send account details
       if (req.isAuthenticated()) {
         const dbSession = dbDriver.session();
-        dbSession.run(`
-          MATCH (user:User {ghId: ${ req.user.ghInfo.id }})
+        dbSession
+          .run(
+            `
+          MATCH (user:User {ghId: ${req.user.ghInfo.id}})
           OPTIONAL MATCH (user)--(:Group)--(project:Project)
           RETURN user, COLLECT(ID(project)) as projects
-        `)
-          .then((result) => {
-            res.json(new db.models.User(result.records[0].get('user'), false, false, result.records[0].get('projects')));
+        `
+          )
+          .then(result => {
+            res.json(
+              new db.models.User(
+                result.records[0].get('user'),
+                false,
+                false,
+                result.records[0].get('projects')
+              )
+            );
             dbSession.close();
           })
           .catch(() => {
