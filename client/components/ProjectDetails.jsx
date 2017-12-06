@@ -17,25 +17,28 @@ class ProjectDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      interest: false,
+      interest: this.props.project.interested,
       open: false,
-      disableUsers: true,
+      disableUsers: !this.props.project.interested
     };
     this.toggleInterest = this.toggleInterest.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.handleInterest = this.handleInterest.bind(this);
-
     this.getUsers();
+  }
+
+  componentDidMount() {
+    console.log('ProjectDetails 31', this.props.project.interested);
   }
 
   getUsers() {
     axios
       .get('/API/users', {
         params: {
-          projectId: this.props.project.id,
-        },
+          projectId: this.props.project.id
+        }
       })
       .then(users => {
         this.props.addUsers(users.data);
@@ -55,30 +58,60 @@ class ProjectDetails extends React.Component {
   /* dialog  handler end */
 
   toggleInterest() {
-    axios
-      .post('/API/projects', {
-        projectId: this.props.project.id,
-      })
-      .then(response => {
-        this.props.dispatchInterest(
-          this.props.project.id,
-          this.props.project.interested,
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    //if wasnt interested, sent request for adding interests
+    console.log(
+      'what was the original state???',
+      this.props.project.interested
+    );
+    if (!this.props.project.interested) {
+      console.log('adding interest');
+      axios
+        .post('/API/projects', {
+          projectId: this.props.project.id
+        })
+        .then(response => {
+          this.props.project.interested = !this.props.project.interested;
+          this.props.dispatchInterest(
+            this.props.project.id,
+            this.props.project.interested
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else if (this.props.project.interested) {
+      console.log('deleting interest');
+      axios
+        .post('/API/deleteInterest', {
+          projectId: this.props.project.id
+        })
+        .then(response => {
+          this.props.project.interested = !this.props.project.interested;
+          console.log(
+            'line82 afterDelete interest',
+            this.props.project.interested
+          );
+          this.props.dispatchInterest(
+            this.props.project.id,
+            this.props.project.interested
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
   handleInterest() {
-    this.props.project.interested = !this.props.project.interested;
+    // this.props.project.interested = !this.props.project.interested;
+    console.log('handleInterest ran');
     this.toggleInterest();
   }
 
   clickHandler() {
-    this.setState({
-      disableUsers: false,
-    });
+    // this.setState({
+    //   disableUsers: false
+    // });
     this.handleInterest();
     this.handleOpen();
   }
@@ -86,7 +119,7 @@ class ProjectDetails extends React.Component {
   render() {
     const actions = [
       <FlatButton label="Sure thing!" primary onClick={this.handleClose} />,
-      <FlatButton label="Cancel" primary onClick={this.handleClose} />,
+      <FlatButton label="Cancel" primary onClick={this.handleClose} />
     ];
 
     return (
@@ -154,9 +187,10 @@ class ProjectDetails extends React.Component {
 
 const mapStateToProps = (state, props) => {
   const projectId = Number(props.routedProjectId);
+  console.log('ProjectDetails line157 project', state.projects);
   return {
     users: state.users,
-    project: state.projects.filter(project => project.id === projectId)[0],
+    project: state.projects.filter(project => project.id === projectId)[0]
   };
 };
 
@@ -164,14 +198,14 @@ const mapDispatchToProps = dispatch => ({
   addUsers: users =>
     dispatch({
       type: 'USERS_ADD',
-      users,
+      users
     }),
   dispatchInterest: (projectId, value) =>
     dispatch({
       type: 'CHANGE_PROJECT_INTEREST',
       projectId,
-      value,
-    }),
+      value
+    })
 });
 
 // connects the Store to ProjectDetails component

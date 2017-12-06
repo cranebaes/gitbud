@@ -23,8 +23,7 @@ class Project extends React.Component {
   POSTprogress() {
     axios
       .post('/API/progress', {
-        projectId: this.props.project.id,
-        progress: this.props.progress
+        projectId: this.props.project.id
       })
       .catch(console.error);
   }
