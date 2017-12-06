@@ -1,7 +1,10 @@
 {
-    "extends": "airbnb",
-    "env": {
-      "browser": true,
-      "node": true
-    }
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    " eslint no-console": "off"
+  }
 }

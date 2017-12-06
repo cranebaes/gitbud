@@ -30,11 +30,7 @@ class ProjectDetails extends React.Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
     // console.log('line38...', this.props.project.interested);
-=======
-    console.log('line38...', this.props.project.interested);
->>>>>>> Add console.log and temparary query for test
     if (this.props.project.interested) {
       console.log('line37 running');
       this.setState({
@@ -73,7 +69,10 @@ class ProjectDetails extends React.Component {
         projectId: this.props.project.id,
       })
       .then(response => {
-        this.props.dispatchInterest(this.props.project.id, this.props.project.interested);
+        this.props.dispatchInterest(
+          this.props.project.id,
+          this.props.project.interested,
+        );
       })
       .catch(error => {
         console.log(error);
@@ -104,7 +103,9 @@ class ProjectDetails extends React.Component {
     ];
 
     return (
-      <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
+      <Paper
+        style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}
+      >
         <Card style={{ marginBottom: 12 }}>
           <Toolbar>
             <ToolbarGroup>
@@ -120,19 +121,26 @@ class ProjectDetails extends React.Component {
             </ToolbarGroup>
           </Toolbar>
           <CardText>
-            {this.props.project.description || 'This project has no description.'}
+            {this.props.project.description ||
+              'This project has no description.'}
           </CardText>
         </Card>
         <Paper>
           <Toolbar>
             <ToolbarGroup>
-              <ToolbarTitle text={`Find a partner for ${this.props.project.project}`} />
+              <ToolbarTitle
+                text={`Find a partner for ${this.props.project.project}`}
+              />
             </ToolbarGroup>
             <ToolbarGroup lastChild>
               <RaisedButton
                 primary
                 onClick={this.clickHandler}
-                label={this.props.project.interested ? 'No longer interested' : "I'm Interested!"}
+                label={
+                  this.props.project.interested
+                    ? 'No longer interested'
+                    : "I'm Interested!"
+                }
               />
             </ToolbarGroup>
           </Toolbar>
@@ -142,7 +150,9 @@ class ProjectDetails extends React.Component {
             open={this.state.open}
             onRequestClose={this.handleClose}
           >
-            {this.props.project.interested ? 'Choose a partner!' : 'Are you sure?'}
+            {this.props.project.interested
+              ? 'Choose a partner!'
+              : 'Are you sure?'}
           </Dialog>
           <UserList
             users={this.props.users}

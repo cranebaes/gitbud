@@ -1,3 +1,4 @@
+/* eslint no-console:0 */
 /*
   This is the main (parent) component for the application.
 
@@ -8,7 +9,7 @@
 
   You can find these routes inside server/routes/index.js
 
- */
+*/
 
 import React from 'react';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
@@ -16,10 +17,10 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import AppBar from 'material-ui/AppBar';
-import Paper from 'material-ui/Paper';
+// import Paper from 'material-ui/Paper';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+// import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { fullWhite } from 'material-ui/styles/colors';
 
 import AppDrawer from './AppDrawer';
@@ -94,9 +95,10 @@ class App extends React.Component {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   }
 
-  handleClick() {
-    // console.log('clicked');
-  }
+  // handleClick() {
+  // console.log('clicked');
+  // }
+
   // gets authentication
   checkAuthenticated() {
     console.log('clickedauthen');
@@ -127,7 +129,10 @@ class App extends React.Component {
       this.setState({
         partyMode: setInterval(() => {
           const randomNum = Math.floor(Math.random() * colors.length);
-          document.body.setAttribute('style', `background-color:${colors[randomNum]}`);
+          document.body.setAttribute(
+            'style',
+            `background-color:${colors[randomNum]}`,
+          );
         }, 200),
       });
     }
@@ -179,12 +184,18 @@ class App extends React.Component {
               <Route path="/my-projects" component={MyProjects} />
               <Route
                 path="/my-partners"
-                render={props => <MyPartners currentPartners={this.state.myPartners} />}
+                render={() => (
+                  <MyPartners currentPartners={this.state.myPartners} />
+                )}
               />
               {/*
                 given this path render this component and pass down the loggedIn state as user props
               */}
-              <Route exact path="/user" render={() => <UserProfile user={this.state.loggedIn} />} />
+              <Route
+                exact
+                path="/user"
+                render={() => <UserProfile user={this.state.loggedIn} />}
+              />
 
               <Route path="/user/:id/:projectId?" component={UserDetails} />
               <Route path="/user/:id" component={UserDetails} />
@@ -244,6 +255,13 @@ const mapDispatchToProps = dispatch => ({
       type: 'USER_LOGOUT',
     }),
 });
-
+App.propTypes = {
+  addAllUsers: React.PropTypes.isRequired,
+  loadPairedUsers: React.PropTypes.isRequired,
+  addProjectsList: React.PropTypes.isRequired,
+  loadMessages: React.PropTypes.isRequired,
+  loggedInUser: React.PropTypes.isRequired,
+  loggedOut: React.PropTypes.isRequired,
+};
 // connects the Store to App component
 export default connect(mapStateToProps, mapDispatchToProps)(App);
