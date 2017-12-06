@@ -5,12 +5,9 @@ import { Card, CardHeader } from 'material-ui/Card';
 // menus and toolbars etc.
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
-import {
-  BottomNavigation,
-  BottomNavigationItem,
-} from 'material-ui/BottomNavigation';
+import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 // buttons
-// import FlatButton from 'material-ui/FlatButton';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 // icons
 import ActionEject from 'material-ui/svg-icons/action/eject';
@@ -27,64 +24,35 @@ Add this to AppDrawer when user functionality expands
 
 function AppDrawer(props) {
   return (
-    <Drawer
-      open={props.open}
-      docked={false}
-      onRequestChange={props.changeOpenState}
-    >
-      <AppBar title="GitPal" showMenuIconButton={false} />
-      <Card style={{ margin: 12, width: '90%', paddingBottom: 12 }}>
-        <CardHeader title="Projects" />
-        <div style={{ width: '90%', margin: 'auto' }}>
-          <Link to="/projects">
-            <RaisedButton
-              label="Find Projects"
-              fullWidth
-              primary
-              onClick={props.closeDrawer}
-              icon={<DeviceDeveloperMode />}
-            />
+    <Drawer open={ props.open } docked={ false } onRequestChange={ props.changeOpenState }>
+      <AppBar title="GitPal" showMenuIconButton={ false }/>
+      <Card style={ { margin: 12, width: '90%', paddingBottom: 12 } }>
+        <CardHeader title="Projects"/>
+        <div style={ {width:'90%', margin: 'auto'} }>
+          <Link to='/projects'>
+            <RaisedButton label="Find Projects" fullWidth={ true } primary={ true } onClick={ props.closeDrawer } icon={ <DeviceDeveloperMode/> }/>
           </Link>
-          <Link to="/my-projects">
-            <RaisedButton
-              label="My Projects"
-              fullWidth
-              onClick={props.closeDrawer}
-            />
+          <Link to='/my-projects'>
+            <RaisedButton label="My Projects" fullWidth={ true } onClick={ props.closeDrawer }/>
           </Link>
         </div>
       </Card>
-      <Card style={{ margin: 12, width: '90%', paddingBottom: 12 }}>
-        <CardHeader title="Users" />
-        <div style={{ width: '90%', margin: 'auto' }}>
+      <Card style={ { margin: 12, width: '90%', paddingBottom: 12 } }>
+        <CardHeader title="Users"/>
+        <div style={ {width:'90%', margin: 'auto'} }>
           <Link to="/my-partners">
-            <RaisedButton
-              label="My Partners"
-              fullWidth
-              onClick={props.closeDrawer}
-              secondaryicon={<ActionFace />}
-            />
+            <RaisedButton label="My Partners"fullWidth={ true } onClick={ props.closeDrawer } secondary={ true }icon={ <ActionFace/> }/>
           </Link>
         </div>
       </Card>
-      <BottomNavigation style={{ position: 'absolute', bottom: 0 }}>
-        <a href="/auth/signout">
-          <BottomNavigationItem
-            onClick={props.logout}
-            label="Sign Out"
-            icon={<ActionEject />}
-          />
+      <BottomNavigation style={ { position: "absolute", bottom: 0 } }>
+        <a href='/auth/signout'>
+          <BottomNavigationItem onClick={ props.logout } label="Sign Out" icon={ <ActionEject/> }/>
         </a>
-        <Link to="/user">
-          <BottomNavigationItem
-            label="My Account"
-            icon={<ActionAccountCircle />}
-            onClick={props.closeDrawer}
-          />
-        </Link>
+        <Link to='/user'><BottomNavigationItem label="My Account" icon={ <ActionAccountCircle/> } onClick={ props.closeDrawer }/></Link>
       </BottomNavigation>
     </Drawer>
-  );
+  )
 }
 
 export default AppDrawer;
