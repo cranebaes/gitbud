@@ -276,9 +276,8 @@ module.exports = {
           .run(
             `
           MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
-          MATCH (project:Project) WHERE ID(project) = ${Number(
-            req.body.projectId
-          )}
+          MATCH (project:Project)
+          WHERE ID(project) = ${Number(req.body.projectId)}
           MERGE (user)-[:INTERESTED_IN]->(project)
           return user, project
           `
@@ -300,9 +299,8 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (project:Project) WHERE ID(project) = ${Number(
-            req.body.project
-          )}
+          MATCH (project:Project)
+          WHERE ID(project) = ${Number(req.body.project)}
           MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
           MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
           MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
@@ -331,10 +329,10 @@ module.exports = {
             `
           MATCH (user:User {ghId: ${req.user.ghInfo.id}}), (recipient:User)
           WHERE ID(recipient) = ${req.body.recipient}
-          CREATE (user)-[:SENT]->(:Message {text: '${req.body.text.replace(
-            "'",
-            "\\'"
-          )}', created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
+          CREATE (user)-[:SENT]->
+          (:Message
+            {text: '${req.body.text.replace("'", "\\'")}',
+           created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
         `
           )
           .then(() => {
@@ -360,13 +358,11 @@ module.exports = {
         dbSession
           .run(
             `
-          MATCH (:User {ghId: ${req.user.ghInfo
-            .id}})-->(group:Group)-->(project:Project)
+          MATCH (:User {ghId: ${req.user.ghInfo.id}})
+          -->(group:Group)-->(project:Project)
           WHERE ID(project) = ${req.body.projectId}
-          SET group.progress = '${JSON.stringify(req.body.progress).replace(
-            "'",
-            "\\'"
-          )}'
+          SET group.progress =
+          '${JSON.stringify(req.body.progress).replace("'", "\\'")}'
         `
           )
           .then(resolve)
