@@ -18,13 +18,13 @@ const createStoreWithMiddleware = applyMiddleware(middleware)(createStore);
    grabs all the reducer from store/reducers.js and creates a store with it. A store manages state.
 */
 const store = createStoreWithMiddleware(
-  reducers, /* preloadedState, */
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  reducers /* preloadedState, */,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 
 const load = storage.createLoader(engine);
 load(store)
-  .then((newState) => console.log('Loaded state:', newState))
+  .then(newState => console.log('Loaded state:', newState))
   .catch(() => console.log('Failed to load previous state'));
 
 export default store;

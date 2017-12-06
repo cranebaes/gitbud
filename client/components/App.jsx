@@ -130,6 +130,7 @@ class App extends React.Component {
      If user is new and logged in using github auth, render questionnaire
      If user is not logged in (logged out) display landing page
     */
+
     if (this.state.loggedIn.language) {
       return (
         <BrowserRouter>
