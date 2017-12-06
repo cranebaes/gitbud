@@ -402,6 +402,33 @@ module.exports = {
       });
     },
 
+    // deleteInterest: function deleteInterest(req) {
+    //   return new Promise((resolve, reject) => {
+    //     const dbSession = dbDriver.session();
+    //     console.log('408 userGhid', req.user.ghInfo.id);
+    //     console.log('409 req.body.project', req.body.projectId);
+    //     dbSession
+    //       .run(
+    //         `
+    //         MATCH (project:Project)
+    //         WHERE ID(project) = ${Number(req.body.project)}
+    //         MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+    //         MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
+    //         MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
+    //         DETACH DELETE group
+    //       `
+    //       )
+    //       .then(() => {
+    //         resolve();
+    //         dbSession.close();
+    //       })
+    //       .catch(err => {
+    //         reject(err);
+    //         dbSession.close();
+    //       });
+    //   });
+    // },
+
     // Updates the db with data from the questionnaire.
     users: function addQuestionnaireData(req) {
       return new Promise((resolve, reject) => {

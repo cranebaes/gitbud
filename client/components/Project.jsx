@@ -24,7 +24,7 @@ class Project extends React.Component {
     axios
       .post('/API/progress', {
         projectId: this.props.project.id,
-        progress: this.props.progress,
+        progress: this.props.progress
       })
       .catch(console.error);
   }
@@ -58,9 +58,10 @@ class Project extends React.Component {
 const mapStateToProps = (state, props) => {
   const projectId = Number(props.match.params.id);
   const project = state.projects.filter(project => project.id === projectId)[0];
+  console.log('Project.jsx line61 props.project', project);
   return {
     project,
-    progress: state.projectProgress[projectId] || [],
+    progress: state.projectProgress[projectId] || []
   };
 };
 
@@ -73,13 +74,13 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch({
       type: 'PROGRESS_CHANGE_ITEM',
       projectId,
-      itemIndex,
+      itemIndex
     }),
   loadProgress: progress =>
     dispatch({
       type: 'PROGRESS_LOAD_ITEMS',
-      progress,
-    }),
+      progress
+    })
 });
 
 // connects the Store to Project component
