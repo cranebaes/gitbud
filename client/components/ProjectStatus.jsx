@@ -51,7 +51,7 @@ class ProjectStatus extends React.Component {
     this.handleDiaLogOpen = this.handleDiaLogOpen.bind(this);
     this.handleDiaLogClose = this.handleDiaLogClose.bind(this);
     this.handleMessegeSubmit = this.handleMessegeSubmit.bind(this);
-    this.handlePartenerList = this.handlePartenerList.bind(this);
+    // this.handlePartenerList = this.handlePartenerList.bind(this);
     socket.on('chat message', msg => this.renderMessages(msg));
   }
 

@@ -29,10 +29,6 @@ class ProjectDetails extends React.Component {
     this.getUsers();
   }
 
-  componentDidMount() {
-    console.log('ProjectDetails 31', this.props.project.interested);
-  }
-
   getUsers() {
     axios
       .get('/API/users', {
@@ -58,23 +54,20 @@ class ProjectDetails extends React.Component {
   /* dialog  handler end */
 
   toggleInterest() {
-    //if wasnt interested, sent request for adding interests
-    console.log(
-      'what was the original state???',
-      this.props.project.interested
-    );
+    // if wasnt interested, sent request for adding interests
     if (!this.props.project.interested) {
       console.log('adding interest');
       axios
         .post('/API/projects', {
           projectId: this.props.project.id
         })
-        .then(response => {
+        .then(() => {
           this.props.project.interested = !this.props.project.interested;
           this.props.dispatchInterest(
             this.props.project.id,
             this.props.project.interested
           );
+          window.location.reload(); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);
@@ -95,6 +88,7 @@ class ProjectDetails extends React.Component {
             this.props.project.id,
             this.props.project.interested
           );
+          window.location.reload(); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);
@@ -113,7 +107,7 @@ class ProjectDetails extends React.Component {
     //   disableUsers: false
     // });
     this.handleInterest();
-    this.handleOpen();
+    // this.handleOpen();
   }
 
   render() {
