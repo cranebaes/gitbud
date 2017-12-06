@@ -107,7 +107,7 @@ class ProjectDetails extends React.Component {
     //   disableUsers: false
     // });
     this.handleInterest();
-    // this.handleOpen();
+    this.handleOpen();
   }
 
   render() {
