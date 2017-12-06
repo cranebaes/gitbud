@@ -30,7 +30,11 @@ class ProjectDetails extends React.Component {
   }
 
   componentDidMount() {
+<<<<<<< HEAD
     // console.log('line38...', this.props.project.interested);
+=======
+    console.log('line38...', this.props.project.interested);
+>>>>>>> Add console.log and temparary query for test
     if (this.props.project.interested) {
       console.log('line37 running');
       this.setState({

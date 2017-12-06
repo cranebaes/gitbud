@@ -260,12 +260,21 @@ module.exports = {
           `
         )
           .then((res) => {
+            console.log('line263....263',res)
             resolve(res);
           })
           .catch(reject)
           .then(() => dbSession.close());
       });
     },
+
+// `
+// MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
+// MATCH (project:Project) WHERE ID(project) = ${Number(req.body.projectId)}
+// MATCH(user)-[r:INTERESTED_IN]->(project)
+// DELETE r
+// `
+
 
     // Sets requesting user as working on the project with project ID
     // with the user with the given user ID
