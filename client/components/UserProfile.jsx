@@ -14,7 +14,7 @@ function UserProfile(props) {
           width: '40%',
           marginLeft: 'auto',
           marginRight: 'auto',
-          marginBottom: 12,
+          marginBottom: 12
         }}
       >
         <Toolbar>
@@ -44,8 +44,8 @@ function UserProfile(props) {
 
 const mapStateToProps = (state, props) => ({
   projects: state.projects.filter(
-    project => props.user.projects.indexOf(project.id) > -1,
-  ),
+    project => props.user.projects.indexOf(project.id) > -1
+  )
 });
 
 export default connect(mapStateToProps)(UserProfile);
