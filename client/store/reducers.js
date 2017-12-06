@@ -5,7 +5,8 @@
 
 import { combineReducers } from 'redux';
 // does nothing - implemented to test connecting Redux to React
-const changeString = (state = 'some message', action) => action.type === 'CHANGE_STRING' ? action.text : state;
+const changeString = (state = 'some message', action) =>
+  action.type === 'CHANGE_STRING' ? action.text : state;
 
 /*
   first condition is the initial state
@@ -13,9 +14,9 @@ const changeString = (state = 'some message', action) => action.type === 'CHANGE
   inside UserDetails component, we dispatch 'dispatchPairing' when user select a partner to pair with
 */
 
-//Returns all users in the database
+// Returns all users in the database
 const allUsers = (state, action) => {
-  if(state === undefined) {
+  if (state === undefined) {
     return [];
   } else if (action.type === 'LOAD_ALL_USERS') {
     return action.allUsers;
@@ -26,7 +27,6 @@ const allUsers = (state, action) => {
   return state;
 };
 
-
 const users = (state, action) => {
   console.log('Reducer action', action);
   if (state === undefined) {
@@ -35,15 +35,15 @@ const users = (state, action) => {
     console.log('ADDING USERS', action);
     return action.users;
   } else if (action.type === 'CHANGE_USER_PAIRING') {
-    console.log('this is state before CHANGE_USER_PAIRING ', state)
-    return state.map((user) => {
+    console.log('this is state before CHANGE_USER_PAIRING ', state);
+    return state.map(user => {
       if (user.id === action.userId) {
         const object = Object.assign({}, user, {
-          paired: user.paired.concat(action.projectId)
+          paired: user.paired.concat(action.projectId),
         });
         return object;
       }
-      console.log('this is the user from reducers ', user)
+      console.log('this is the user from reducers ', user);
       return user;
     });
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
@@ -60,9 +60,7 @@ const pairedUsers = (state, action) => {
     return action.pairedUsers;
   } else if (action.type === 'ADD_PAIRING') {
     if (state.length !== 0) {
-      const idCollection = state[0].map((user) => {
-	      return user.ghId;
-      });
+      const idCollection = state[0].map(user => user.ghId);
       if (idCollection.indexOf(action.pairs.ghId) === -1) {
         state[0].push(action.pairs);
       }
@@ -81,10 +79,10 @@ const pairingStatus = (state, action) => {
   if (state === undefined) {
     return null;
   } else if (action.type === 'ADD_PAIRING_STATUS') {
-    return action.isPaired
+    return action.isPaired;
   }
   return state;
-}
+};
 
 /*
   first condition is the initial state
@@ -98,17 +96,17 @@ const projects = (state, action) => {
   } else if (action.type === 'LIST_PROJECTS') {
     return action.projects;
   } else if (action.type === 'CHANGE_PROJECT_INTEREST') {
-    return state.map((project) => {
+    return state.map(project => {
       if (project.id === action.projectId) {
         return Object.assign({}, project, { interested: action.value });
       }
       return project;
     });
   } else if (action.type === 'CHANGE_USER_PAIRING') {
-    return state.map((project) => {
+    return state.map(project => {
       if (project.id === action.projectId) {
         return Object.assign({}, project, {
-          paired: project.paired.concat(action.userId)
+          paired: project.paired.concat(action.userId),
         });
       }
       return project;
@@ -158,8 +156,13 @@ const projectProgress = (state, action) => {
     const stateProject = state[action.projectId];
     newProgress[action.projectId] = stateProject.slice();
     const updatedProject = newProgress[action.projectId];
-    updatedProject[action.itemIndex] = Object.assign({}, stateProject[action.itemIndex]);
-    updatedProject[action.itemIndex].complete = !updatedProject[action.itemIndex].complete;
+    updatedProject[action.itemIndex] = Object.assign(
+      {},
+      stateProject[action.itemIndex],
+    );
+    updatedProject[action.itemIndex].complete = !updatedProject[
+      action.itemIndex
+    ].complete;
     return newProgress;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     console.log('Project progress load', action.payload.projectProgress);
@@ -203,6 +206,6 @@ const rootReducer = (state, action) => {
     state = undefined;
   }
   return appReducer(state, action);
-}
+};
 
-export default rootReducer
+export default rootReducer;
