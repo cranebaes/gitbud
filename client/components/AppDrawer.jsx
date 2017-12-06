@@ -63,12 +63,8 @@ function AppDrawer(props) {
               label="My Partners"
               fullWidth
               onClick={props.closeDrawer}
-<<<<<<< HEAD
-              secondaryicon={<ActionFace />}
-=======
               secondary
               icon={<ActionFace />}
->>>>>>> Update eslintrc rules and add editorconfig
             />
           </Link>
         </div>

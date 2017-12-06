@@ -47,11 +47,7 @@ class UserDetails extends React.Component {
       open: false,
       isPaired: false,
       curProjectId: null,
-<<<<<<< HEAD
-      curProjectProperty: null,
-=======
       curProjectProperty: null
->>>>>>> Update eslintrc rules and add editorconfig
     };
     this.expandCard = () => {
       this.setState({ expanded: true });
@@ -74,11 +70,7 @@ class UserDetails extends React.Component {
       axios
         .post('/API/messages', {
           text: this.state.message,
-<<<<<<< HEAD
-          recipient: this.props.user.id,
-=======
           recipient: this.props.user.id
->>>>>>> Update eslintrc rules and add editorconfig
         })
         .then(() => {
           this.props.dispatchMessage(this.props.user.id, {
@@ -210,7 +202,7 @@ class UserDetails extends React.Component {
     updatedChatBox.push(myMessage);
 
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
 
     socket.emit('chat message', newMessage); // send msg
@@ -230,7 +222,7 @@ class UserDetails extends React.Component {
     const updatedChatBox = this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
   }
 

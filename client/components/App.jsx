@@ -40,11 +40,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-<<<<<<< HEAD
-      drawerOpen: false,
-=======
       drawerOpen: false
->>>>>>> Update eslintrc rules and add editorconfig
     };
     this.checkAuthenticated();
 
@@ -59,26 +55,14 @@ class App extends React.Component {
   getAllUsers() {
     axios
       .get('/API/allUsers')
-<<<<<<< HEAD
-      .then(allUsers => {
-        this.props.addAllUsers(allUsers.data);
-      })
-=======
       .then(allUsers => this.props.addAllUsers(allUsers.data))
->>>>>>> Update eslintrc rules and add editorconfig
       .catch(console.error);
   }
 
   getPairs() {
     axios
       .get('/API/pairs')
-<<<<<<< HEAD
-      .then(pairs => {
-        this.props.loadPairedUsers(pairs.data);
-      })
-=======
       .then(pairs => this.props.loadPairedUsers(pairs.data))
->>>>>>> Update eslintrc rules and add editorconfig
       .catch(console.error);
   }
 
@@ -86,13 +70,7 @@ class App extends React.Component {
   getProjects() {
     axios
       .get('/API/projects/')
-<<<<<<< HEAD
-      .then(project => {
-        this.props.addProjectsList(project.data);
-      })
-=======
       .then(project => this.props.addProjectsList(project.data))
->>>>>>> Update eslintrc rules and add editorconfig
       .catch(console.error);
   }
 
@@ -100,13 +78,7 @@ class App extends React.Component {
   getMessages() {
     axios
       .get('/API/messages')
-<<<<<<< HEAD
-      .then(res => {
-        this.props.loadMessages(res.data);
-      })
-=======
       .then(res => this.props.loadMessages(res.data))
->>>>>>> Update eslintrc rules and add editorconfig
       .catch(console.error);
   }
 
@@ -227,11 +199,7 @@ class App extends React.Component {
 const mapStateToProps = state => ({
   message: state.message,
   projects: state.projects,
-<<<<<<< HEAD
-  pairedUsers: state.pairedUsers,
-=======
   pairedUsers: state.pairedUsers
->>>>>>> Update eslintrc rules and add editorconfig
 });
 
 /*
@@ -266,15 +234,11 @@ const mapDispatchToProps = dispatch => ({
     }),
   loggedOut: () =>
     dispatch({
-<<<<<<< HEAD
-      type: 'USER_LOGOUT',
-    }),
-});
-=======
       type: 'USER_LOGOUT'
     })
 });
 
+/*
 App.propTypes = {
   addAllUsers: React.PropTypes.isRequired,
   loadPairedUsers: React.PropTypes.isRequired,
@@ -283,7 +247,7 @@ App.propTypes = {
   loggedInUser: React.PropTypes.isRequired,
   loggedOut: React.PropTypes.isRequired
 };
->>>>>>> Update eslintrc rules and add editorconfig
+*/
 
 // connects the Store to App component
 export default connect(mapStateToProps, mapDispatchToProps)(App);
