@@ -23,7 +23,7 @@ import FlatButton from 'material-ui/FlatButton';
 const customContentStyle = {
   width: '80%',
   height: '100%',
-  maxWidth: 'none',
+  maxWidth: 'none'
 };
 /* for Dialog  */
 
@@ -47,7 +47,7 @@ class UserDetails extends React.Component {
       open: false,
       isPaired: false,
       curProjectId: null,
-      curProjectProperty: null,
+      curProjectProperty: null
     };
     this.expandCard = () => {
       this.setState({ expanded: true });
@@ -56,6 +56,7 @@ class UserDetails extends React.Component {
     socket.on('chat message', msg => this.renderMessages(msg));
     // receive messages
     this.addPair = this.addPair.bind(this);
+    this.unPair = this.unPair.bind(this);
     this.togglePair = this.togglePair.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -70,12 +71,12 @@ class UserDetails extends React.Component {
       axios
         .post('/API/messages', {
           text: this.state.message,
-          recipient: this.props.user.id,
+          recipient: this.props.user.id
         })
         .then(() => {
           this.props.dispatchMessage(this.props.user.id, {
             text: this.state.message,
-            sender: true,
+            sender: true
           });
         });
     };
@@ -95,13 +96,13 @@ class UserDetails extends React.Component {
       .get('/API/pairedProjects', {
         params: {
           userId: this.props.loggedInUserGhId,
-          partnerId: this.props.user.ghId,
-        },
+          partnerId: this.props.user.ghId
+        }
       })
       .then(pairProjects => {
         if (pairProjects.data.length > 0) {
           this.setState({
-            buttonClicked: true,
+            buttonClicked: true
           });
         }
       })
@@ -114,7 +115,7 @@ class UserDetails extends React.Component {
     axios
       .post('/API/pair', {
         partnered: this.props.user.id,
-        project: this.state.curProjectId,
+        project: this.state.curProjectId
       })
       .then(response => {
         this.props.createPairing(response.data);
@@ -127,11 +128,30 @@ class UserDetails extends React.Component {
 
     axios.get('/');
   }
+
+  unPair() {
+    axios
+      .post('/API/unpair', {
+        partnered: this.props.user.id,
+        project: this.state.curProjectId
+      })
+      .then(response => {
+        // this.props.createPairing(response.data);
+        this.setState({ buttonClicked: !this.state.buttonClicked });
+        window.location.reload(); // REACT needs this after a POST
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    axios.get('/');
+  }
+
   togglePair() {
     axios
       .post('/API/pair', {
         partnered: this.props.user.id,
-        project: this.state.curProjectId,
+        project: this.state.curProjectId
       })
       .then(response => {
         // this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
@@ -156,12 +176,12 @@ class UserDetails extends React.Component {
       return (
         <div>
           <RaisedButton
-            label="Partnered"
+            label="unPartner"
             labelColor={fullWhite}
             backgroundColor="#a4c639"
             fullWidth
-            icon={<ActionDone color={fullWhite} />}
-            onClick={this.addPair}
+            icon={<ActionFace color={fullWhite} />}
+            onClick={this.unPair}
           />
           <RaisedButton
             label="Let's Work!"
@@ -190,19 +210,19 @@ class UserDetails extends React.Component {
     // socket.emit('chat message', );
     const newMessage = {
       message: this._message.value,
-      username: this.props.loggedInUser,
+      username: this.props.loggedInUser
     };
 
     const myMessage = {
       username: 'me: ',
-      message: this._message.value,
+      message: this._message.value
     };
 
     const updatedChatBox = this.state.chatBox;
     updatedChatBox.push(myMessage);
 
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
 
     socket.emit('chat message', newMessage); // send msg
@@ -222,7 +242,7 @@ class UserDetails extends React.Component {
     const updatedChatBox = this.state.chatBox;
     updatedChatBox.push(msg);
     this.setState({
-      chatBox: updatedChatBox,
+      chatBox: updatedChatBox
     });
   }
 
@@ -231,8 +251,8 @@ class UserDetails extends React.Component {
     axios
       .get('/API/project', {
         params: {
-          id: userId,
-        },
+          id: userId
+        }
       })
       .then(project => {
         this.state.curProjectId = project.data.id;
@@ -255,7 +275,7 @@ class UserDetails extends React.Component {
           </FlatButton>
         </form>
       </div>,
-      <FlatButton label="Cancel" primary onClick={this.handleClose} />,
+      <FlatButton label="Cancel" primary onClick={this.handleClose} />
     ];
     return (
       <Paper
@@ -267,7 +287,7 @@ class UserDetails extends React.Component {
             width: '40%',
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginBottom: 12,
+            marginBottom: 12
           }}
         >
           <Toolbar>
@@ -366,7 +386,7 @@ const mapStateToProps = (state, props) => {
   const userId = Number(props.match.params.id);
   const user = state.allUsers.filter(user => user.id === userId)[0];
   const projects = state.projects.filter(
-    project => user.projects.indexOf(project.id) > -1,
+    project => user.projects.indexOf(project.id) > -1
   );
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
@@ -375,31 +395,31 @@ const mapStateToProps = (state, props) => {
     projects,
     messages: state.messages[userId] || [],
     loggedInUser,
-    loggedInUserGhId,
+    loggedInUserGhId
   };
 };
 const mapDispatchToProps = dispatch => ({
   loadMessages: messages =>
     dispatch({
       type: 'MESSAGES_LOAD',
-      messages,
+      messages
     }),
   createPairing: pairs =>
     dispatch({
       type: 'ADD_PAIRING',
-      pairs,
+      pairs
     }),
   dispatchPairing: (userId, projectId) =>
     dispatch({
       type: 'CHANGE_USER_PAIRING',
       userId,
-      projectId,
+      projectId
     }),
   dispatchMessage: (userId, message) =>
     dispatch({
       type: 'MESSAGE_SEND',
       userId,
-      message,
-    }),
+      message
+    })
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

@@ -8,7 +8,7 @@ import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import {
   BottomNavigation,
-  BottomNavigationItem,
+  BottomNavigationItem
 } from 'material-ui/BottomNavigation';
 // buttons
 import FlatButton from 'material-ui/FlatButton';
@@ -63,7 +63,8 @@ function AppDrawer(props) {
               label="My Partners"
               fullWidth
               onClick={props.closeDrawer}
-              secondaryicon={<ActionFace />}
+              secondary
+              icon={<ActionFace />}
             />
           </Link>
         </div>
