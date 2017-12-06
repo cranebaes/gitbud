@@ -176,11 +176,11 @@ class UserDetails extends React.Component {
       return (
         <div>
           <RaisedButton
-            label="un Partnered"
+            label="unPartner"
             labelColor={fullWhite}
             backgroundColor="#a4c639"
             fullWidth
-            icon={<ActionDone color={fullWhite} />}
+            icon={<ActionFace color={fullWhite} />}
             onClick={this.unPair}
           />
           <RaisedButton
