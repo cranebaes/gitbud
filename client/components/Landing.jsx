@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 // makes the theme available via a higher-0rder component
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import octocat from '../assets/octocat.bmp';
 
 const style = {
   textAlign: 'center',
@@ -29,7 +30,7 @@ function Landing(props) {
         showMenuIconButton={false}
       />
       <CardMedia>
-        <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" />
+        <img src={octocat} />
       </CardMedia>
       <div style={{ width: '90%', margin: 'auto' }}>
         <a href="/auth/github">
