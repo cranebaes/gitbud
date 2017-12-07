@@ -15,13 +15,21 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
-      }
-    ]
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif|bmp)$/,
+        use: [
+          'file-loader',
+        ],
+      },
+    ],
   },
   devServer: {
     contentBase: path.join(__dirname, '/dist'),

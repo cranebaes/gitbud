@@ -1,6 +1,6 @@
 # GitPal
 
-> GitPal is an application forked from GitBud that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
+> GitPal is an application that was forked from GitBud that allows users to connect with others who are either at the same level or higher to work on open source projects. Users can view current projects, interested users, and pair up to work on a project together.
 
 ![Alt text](https://s3.amazonaws.com/poly-screenshots.angel.co/Project/c6/610187/7b1e3bb1d52fba7f60c382df3dc03a0b-original.png)
 
