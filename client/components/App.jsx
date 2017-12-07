@@ -1,4 +1,5 @@
 /* eslint no-console:0 */
+
 /*
   This is the main (parent) component for the application.
 
