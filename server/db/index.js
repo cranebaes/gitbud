@@ -33,13 +33,14 @@
 */
 
 // import neo4 driver
+require('dotenv').config();
 const neo4j = require('neo4j-driver').v1;
 // set variables to connect
 const url = process.env.GRAPHENEDB_BOLT_URL || 'bolt://localhost';
 const username =
-  process.env.GRAPHENEDB_BOLT_USERNAME || process.env.NEO4J_USERNAME || 'neo4j';
+  process.env.GRAPHENEDB_BOLT_USERNAME || process.env.NEO4J_USERNAME;
 const password =
-  process.env.GRAPHENEDB_BOLT_PASSWORD || process.env.NEO4J_PASSWORD || 'neo';
+  process.env.GRAPHENEDB_BOLT_PASSWORD || process.env.NEO4J_PASSWORD;
 // connect and create session
 exports.driver = neo4j.driver(url, neo4j.auth.basic(username, password));
 
