@@ -164,9 +164,9 @@ class ProjectDetails extends React.Component {
             open={this.state.open}
             onRequestClose={this.handleClose}
           >
-            {this.props.project.interested
+            {/* {this.props.project.interested
               ? 'Choose a partner!'
-              : 'Are you sure?'}
+              : 'Are you sure?'} */}
           </Dialog>
           <UserList
             users={this.props.users}
