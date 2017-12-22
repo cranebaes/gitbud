@@ -50,6 +50,7 @@ class ProjectDetails extends React.Component {
 
   handleClose() {
     this.setState({ open: false });
+    this.handleInterest();
   }
   /* dialog  handler end */
 
@@ -106,7 +107,7 @@ class ProjectDetails extends React.Component {
     // this.setState({
     //   disableUsers: false
     // });
-    this.handleInterest();
+    // this.handleInterest();
     this.handleOpen();
   }
 
@@ -164,9 +165,9 @@ class ProjectDetails extends React.Component {
             open={this.state.open}
             onRequestClose={this.handleClose}
           >
-            {/* {this.props.project.interested
-              ? 'Choose a partner!'
-              : 'Are you sure?'} */}
+            {this.props.project.interested
+              ? 'Are you sure?'
+              : 'Choose a partner!'}
           </Dialog>
           <UserList
             users={this.props.users}
