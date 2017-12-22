@@ -63,7 +63,7 @@ class UserDetails extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
-
+    this.sendinvitations = this.sendinvitations.bind(this);
     this.initialize();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
@@ -161,6 +161,20 @@ class UserDetails extends React.Component {
         console.log(error);
       });
   }
+  sendinvitations() {
+    // socketIO send invitation
+    // change work with me to invitation pending
+    console.log(this.props.user.id);
+    console.log('userDetails', socket.id);
+    let userInfo = {
+      inviteeGithubId: this.props.user.id,
+      inviterGithubId: this.props.loggedInUserGhId
+    };
+    socket.emit('pendingInvitation', userInfo);
+    // waiting for comfirmation from another user
+    // change it here
+  }
+
   /* dialog  handler */
   handleOpen() {
     // console.log("clicked")
@@ -198,7 +212,7 @@ class UserDetails extends React.Component {
           label="Work With Me"
           fullWidth
           icon={<ActionAdd />}
-          onClick={this.addPair}
+          onClick={this.sendinvitations}
           primary
         />
       );

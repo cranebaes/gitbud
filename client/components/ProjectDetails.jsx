@@ -12,6 +12,9 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import UserList from './UserList';
+import io from 'socket.io-client';
+
+const socket = io();
 
 class ProjectDetails extends React.Component {
   constructor(props) {
@@ -26,6 +29,9 @@ class ProjectDetails extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.handleInterest = this.handleInterest.bind(this);
+    // this.fetchInterestList = this.fetchInterestList.bind(this);
+    socket.on('updateInterestList', () => this.getUsers());
+    // receive messages
     this.getUsers();
   }
 
@@ -68,7 +74,7 @@ class ProjectDetails extends React.Component {
             this.props.project.id,
             this.props.project.interested
           );
-          window.location.reload(); // REACT needs this after a POST
+          socket.emit('updateInterestList'); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);
@@ -89,7 +95,7 @@ class ProjectDetails extends React.Component {
             this.props.project.id,
             this.props.project.interested
           );
-          window.location.reload(); // REACT needs this after a POST
+          socket.emit('updateInterestList'); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);

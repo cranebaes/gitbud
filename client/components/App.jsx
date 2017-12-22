@@ -35,6 +35,7 @@ import Questionnaire from './Questionnaire';
 import NotFound from './NotFound';
 import MyProjects from './MyProjects';
 import MyPartners from './MyPartners';
+import io from 'socket.io-client';
 
 class App extends React.Component {
   constructor(props) {
@@ -82,7 +83,11 @@ class App extends React.Component {
       .then(res => this.props.loadMessages(res.data))
       .catch(console.error);
   }
-
+  //
+  // readySockets() {
+  //   const socket = io();
+  //
+  // }
   navTap() {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   }
@@ -92,6 +97,7 @@ class App extends React.Component {
     axios.get('/auth/authenticated').then(res => {
       if (res.data !== false) {
         this.setState({ loggedIn: res.data });
+        // this.readySockets();
         this.getMessages();
         this.getProjects();
         this.getPairs();
@@ -208,6 +214,12 @@ const mapStateToProps = state => ({
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = dispatch => ({
+  // addSockets: theSocket => {
+  //   dispatch({
+  //     type: 'READY_SOCKET',
+  //     theSocket
+  //   });
+  // },
   addAllUsers: allUsers =>
     dispatch({
       type: 'LOAD_ALL_USERS',

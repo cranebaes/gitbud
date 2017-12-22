@@ -13,7 +13,6 @@ import Dialog from 'material-ui/Dialog';
 import SocialPartyMode from 'material-ui/svg-icons/social/party-mode';
 
 import io from 'socket.io-client';
-
 const socket = io();
 
 const style = {

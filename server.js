@@ -29,12 +29,14 @@ const session = require('express-session');
 // GitPal modules
 const passport = require('./server/authentication').passport;
 const requestHandler = require('./server/request-handler');
+const eventSockets = require('./server/sockets');
 
+const socketio = require('socket.io');
 // Make express server
 const app = express();
 const port = process.env.PORT || 8080;
 
-const server = app.listen(port, function(err) {
+const server = app.listen(port, err => {
   if (err) {
     console.log(err);
   } else {
@@ -42,39 +44,18 @@ const server = app.listen(port, function(err) {
   }
 });
 
-const io = require('socket.io')(server);
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  // // when the client emits 'new message', this listens and executes
-  // socket.on('new message', function (data) {
-  //   // we tell the client to execute 'new message'
-  //   socket.broadcast.emit('new message', {
-  //     username: socket.username,
-  //     message: data
-  //   });
-  // });
-
-  socket.on('chat message', function(msg) {
-    console.log(msg);
-    socket.broadcast.emit('chat message', msg);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-
+const io = socketio(server);
+eventSockets(io);
 // Save sessions
 // NOTE: This is using a bad memory store
 // https://www.npmjs.com/package/express-session#sessionoptions
-app.use(session({
-  secret: 'This is a secret',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: 'This is a secret',
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
 // Set server to use initialized passport from authentication module
 app.use(passport.initialize());

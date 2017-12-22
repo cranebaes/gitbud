@@ -8,7 +8,7 @@
 // For info on how to do this better, check the hints in the db module.
 const db = require('../db');
 const passport = require('../authentication');
-
+// const processSocketIo = require('../sockets');
 const dbDriver = db.driver;
 
 module.exports = {
@@ -42,6 +42,7 @@ module.exports = {
               )
             );
             dbSession.close();
+            // processSocketIo();
           })
           .catch(() => {
             res.send(false);

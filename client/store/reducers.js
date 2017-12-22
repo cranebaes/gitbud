@@ -39,7 +39,7 @@ const users = (state, action) => {
     return state.map(user => {
       if (user.id === action.userId) {
         const object = Object.assign({}, user, {
-          paired: user.paired.concat(action.projectId),
+          paired: user.paired.concat(action.projectId)
         });
         return object;
       }
@@ -106,7 +106,7 @@ const projects = (state, action) => {
     return state.map(project => {
       if (project.id === action.projectId) {
         return Object.assign({}, project, {
-          paired: project.paired.concat(action.userId),
+          paired: project.paired.concat(action.userId)
         });
       }
       return project;
@@ -158,7 +158,7 @@ const projectProgress = (state, action) => {
     const updatedProject = newProgress[action.projectId];
     updatedProject[action.itemIndex] = Object.assign(
       {},
-      stateProject[action.itemIndex],
+      stateProject[action.itemIndex]
     );
     updatedProject[action.itemIndex].complete = !updatedProject[
       action.itemIndex
@@ -179,6 +179,15 @@ const loggedInUser = (state, action) => {
   }
   return state;
 };
+//
+// const sockets = (state, action) => {
+//   if (state === undefined) {
+//     return {};
+//   } else if (action.type === 'READY_SOCKET') {
+//     return action.theSocket;
+//   }
+//   return state;
+// };
 /*
   hands off state/dispatch to React components with mapStateToProps and mapDispatchToProps
   combineReducers function creates a single object that contains all the reducers
@@ -198,7 +207,8 @@ const appReducer = combineReducers({
   projectProgress,
   loggedInUser,
   pairingStatus,
-  allUsers,
+  allUsers
+  // sockets
 });
 
 const rootReducer = (state, action) => {
