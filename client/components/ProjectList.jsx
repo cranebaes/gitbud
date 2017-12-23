@@ -1,4 +1,3 @@
-/* eslint no-console:0 */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -16,7 +15,6 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card } from 'material-ui/Card';
 
 const ProjectList = props => (
-  // console.log('ProjectList.jsx Props', props);
   <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
     <Card>
       <Toolbar>

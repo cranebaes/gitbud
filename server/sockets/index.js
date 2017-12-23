@@ -9,6 +9,7 @@ module.exports = io => {
     //     message: data
     //   });
     // });
+    console.log('connect to user:', socket.id);
     socket.on('id myself', obj => {
       console.log('id', obj);
     });

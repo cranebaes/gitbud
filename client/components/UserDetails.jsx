@@ -135,7 +135,7 @@ class UserDetails extends React.Component {
         partnered: this.props.user.id,
         project: this.state.curProjectId
       })
-      .then(response => {
+      .then(() => {
         // this.props.createPairing(response.data);
         this.setState({ buttonClicked: !this.state.buttonClicked });
         window.location.reload(); // REACT needs this after a POST
@@ -221,7 +221,7 @@ class UserDetails extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // socket.emit('chat message', );
+
     const newMessage = {
       message: this._message.value,
       username: this.props.loggedInUser
@@ -240,7 +240,6 @@ class UserDetails extends React.Component {
     });
 
     socket.emit('chat message', newMessage); // send msg
-    console.log(newMessage);
   }
 
   getMessages() {
@@ -276,6 +275,11 @@ class UserDetails extends React.Component {
   }
 
   render() {
+    const userInfo = {
+      userId: this.props.loggedInUserGhId,
+      socketId: socket.id
+    };
+    socket.emit('id myself', userInfo);
     const actions = [
       <div>
         <form onSubmit={this.handleSubmit}>

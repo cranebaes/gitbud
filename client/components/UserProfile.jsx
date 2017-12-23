@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Card, CardMedia, CardText, CardTitle } from 'material-ui/Card';
+import { Card, CardMedia, CardTitle } from 'material-ui/Card';
 
 function UserProfile(props) {
   return (
