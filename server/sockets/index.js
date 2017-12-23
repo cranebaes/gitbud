@@ -1,7 +1,6 @@
 module.exports = io => {
+  let userGroup = {};
   io.on('connection', socket => {
-    console.log('a user connected');
-    console.log('this user socket.id', socket.id);
     // // when the client emits 'new message', this listens and executes
     // socket.on('new message', function (data) {
     //   // we tell the client to execute 'new message'
@@ -10,6 +9,9 @@ module.exports = io => {
     //     message: data
     //   });
     // });
+    socket.on('id myself', obj => {
+      console.log('id', obj);
+    });
 
     socket.on('chat message', msg => {
       console.log(msg);

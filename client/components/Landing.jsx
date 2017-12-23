@@ -1,7 +1,5 @@
-/* eslint no-console:0 */
 import React from 'react';
 
-import { Link } from 'react-router-dom';
 import { Card, CardMedia } from 'material-ui/Card';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -10,10 +8,10 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import octocat from '../assets/octocat.bmp';
 
 const style = {
-  textAlign: 'center',
+  textAlign: 'center'
 };
 
-function Landing(props) {
+function Landing() {
   return (
     <Card
       style={{
@@ -21,7 +19,7 @@ function Landing(props) {
         width: '75%',
         margin: 'auto',
         paddingBottom: 12,
-        marginTop: 12,
+        marginTop: 12
       }}
     >
       <AppBar
@@ -30,7 +28,7 @@ function Landing(props) {
         showMenuIconButton={false}
       />
       <CardMedia>
-        <img src={octocat} />
+        <img src={octocat} alt="icon" />
       </CardMedia>
       <div style={{ width: '90%', margin: 'auto' }}>
         <a href="/auth/github">

@@ -1,5 +1,3 @@
-/* eslint no-console:0 */
-
 /*
   This is the main (parent) component for the application.
 
@@ -18,10 +16,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import AppBar from 'material-ui/AppBar';
-import Paper from 'material-ui/Paper';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { fullWhite } from 'material-ui/styles/colors';
 
 import AppDrawer from './AppDrawer';
@@ -35,7 +31,6 @@ import Questionnaire from './Questionnaire';
 import NotFound from './NotFound';
 import MyProjects from './MyProjects';
 import MyPartners from './MyPartners';
-import io from 'socket.io-client';
 
 class App extends React.Component {
   constructor(props) {
@@ -45,7 +40,6 @@ class App extends React.Component {
       drawerOpen: false
     };
     this.checkAuthenticated();
-
     this.navTap = this.navTap.bind(this);
   }
   componentDidUpdate() {
@@ -83,11 +77,7 @@ class App extends React.Component {
       .then(res => this.props.loadMessages(res.data))
       .catch(console.error);
   }
-  //
-  // readySockets() {
-  //   const socket = io();
-  //
-  // }
+
   navTap() {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   }
@@ -97,33 +87,12 @@ class App extends React.Component {
     axios.get('/auth/authenticated').then(res => {
       if (res.data !== false) {
         this.setState({ loggedIn: res.data });
-        // this.readySockets();
         this.getMessages();
         this.getProjects();
         this.getPairs();
         this.props.loggedInUser(res.data);
       }
     });
-  }
-
-  // party mode
-  togglePartyMode() {
-    const colors = ['blue', 'green', 'red', 'yellow', 'lilac'];
-    if (this.state.partyMode) {
-      clearInterval(this.state.partyMode);
-      document.body.setAttribute('style', 'background-color:white');
-      this.setState({ partyMode: false });
-    } else {
-      this.setState({
-        partyMode: setInterval(() => {
-          const randomNum = Math.floor(Math.random() * colors.length);
-          document.body.setAttribute(
-            'style',
-            `background-color:${colors[randomNum]}`
-          );
-        }, 200)
-      });
-    }
   }
 
   render() {
@@ -173,7 +142,7 @@ class App extends React.Component {
               <Route path="/my-projects" component={MyProjects} />
               <Route
                 path="/my-partners"
-                render={props => (
+                render={() => (
                   <MyPartners currentPartners={this.state.myPartners} />
                 )}
               />
@@ -214,12 +183,6 @@ const mapStateToProps = state => ({
   Dispatch can be found in store/reducers.js
 */
 const mapDispatchToProps = dispatch => ({
-  // addSockets: theSocket => {
-  //   dispatch({
-  //     type: 'READY_SOCKET',
-  //     theSocket
-  //   });
-  // },
   addAllUsers: allUsers =>
     dispatch({
       type: 'LOAD_ALL_USERS',
@@ -250,17 +213,6 @@ const mapDispatchToProps = dispatch => ({
       type: 'USER_LOGOUT'
     })
 });
-
-/*
-App.propTypes = {
-  addAllUsers: React.PropTypes.isRequired,
-  loadPairedUsers: React.PropTypes.isRequired,
-  addProjectsList: React.PropTypes.isRequired,
-  loadMessages: React.PropTypes.isRequired,
-  loggedInUser: React.PropTypes.isRequired,
-  loggedOut: React.PropTypes.isRequired
-};
-*/
 
 // connects the Store to App component
 export default connect(mapStateToProps, mapDispatchToProps)(App);
