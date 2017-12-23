@@ -15,7 +15,7 @@ module.exports = io => {
     });
 
     socket.on('pairInfo', obj => {
-      socket.emit('pairInfo');
+      socket.broadcast.emit('pairInfo');
     });
 
     socket.on('chat message', msg => {

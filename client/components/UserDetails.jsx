@@ -115,8 +115,6 @@ class UserDetails extends React.Component {
             buttonClicked: true
           });
         }
-        console.log('check runs');
-        // this.props.loadPairedUsers(pairs.data);
       })
       .catch(error => {
         console.log(error);
@@ -280,12 +278,15 @@ class UserDetails extends React.Component {
   }
 
   render() {
-    socket.on('pairInfo', () => this.checkIfPaired());
+    socket.on('pairInfo', () => {
+      this.checkIfPaired();
+      // this.getPairs();
+    });
     const userInfo = {
       userId: this.props.loggedInUserGhId,
       socketId: socket.id
     };
-    socket.emit('id myself', userInfo);
+    // socket.emit('id myself', userInfo);
     const actions = [
       <div>
         <form onSubmit={this.handleSubmit}>
