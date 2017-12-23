@@ -57,13 +57,13 @@ class UserDetails extends React.Component {
     // receive messages
     this.addPair = this.addPair.bind(this);
     this.unPair = this.unPair.bind(this);
-    this.togglePair = this.togglePair.bind(this);
+    // this.getPairs = this.getPairs.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.retrieveProjectId = this.retrieveProjectId.bind(this);
-    this.sendinvitations = this.sendinvitations.bind(this);
+    // this.sendinvitations = this.sendinvitations.bind(this);
     this.initialize();
 
     this.setMessageText = (_, text) => this.setState({ message: text });
@@ -90,6 +90,16 @@ class UserDetails extends React.Component {
       this.checkIfPaired();
     });
   }
+  // getPairs() {
+  //   console.log('get pairs runninnnngnggngg');
+  //   axios
+  //     .get('/API/pairs')
+  //     .then(pairs => {
+  //       this.props.loadPairedUsers(pairs.data);
+  //       console.log('get pairs runnin', pairs.data);
+  //     })
+  //     .catch(console.error);
+  // }
 
   checkIfPaired() {
     axios
@@ -105,6 +115,8 @@ class UserDetails extends React.Component {
             buttonClicked: true
           });
         }
+        console.log('check runs');
+        // this.props.loadPairedUsers(pairs.data);
       })
       .catch(error => {
         console.log(error);
@@ -118,9 +130,11 @@ class UserDetails extends React.Component {
         project: this.state.curProjectId
       })
       .then(response => {
+        console.log('addPair!!!!!!!', response.data);
         this.props.createPairing(response.data);
         this.setState({ buttonClicked: !this.state.buttonClicked });
-        window.location.reload(); // REACT needs this after a POST
+        // window.location.reload(); // REACT needs this after a POST
+        socket.emit('pairInfo');
       })
       .catch(error => {
         console.log(error);
@@ -136,9 +150,12 @@ class UserDetails extends React.Component {
         project: this.state.curProjectId
       })
       .then(() => {
-        // this.props.createPairing(response.data);
+        console.log('testGHid', this.props.user.id);
+        const partneredId = this.props.user.id;
+        this.props.removingPairing(partneredId);
         this.setState({ buttonClicked: !this.state.buttonClicked });
-        window.location.reload(); // REACT needs this after a POST
+        // window.location.reload(); // REACT needs this after a POST
+        socket.emit('pairInfo');
       })
       .catch(error => {
         console.log(error);
@@ -147,33 +164,19 @@ class UserDetails extends React.Component {
     axios.get('/');
   }
 
-  togglePair() {
-    axios
-      .post('/API/pair', {
-        partnered: this.props.user.id,
-        project: this.state.curProjectId
-      })
-      .then(response => {
-        // this.props.dispatchPairing(this.props.user.id, this.state.curProjectId);
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-  sendinvitations() {
-    // socketIO send invitation
-    // change work with me to invitation pending
-    console.log(this.props.user.id);
-    console.log('userDetails', socket.id);
-    let userInfo = {
-      inviteeGithubId: this.props.user.id,
-      inviterGithubId: this.props.loggedInUserGhId
-    };
-    socket.emit('pendingInvitation', userInfo);
-    // waiting for comfirmation from another user
-    // change it here
-  }
+  // sendinvitations() {
+  //   // socketIO send invitation
+  //   // change work with me to invitation pending
+  //   console.log(this.props.user.id);
+  //   console.log('userDetails', socket.id);
+  //   let userInfo = {
+  //     inviteeGithubId: this.props.user.id,
+  //     inviterGithubId: this.props.loggedInUserGhId
+  //   };
+  //   socket.emit('pendingInvitation', userInfo);
+  //   // waiting for comfirmation from another user
+  //   // change it here
+  // }
 
   /* dialog  handler */
   handleOpen() {
@@ -212,7 +215,7 @@ class UserDetails extends React.Component {
           label="Work With Me"
           fullWidth
           icon={<ActionAdd />}
-          onClick={this.sendinvitations}
+          onClick={this.addPair}
           primary
         />
       );
@@ -275,6 +278,7 @@ class UserDetails extends React.Component {
   }
 
   render() {
+    socket.on('pairInfo', () => this.checkIfPaired());
     const userInfo = {
       userId: this.props.loggedInUserGhId,
       socketId: socket.id
@@ -427,6 +431,16 @@ const mapDispatchToProps = dispatch => ({
       type: 'ADD_PAIRING',
       pairs
     }),
+  removingPairing: ghId =>
+    dispatch({
+      type: 'DEL_PAIRING',
+      ghId
+    }),
+  // loadPairedUsers: pairedUsers =>
+  //   dispatch({
+  //     type: 'LOAD_PAIRING',
+  //     pairedUsers
+  //   }),
   dispatchPairing: (userId, projectId) =>
     dispatch({
       type: 'CHANGE_USER_PAIRING',

@@ -14,6 +14,10 @@ module.exports = io => {
       console.log('id', obj);
     });
 
+    socket.on('pairInfo', obj => {
+      socket.emit('pairInfo');
+    });
+
     socket.on('chat message', msg => {
       console.log(msg);
       socket.broadcast.emit('chat message', msg);

@@ -62,6 +62,7 @@ const pairedUsers = (state, action) => {
   if (state === undefined) {
     return [];
   } else if (action.type === 'LOAD_PAIRING') {
+    console.log('action.pairedUsers', action.pairedUsers);
     return action.pairedUsers;
   } else if (action.type === 'ADD_PAIRING') {
     if (state.length !== 0) {
@@ -72,6 +73,14 @@ const pairedUsers = (state, action) => {
     } else {
       state.push(action.pairs);
     }
+    return state;
+  } else if (action.type === 'DEL_PAIRING') {
+    const idCollection = state[0].map(user => user.id);
+    const index = idCollection.indexOf(action.ghId);
+    if (index !== -1) {
+      state[0].splice(index, 1);
+    }
+    console.log('state[0]', state[0]);
     return state;
   } else if (action.type === 'REDUX_STORAGE_LOAD') {
     // console.log('pairedUsers load:', action.payload.pairedUsers);

@@ -22,6 +22,7 @@ const UserList = props => (
           />
         }
         leftAvatar={<Avatar src={user.avatarUrl} />}
+        // rightAvatar={if(props.paringWithCur){return <Avatar src={user.avatarUrl} />}}
         key={index}
         primaryText={user.name}
         secondaryText={`Rating: ${user.rating}`}

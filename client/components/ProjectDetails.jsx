@@ -167,6 +167,7 @@ class ProjectDetails extends React.Component {
             users={this.props.users}
             projectId={this.props.project.id}
             isClickable={this.props.disableUsers}
+            // paringWithCur={this.props.paringWithCur}
           />
         </Paper>
       </Paper>
@@ -178,6 +179,8 @@ const mapStateToProps = (state, props) => {
   const projectId = Number(props.routedProjectId);
   const project = state.projects.filter(cur => cur.id === projectId)[0];
   const disableUsers = !project.interested;
+  const paringWithCur = state.pairedUsers;
+  console.log(paringWithCur);
   return {
     users: state.users,
     project,
