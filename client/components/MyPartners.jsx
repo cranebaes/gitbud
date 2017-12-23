@@ -12,7 +12,7 @@ import {
   TableRowColumn
 } from 'material-ui/Table';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Card, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
 
 class MyPartners extends React.Component {
@@ -38,6 +38,7 @@ class MyPartners extends React.Component {
 
   render() {
     const tests = this.props.pairedUsers[0] || [];
+
     return (
       <Paper
         style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}
@@ -77,10 +78,10 @@ class MyPartners extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
   pairedUsers: state.pairedUsers
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyPartners);

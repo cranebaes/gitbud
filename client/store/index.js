@@ -19,12 +19,12 @@ const createStoreWithMiddleware = applyMiddleware(middleware)(createStore);
 */
 const store = createStoreWithMiddleware(
   reducers /* preloadedState, */,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 const load = storage.createLoader(engine);
 load(store)
-  .then(newState => console.log('Loaded state:', newState))
+  // .then(newState => console.log('Loaded state:', newState))
   .catch(() => console.log('Failed to load previous state'));
 
 export default store;

@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import {
   Table,
@@ -11,10 +10,10 @@ import {
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
+  TableRowColumn
 } from 'material-ui/Table';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Card, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 
 const MyProjects = props => (
   <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
@@ -52,7 +51,7 @@ const MyProjects = props => (
 );
 
 const mapStateToProps = state => ({
-  projects: state.projects.filter(project => project.paired.length > 0),
+  projects: state.projects.filter(project => project.paired.length > 0)
 });
 
 // connects the Store to MyProjects component

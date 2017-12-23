@@ -1,4 +1,3 @@
-/* eslint no-console:0 */
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -57,7 +56,7 @@ class Project extends React.Component {
 const mapStateToProps = (state, props) => {
   const projectId = Number(props.match.params.id);
   const project = state.projects.filter(project => project.id === projectId)[0];
-  console.log('Project.jsx line61 props.project', project);
+  // console.log('Project.jsx line61 props.project', project);
   return {
     project,
     progress: state.projectProgress[projectId] || []
@@ -68,7 +67,7 @@ const mapStateToProps = (state, props) => {
   Map our dispatch to Project component as props
   Dispatch can be found in store/reducers.js
 */
-const mapDispatchToProps = (dispatch, props) => ({
+const mapDispatchToProps = dispatch => ({
   dispatchProgress: (projectId, itemIndex) =>
     dispatch({
       type: 'PROGRESS_CHANGE_ITEM',

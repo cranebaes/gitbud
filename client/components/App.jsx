@@ -1,5 +1,3 @@
-/* eslint no-console:0 */
-
 /*
   This is the main (parent) component for the application.
 
@@ -18,10 +16,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import AppBar from 'material-ui/AppBar';
-import Paper from 'material-ui/Paper';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { fullWhite } from 'material-ui/styles/colors';
 
 import AppDrawer from './AppDrawer';
@@ -44,7 +40,6 @@ class App extends React.Component {
       drawerOpen: false
     };
     this.checkAuthenticated();
-
     this.navTap = this.navTap.bind(this);
   }
   componentDidUpdate() {
@@ -100,26 +95,6 @@ class App extends React.Component {
     });
   }
 
-  // party mode
-  togglePartyMode() {
-    const colors = ['blue', 'green', 'red', 'yellow', 'lilac'];
-    if (this.state.partyMode) {
-      clearInterval(this.state.partyMode);
-      document.body.setAttribute('style', 'background-color:white');
-      this.setState({ partyMode: false });
-    } else {
-      this.setState({
-        partyMode: setInterval(() => {
-          const randomNum = Math.floor(Math.random() * colors.length);
-          document.body.setAttribute(
-            'style',
-            `background-color:${colors[randomNum]}`
-          );
-        }, 200)
-      });
-    }
-  }
-
   render() {
     /*
      Condition:
@@ -167,7 +142,7 @@ class App extends React.Component {
               <Route path="/my-projects" component={MyProjects} />
               <Route
                 path="/my-partners"
-                render={props => (
+                render={() => (
                   <MyPartners currentPartners={this.state.myPartners} />
                 )}
               />
@@ -238,17 +213,6 @@ const mapDispatchToProps = dispatch => ({
       type: 'USER_LOGOUT'
     })
 });
-
-/*
-App.propTypes = {
-  addAllUsers: React.PropTypes.isRequired,
-  loadPairedUsers: React.PropTypes.isRequired,
-  addProjectsList: React.PropTypes.isRequired,
-  loadMessages: React.PropTypes.isRequired,
-  loggedInUser: React.PropTypes.isRequired,
-  loggedOut: React.PropTypes.isRequired
-};
-*/
 
 // connects the Store to App component
 export default connect(mapStateToProps, mapDispatchToProps)(App);

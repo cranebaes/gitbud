@@ -2,6 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import io from 'socket.io-client';
+
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -11,8 +14,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import SocialPartyMode from 'material-ui/svg-icons/social/party-mode';
-
-import io from 'socket.io-client';
 
 const socket = io();
 
@@ -51,18 +52,16 @@ class ProjectStatus extends React.Component {
     this.handleDiaLogOpen = this.handleDiaLogOpen.bind(this);
     this.handleDiaLogClose = this.handleDiaLogClose.bind(this);
     this.handleMessegeSubmit = this.handleMessegeSubmit.bind(this);
-    // this.handlePartenerList = this.handlePartenerList.bind(this);
+
     socket.on('chat message', msg => this.renderMessages(msg));
   }
 
   /* dialog  handler */
   handleDiaLogOpen() {
-    console.log('clicked');
     this.setState({ dialogOpen: true });
   }
 
   handleDiaLogClose() {
-    console.log('clicked');
     this.setState({ dialogOpen: false });
   }
   /* dialog  handler end */
@@ -107,7 +106,6 @@ class ProjectStatus extends React.Component {
 
   renderMessages(msg) {
     const updatedChatBox = this.state.chatBox;
-    console.log('line 119', msg);
     updatedChatBox.push(msg);
     this.setState({
       chatBox: updatedChatBox
@@ -207,7 +205,7 @@ class ProjectStatus extends React.Component {
           open={this.state.dialogOpen}
           autoScrollBodyContent
         >
-          <ul id="messages">hey</ul>
+          <ul id="messages" />
           {this.state.chatBox.map((chat, index) => (
             <div key={index}>
               <strong>{chat.username}</strong>
@@ -220,7 +218,7 @@ class ProjectStatus extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = state => {
   const loggedInUser = state.loggedInUser.username;
   const loggedInUserGhId = state.loggedInUser.ghId;
   return {
@@ -229,6 +227,6 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectStatus);

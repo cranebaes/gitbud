@@ -1,6 +1,5 @@
-/* eslint no-console:0 */
 import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { Card, CardHeader } from 'material-ui/Card';
 // menus and toolbars etc.
@@ -11,7 +10,6 @@ import {
   BottomNavigationItem
 } from 'material-ui/BottomNavigation';
 // buttons
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 // icons
 import ActionEject from 'material-ui/svg-icons/action/eject';

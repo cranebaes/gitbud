@@ -14,38 +14,32 @@ class Questionnaire extends React.Component {
     this.state = {
       selectedLanguage: 'JavaScript',
       selectedSkillLevel: 'Beginner',
-      description: '',
+      description: ''
     };
   }
 
   onLanguageSelect(val) {
-    this.setState({ selectedLanguage: val }, () =>
-      console.log(this.state.selectedLanguage),
-    );
+    this.setState({ selectedLanguage: val });
   }
 
   onSkillLevelSelect(val) {
-    this.setState({ selectedSkillLevel: val }, () =>
-      console.log(this.state.selectedSkillLevel),
-    );
+    this.setState({ selectedSkillLevel: val });
   }
 
   onDescriptionChange(val) {
-    this.setState({ description: val }, () =>
-      console.log(this.state.description),
-    );
+    this.setState({ description: val });
   }
 
   onButtonClick() {
     const userInfo = {
       language: this.state.selectedLanguage,
       experience: this.state.selectedSkillLevel,
-      description: this.state.description,
+      description: this.state.description
     };
 
     axios
       .post('/API/users', userInfo)
-      .then(response => {
+      .then(() => {
         // redirect to home after successful submission
         window.location.href = '/projects';
       })

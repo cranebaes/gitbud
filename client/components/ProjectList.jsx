@@ -1,22 +1,20 @@
-/* eslint no-console:0 */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
+
 import {
   Table,
   TableBody,
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
+  TableRowColumn
 } from 'material-ui/Table';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Card, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 
 const ProjectList = props => (
-  // console.log('ProjectList.jsx Props', props);
   <Paper style={{ width: '95%', margin: 'auto', marginTop: 12, padding: 12 }}>
     <Card>
       <Toolbar>
@@ -51,7 +49,7 @@ const ProjectList = props => (
 );
 
 const mapStateToProps = state => ({
-  projects: state.projects,
+  projects: state.projects
 });
 
 // connects the Store to ProjectList

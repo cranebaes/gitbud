@@ -7,14 +7,6 @@ import { Link } from 'react-router-dom';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
 
 const UserList = props => (
   <List>
@@ -30,6 +22,7 @@ const UserList = props => (
           />
         }
         leftAvatar={<Avatar src={user.avatarUrl} />}
+        // rightAvatar={if(props.paringWithCur){return <Avatar src={user.avatarUrl} />}}
         key={index}
         primaryText={user.name}
         secondaryText={`Rating: ${user.rating}`}

@@ -1,6 +1,6 @@
 /* eslint no-console:0 */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import UserList from './UserList';
+
+const socket = io();
 
 class ProjectDetails extends React.Component {
   constructor(props) {
@@ -26,6 +28,7 @@ class ProjectDetails extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.handleInterest = this.handleInterest.bind(this);
+
     this.getUsers();
   }
 
@@ -44,19 +47,19 @@ class ProjectDetails extends React.Component {
 
   /* dialog  handler */
   handleOpen() {
-    console.log('clicked');
     this.setState({ open: true });
   }
 
   handleClose() {
     this.setState({ open: false });
+    this.handleInterest();
   }
   /* dialog  handler end */
 
   toggleInterest() {
     // if wasnt interested, sent request for adding interests
     if (!this.props.project.interested) {
-      console.log('adding interest');
+      // adding interest;
       axios
         .post('/API/projects', {
           projectId: this.props.project.id
@@ -67,28 +70,24 @@ class ProjectDetails extends React.Component {
             this.props.project.id,
             this.props.project.interested
           );
-          window.location.reload(); // REACT needs this after a POST
+          socket.emit('updateInterestList'); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);
         });
     } else if (this.props.project.interested) {
-      console.log('deleting interest');
+      // deleting interest;
       axios
         .post('/API/deleteInterest', {
           projectId: this.props.project.id
         })
-        .then(response => {
+        .then(() => {
           this.props.project.interested = !this.props.project.interested;
-          console.log(
-            'line82 afterDelete interest',
-            this.props.project.interested
-          );
           this.props.dispatchInterest(
             this.props.project.id,
             this.props.project.interested
           );
-          window.location.reload(); // REACT needs this after a POST
+          socket.emit('updateInterestList'); // REACT needs this after a POST
         })
         .catch(error => {
           console.log(error);
@@ -97,20 +96,16 @@ class ProjectDetails extends React.Component {
   }
 
   handleInterest() {
-    // this.props.project.interested = !this.props.project.interested;
-    console.log('handleInterest ran');
     this.toggleInterest();
   }
 
   clickHandler() {
-    // this.setState({
-    //   disableUsers: false
-    // });
-    this.handleInterest();
     this.handleOpen();
   }
 
   render() {
+    socket.on('updateInterestList', () => this.getUsers());
+
     const actions = [
       <FlatButton label="Sure thing!" primary onClick={this.handleClose} />,
       <FlatButton label="Cancel" primary onClick={this.handleClose} />
@@ -165,13 +160,14 @@ class ProjectDetails extends React.Component {
             onRequestClose={this.handleClose}
           >
             {this.props.project.interested
-              ? 'Choose a partner!'
-              : 'Are you sure?'}
+              ? 'Are you sure?'
+              : 'Choose a partner!'}
           </Dialog>
           <UserList
             users={this.props.users}
             projectId={this.props.project.id}
-            isClickable={this.state.disableUsers}
+            isClickable={this.props.disableUsers}
+            // paringWithCur={this.props.paringWithCur}
           />
         </Paper>
       </Paper>
@@ -181,10 +177,14 @@ class ProjectDetails extends React.Component {
 
 const mapStateToProps = (state, props) => {
   const projectId = Number(props.routedProjectId);
-  console.log('ProjectDetails line157 project', state.projects);
+  const project = state.projects.filter(cur => cur.id === projectId)[0];
+  const disableUsers = !project.interested;
+  const paringWithCur = state.pairedUsers;
+  console.log(paringWithCur);
   return {
     users: state.users,
-    project: state.projects.filter(project => project.id === projectId)[0]
+    project,
+    disableUsers
   };
 };
 
