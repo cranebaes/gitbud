@@ -57,7 +57,7 @@ class UserDetails extends React.Component {
     // receive messages
     this.addPair = this.addPair.bind(this);
     this.unPair = this.unPair.bind(this);
-    // this.getPairs = this.getPairs.bind(this);
+    this.getPairs = this.getPairs.bind(this);
     this.pairButton = this.pairButton.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -90,16 +90,16 @@ class UserDetails extends React.Component {
       this.checkIfPaired();
     });
   }
-  // getPairs() {
-  //   console.log('get pairs runninnnngnggngg');
-  //   axios
-  //     .get('/API/pairs')
-  //     .then(pairs => {
-  //       this.props.loadPairedUsers(pairs.data);
-  //       console.log('get pairs runnin', pairs.data);
-  //     })
-  //     .catch(console.error);
-  // }
+  getPairs() {
+    console.log('get pairs runninnnngnggngg');
+    axios
+      .get('/API/pairs')
+      .then(pairs => {
+        this.props.loadPairedUsers(pairs.data);
+        console.log('get pairs runnin', pairs.data);
+      })
+      .catch(console.error);
+  }
 
   checkIfPaired() {
     axios
@@ -135,6 +135,7 @@ class UserDetails extends React.Component {
         this.setState({ buttonClicked: !this.state.buttonClicked });
         // window.location.reload(); // REACT needs this after a POST
         socket.emit('pairInfo');
+        this.getPairs();
       })
       .catch(error => {
         console.log(error);
@@ -156,6 +157,7 @@ class UserDetails extends React.Component {
         this.setState({ buttonClicked: !this.state.buttonClicked });
         // window.location.reload(); // REACT needs this after a POST
         socket.emit('pairInfo');
+        this.getPairs();
       })
       .catch(error => {
         console.log(error);
@@ -436,11 +438,11 @@ const mapDispatchToProps = dispatch => ({
       type: 'DEL_PAIRING',
       ghId
     }),
-  // loadPairedUsers: pairedUsers =>
-  //   dispatch({
-  //     type: 'LOAD_PAIRING',
-  //     pairedUsers
-  //   }),
+  loadPairedUsers: pairedUsers =>
+    dispatch({
+      type: 'LOAD_PAIRING',
+      pairedUsers
+    }),
   dispatchPairing: (userId, projectId) =>
     dispatch({
       type: 'CHANGE_USER_PAIRING',
