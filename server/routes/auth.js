@@ -1,19 +1,22 @@
 /*
  *  REQUEST HANDLERS FOR AUTHENTICATION ROUTES
- * 
+ *
  *  These handlers deal with the response directly by convenience, not by good design.
  */
 
 // Required to create a db session and run a query.
 // For info on how to do this better, check the hints in the db module.
 const db = require('../db');
-const dbDriver = db.driver;
 const passport = require('../authentication');
+// const processSocketIo = require('../sockets');
+const dbDriver = db.driver;
 
 module.exports = {
   GET: {
     signout: function signout(req, res) {
       // destroy session and redirect to home
+      console.log('Logging out');
+      req.session.destroy();
       req.logout();
       res.redirect('/');
     },
@@ -21,14 +24,25 @@ module.exports = {
       // If user signed in, send account details
       if (req.isAuthenticated()) {
         const dbSession = dbDriver.session();
-        dbSession.run(`
-          MATCH (user:User {ghId: ${ req.user.ghInfo.id }})
+        dbSession
+          .run(
+            `
+          MATCH (user:User {ghId: ${req.user.ghInfo.id}})
           OPTIONAL MATCH (user)--(:Group)--(project:Project)
           RETURN user, COLLECT(ID(project)) as projects
-        `)
-          .then((result) => {
-            res.json(new db.models.User(result.records[0].get('user'), false, false, result.records[0].get('projects')));
+        `
+          )
+          .then(result => {
+            res.json(
+              new db.models.User(
+                result.records[0].get('user'),
+                false,
+                false,
+                result.records[0].get('projects')
+              )
+            );
             dbSession.close();
+            // processSocketIo();
           })
           .catch(() => {
             res.send(false);

@@ -9,15 +9,16 @@ const session = driver.session();
 // Deletes all nodes and relationships in the graph
 const dropGraph = function dropGraph() {
   const dropGraphQueryString = 'MATCH (n) DETACH DELETE n';
-  return session.run(dropGraphQueryString)
-    .then((result) => {
-    console.log('Graph dropped');
+  return session
+    .run(dropGraphQueryString)
+    .then(result => {
+      console.log('Graph dropped');
     })
-    .catch((error) => {
+    .catch(error => {
       session.close();
       throw error;
     });
-}
+};
 
 const addUsersQueryString = `
   CREATE
@@ -29,11 +30,12 @@ const addUsersQueryString = `
 
 // Add user nodes
 function addUsers() {
-  return session.run(addUsersQueryString)
-    .then((result) => {
+  return session
+    .run(addUsersQueryString)
+    .then(result => {
       console.log('Users added');
     })
-    .catch((error) => {
+    .catch(error => {
       session.close();
       throw error;
     });
@@ -49,17 +51,19 @@ const addProjectsQueryString = `
 
 // Add project nodes
 const addProjects = function addProjects() {
-  return session.run(addProjectsQueryString)
-    .then((result) => {
+  return session
+    .run(addProjectsQueryString)
+    .then(result => {
       console.log('Projects added');
     })
-    .catch((error) => {
+    .catch(error => {
       session.close();
       throw error;
     });
-}
+};
 
 //Create INTERESTED_IN relationships between users and projects
+//Add INTERESTED_IN relationships if you addPairs
 const addInterestedInRelationshipsQueryString = `
   MATCH (robb:User) WHERE robb.name = "Robb Stark"
   MATCH (arya:User) WHERE arya.name = "Arya Stark"
@@ -67,6 +71,7 @@ const addInterestedInRelationshipsQueryString = `
   MATCH (bran:User) WHERE bran.name = "Bran Stark"
   MATCH (helloGitBud:Project) WHERE helloGitBud.project = "Hello GitBud"
   MATCH (randomQuoteMachine:Project) WHERE randomQuoteMachine.project = "Random Quote Machine"
+  MATCH (ticTacToe:Project) WHERE ticTacToe.project = "Tic Tac Toe"
   CREATE
     (robb)-[:INTERESTED_IN]->(helloGitBud),
     (arya)-[:INTERESTED_IN]->(helloGitBud),
@@ -75,15 +80,16 @@ const addInterestedInRelationshipsQueryString = `
   `;
 
 const addInterestedInRelationships = function addInterestedInRelationships() {
-  return session.run(addInterestedInRelationshipsQueryString)
-    .then((result) => {
+  return session
+    .run(addInterestedInRelationshipsQueryString)
+    .then(result => {
       console.log('INTERESTED_IN relationships added');
     })
-    .catch((error) => {
+    .catch(error => {
       session.close();
       throw error;
     });
-}
+};
 
 // Add pair
 const addPairQueryString = `
@@ -98,22 +104,23 @@ const addPairQueryString = `
   `;
 
 const addPair = function addPair() {
-  return session.run(addPairQueryString)
-    .then((result) => {
+  return session
+    .run(addPairQueryString)
+    .then(result => {
       console.log('PAIRED_WITH relationships added');
     })
-    .catch((error) => {
+    .catch(error => {
       session.close();
       throw error;
     });
-}
+};
 
 // Call functions that seed the db
 dropGraph()
   .then(addUsers)
   .then(addProjects)
   .then(addInterestedInRelationships)
-  .then(addPair)
+  // .then(addPair)
   .then(() => {
     session.close();
     driver.close();

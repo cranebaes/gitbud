@@ -1,9 +1,9 @@
 /*
  * ENTRY POINT TO ALL THE SERVER SIDE CODE
- * 
+ *
  * Most of the server code is clearly modularised, so this
  * is mostly uncontroversial requires and uses.
- * 
+ *
  * The other server modules are:
  *    request-handler
  *    --Sends correct response to each URL (mostly by calling appropriate function from routes)
@@ -19,31 +19,43 @@
 // Allows storing of environment variables
 // in .env of root directory.
 require('dotenv').config();
+const open = require('open');
 // Libraries for handling requests
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 // Libraries for authentication and sessions
 const session = require('express-session');
-// GitBud modules
+// GitPal modules
 const passport = require('./server/authentication').passport;
 const requestHandler = require('./server/request-handler');
+const eventSockets = require('./server/sockets');
 
+const socketio = require('socket.io');
 // Make express server
 const app = express();
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+
+const server = app.listen(port, err => {
+  if (err) {
+    console.log(err);
+  } else {
+    open(`http://localhost:${port}`);
+  }
 });
 
+const io = socketio(server);
+eventSockets(io);
 // Save sessions
 // NOTE: This is using a bad memory store
 // https://www.npmjs.com/package/express-session#sessionoptions
-app.use(session({
-  secret: 'This is a secret',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: 'This is a secret',
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
 // Set server to use initialized passport from authentication module
 app.use(passport.initialize());

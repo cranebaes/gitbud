@@ -2,9 +2,10 @@
  *  Request handlers for API routes.
  *  These are stored on an object for easy lookup in the request-handler module and are indexed
  *  first by method then by route.
- * 
+ *
  *  THINGS TO FIX:
- *  There's a lot of repeated code in the db queries. You may find it helpful to create better helper functions
+ *  There's a lot of repeated code in the db queries. You may find it helpful
+ * to create better helper functions
  *  here, simply modularise the db functionality better or both.
  *  Suggestions in the db module.
 */
@@ -12,8 +13,8 @@
 // Required to create a db session and run a query.
 // For info on how to do this better, check the hints in the db module.
 const db = require('../db');
-const dbDriver = db.driver;
 
+const dbDriver = db.driver;
 
 module.exports = {
   GET: {
@@ -22,20 +23,27 @@ module.exports = {
     */
     // Returns an object with numerical properties representing
     // project IDs each with a value of an array of checkpoints of the form
-    // { text: prompt(string), hint: hint on how to tackle prompt(string), complete: completion status of prompt(bool) }
+    // { text: prompt(string), hint: hint on how to tackle prompt(string),
+    // complete: completion status of prompt(bool) }
     progress: function getProgress(req) {
       return new Promise((resolve, reject) => {
         console.log('GET progress');
         const dbSession = dbDriver.session();
-        dbSession.run(`
-          MATCH (:User {ghId: ${req.user.ghInfo.id}})-->(group:Group)-->(project:Project)
-          RETURN group, project
-        `)
-          .then((res) => {
+        dbSession
+          .run(
+            `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -->(group:Group)-->(project:Project)
+            RETURN group, project
+            `
+          )
+          .then(res => {
             const projectProgress = {};
-            res.records.forEach((record) => {
+            res.records.forEach(record => {
               const group = record.get('group').properties;
-              projectProgress[record.get('project').identity] = group.progress ? JSON.parse(group.progress) : [];
+              projectProgress[record.get('project').identity] = group.progress
+                ? JSON.parse(group.progress)
+                : [];
             });
             resolve(projectProgress);
           })
@@ -50,13 +58,17 @@ module.exports = {
       return new Promise((resolve, reject) => {
         console.log('GET messages');
         const dbSession = dbDriver.session();
-        dbSession.run(`
-          MATCH (:User {ghId: ${req.user.ghInfo.id}})-[to_user]-(message:Message)--(other:User)
-          RETURN message, to_user, other ORDER BY message.created_at DESC
-        `)
-          .then((res) => {
+        dbSession
+          .run(
+            `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -[to_user]-(message:Message)--(other:User)
+            RETURN message, to_user, other ORDER BY message.created_at DESC
+            `
+          )
+          .then(res => {
             const messages = {};
-            res.records.forEach((record) => {
+            res.records.forEach(record => {
               const text = record.get('message').properties.text;
               const userId = record.get('other').identity.toNumber();
               const sender = record.get('to_user').type === 'SENT';
@@ -66,7 +78,7 @@ module.exports = {
             });
             resolve(messages);
           })
-          .catch((err) => {
+          .catch(err => {
             reject(err);
             dbSession.close();
           });
@@ -84,30 +96,40 @@ module.exports = {
         console.log('GET users');
         const ghId = req.user.ghInfo.id;
         const projectId = Number(req.query.projectId);
-        dbSession.run(`
-          MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
-          WITH user, pair, xp
-          MATCH (pair)-->(group:Group)<--(user),
-            (group)-->(pairedProject:Project),
-            (pair)-[:INTERESTED_IN]->(project:Project)
-          WHERE ID(project) = ${projectId}
-          OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
-          RETURN pair, COLLECT(ID(pairedProject)) as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
-          UNION
-          MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
-          WITH user, xp, pair
-          MATCH (pair)-[:INTERESTED_IN]->(project:Project)
-          WHERE ID(project) = ${projectId} AND NOT (pair)-->(:Group)<--(:User {ghId: ${ghId}})
-          OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
-          RETURN pair, false as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
-        `)
-          .then((res) => {
+        dbSession
+          .run(
+            `
+            MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
+            WITH user, pair, xp
+            MATCH (pair)-->(group:Group)<--(user),
+              (group)-->(pairedProject:Project),
+              (pair)-[:INTERESTED_IN]->(project:Project)
+            WHERE ID(project) = ${projectId}
+            OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
+            RETURN pair, COLLECT(ID(pairedProject)) as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
+            UNION
+            MATCH (user:User {ghId: ${ghId}})<-[xp:EXPERIENCE_DIFFERENCE]->(pair:User)
+            WITH user, xp, pair
+            MATCH (pair)-[:INTERESTED_IN]->(project:Project)
+            WHERE ID(project) = ${projectId} AND NOT (pair)-->(:Group)<--(:User {ghId: ${ghId}})
+            OPTIONAL MATCH (pair)--(:Group)--(pairsProjects:Project)
+            RETURN pair, false as projects, COLLECT(ID(pairsProjects)) as pairsProjects, xp
+            `
+          )
+          .then(res => {
             resolve(
-              res.records.map(user =>
-                new db.models.User(user.get('pair'), user.get('projects'), user.get('xp'), user.get('pairsProjects'))
-              )
+              res.records
+                .map(
+                  user =>
+                    new db.models.User(
+                      user.get('pair'),
+                      user.get('projects'),
+                      user.get('xp'),
+                      user.get('pairsProjects')
+                    )
+                )
                 .sort((a, b) => a.rating - b.rating)
-            )
+            );
           })
           .catch(reject)
           .then(() => dbSession.close());
@@ -121,7 +143,9 @@ module.exports = {
         const dbSession = dbDriver.session();
         console.log('GET projects');
         const ghId = req.user.ghInfo.id;
-        dbSession.run(`
+        dbSession
+          .run(
+            `
             MATCH (user:User {ghId: ${ghId}})-->(group:Group)-->(project:Project)
             WITH user, group, project
             MATCH (pair:User)-->(group)-->(project)
@@ -135,11 +159,79 @@ module.exports = {
             MATCH (user:User {ghId: ${ghId}}), (project:Project)
             WHERE NOT (user)-->(:Group)-->(project) AND NOT (user)-[:INTERESTED_IN]->(project)
             RETURN false as pairs, false as interested, project
-         `)
-          .then((res) => {
-            resolve(res.records.map(project => 
-              new db.models.Project(project.get('project'), project.get('pairs'), project.get('interested'))
-            ));
+           `
+          )
+          .then(res => {
+            resolve(
+              res.records.map(
+                project =>
+                  new db.models.Project(
+                    project.get('project'),
+                    project.get('pairs'),
+                    project.get('interested')
+                  )
+              )
+            );
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      });
+    },
+    // Retrieve the project that two users share
+    // Returns a project
+    project: function getProject(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('GET project');
+        const ghId = req.user.ghInfo.id;
+        const userId = req.query.id;
+        dbSession
+          .run(
+            `
+            MATCH (:User {ghId:${ghId}})-[WORKING_ON]-(project:Project)--(:User {ghId:${userId}})
+            RETURN project
+            `
+          )
+          .then(res => {
+            const project = res.records[0];
+            resolve(new db.models.Project(project.get('project')));
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      });
+    },
+    // Retrieves all projects that a user is paired with other users
+    pairedProjects: function findPairProjects(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('GET paired projects');
+        const userId = Number(req.query.userId);
+        const partnerId = Number(req.query.partnerId);
+        dbSession
+          .run(
+            `
+          MATCH(user:User {ghId: ${userId}})-[:PAIRED_WITH]->(group)<-
+          [:PAIRED_WITH]-(partner:User {ghId: ${partnerId}})
+          RETURN group
+          `
+          )
+          .then(res => {
+            resolve(res.records);
+          })
+          .catch(reject)
+          .then(() => dbSession.close());
+      });
+    },
+    // Retrieves all users
+    allUsers: function getAllUsers(req, res) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        dbSession
+          .run('MATCH (users:User) RETURN users')
+          .then(res => {
+            resolve(
+              res.records.map(user => new db.models.User(user.get('users')))
+            );
           })
           .catch(reject)
           .then(() => dbSession.close());
@@ -153,21 +245,25 @@ module.exports = {
         const dbSession = dbDriver.session();
         console.log('GET pairs');
         const ghId = req.user.ghInfo.id;
-        dbSession.run(`
-          MATCH (pair:User)-->(group:Group)<--(user:User)
-          WHERE user.ghId = ${Number(ghId)}
-          RETURN pair
-         `)
-          .then((res) => {
-            resolve(res.records.map(project => 
-              res.records.map(user => new db.models.User(user.get('pair')))
-            ));
+        dbSession
+          .run(
+            `
+            MATCH (pair:User)-->(group:Group)<--(user:User)
+            WHERE user.ghId = ${Number(ghId)}
+            RETURN pair
+           `
+          )
+          .then(res => {
+            resolve(
+              res.records.map(project =>
+                res.records.map(user => new db.models.User(user.get('pair')))
+              )
+            );
           })
           .catch(reject)
           .then(() => dbSession.close());
       });
     }
-
   },
 
   /*
@@ -179,19 +275,47 @@ module.exports = {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
         console.log('POST projects');
-        dbSession.run(
-          `
-          MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
-          MATCH (project:Project) WHERE ID(project) = ${Number(req.body.projectId)}
-          MERGE (user)-[:INTERESTED_IN]->(project)
-          return user, project
-          `
-        )
-          .then((res) => {
+        dbSession
+          .run(
+            `
+            MATCH (user:User) WHERE user.ghId=${Number(req.user.ghInfo.id)}
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.projectId)}
+            MERGE (user)-[:INTERESTED_IN]->(project)
+            return user, project
+            `
+          )
+          .then(res => {
             resolve(res);
           })
           .catch(reject)
           .then(() => dbSession.close());
+      });
+    },
+
+    deleteInterest: function deleteInterest(req) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('298 userGhid', req.user.ghInfo.id);
+        console.log('299 req.body.project', req.body.projectId);
+        dbSession
+          .run(
+            `
+            MATCH (project:Project)
+            WHERE ID(project) = ${req.body.projectId}
+            MATCH (user:User) WHERE user.ghId = ${req.user.ghInfo.id}
+            MATCH  (user)-[r:INTERESTED_IN]->(project:Project)
+            DELETE r
+          `
+          )
+          .then(() => {
+            resolve();
+            dbSession.close();
+          })
+          .catch(err => {
+            reject(err);
+            dbSession.close();
+          });
       });
     },
 
@@ -201,18 +325,53 @@ module.exports = {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
         console.log('POST pair');
-        dbSession.run(`
-          MATCH (project:Project) WHERE ID(project) = ${Number(req.body.project)}
-          MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
-          MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
-          MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
-          MERGE (group)-[:WORKING_ON]->(project)
-          SET group.progress = project.structure
-          return user, pair, group, project
-        `)
-          .then(resolve)
+        dbSession
+          .run(
+            `
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.project)}
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
+            MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
+            MERGE (group)-[:WORKING_ON]->(project)
+            SET group.progress = project.structure
+            return user, pair, group, project
+          `
+          )
+          .then(res => {
+            const pair = res.records[0];
+            resolve(new db.models.User(pair.get('pair')));
+          })
           .catch(reject)
           .then(() => dbSession.close());
+      });
+    },
+
+    unpair: function unPair(req) {
+      return new Promise((resolve, reject) => {
+        const dbSession = dbDriver.session();
+        console.log('327 userGhid', req.user.ghInfo.id);
+        console.log('328 partnered', req.body.partnered);
+        console.log('329req.body.project', req.body.project);
+        dbSession
+          .run(
+            `
+            MATCH (project:Project)
+            WHERE ID(project) = ${Number(req.body.project)}
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            MATCH (pair:User) WHERE ID(pair) = ${Number(req.body.partnered)}
+            MERGE (user)-[:PAIRED_WITH]->(group:Group)<-[:PAIRED_WITH]-(pair)
+            DETACH DELETE group
+          `
+          )
+          .then(() => {
+            resolve();
+            dbSession.close();
+          })
+          .catch(err => {
+            reject(err);
+            dbSession.close();
+          });
       });
     },
 
@@ -222,19 +381,25 @@ module.exports = {
         const dbSession = dbDriver.session();
         const message = req.body;
         console.log('POST messages');
-        dbSession.run(`
-          MATCH (user:User {ghId: ${ req.user.ghInfo.id }}), (recipient:User)
-          WHERE ID(recipient) = ${ req.body.recipient }
-          CREATE (user)-[:SENT]->(:Message {text: '${ req.body.text.replace('\'', '\\\'') }', created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
-        `)
+        dbSession
+          .run(
+            `
+            MATCH (user:User {ghId: ${req.user.ghInfo.id}}), (recipient:User)
+            WHERE ID(recipient) = ${req.body.recipient}
+            CREATE (user)-[:SENT]->
+            (:Message
+              {text: '${req.body.text.replace("'", "\\'")}',
+            created_at: TIMESTAMP()})-[:RECEIVED]->(recipient)
+            `
+          )
           .then(() => {
             resolve();
             dbSession.close();
           })
-          .catch((err) => {
+          .catch(err => {
             reject(err);
             dbSession.close();
-          })
+          });
       });
     },
 
@@ -246,12 +411,17 @@ module.exports = {
     progress: function updateProgress(req) {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
-        console.log('POST progress')
-        dbSession.run(`
-          MATCH (:User {ghId: ${req.user.ghInfo.id}})-->(group:Group)-->(project:Project)
-          WHERE ID(project) = ${req.body.projectId}
-          SET group.progress = '${JSON.stringify(req.body.progress).replace('\'', '\\\'')}'
-        `)
+        console.log('POST progress');
+        dbSession
+          .run(
+            `
+            MATCH (:User {ghId: ${req.user.ghInfo.id}})
+            -->(group:Group)-->(project:Project)
+            WHERE ID(project) = ${req.body.projectId}
+            SET group.progress =
+            '${JSON.stringify(req.body.progress).replace("'", "\\'")}'
+            `
+          )
           .then(resolve)
           .catch(reject)
           .then(() => dbSession.close());
@@ -263,16 +433,18 @@ module.exports = {
       return new Promise((resolve, reject) => {
         const dbSession = dbDriver.session();
         console.log('POST users');
-        dbSession.run(`
-          MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
-          SET user.description = '${req.body.description}'
-          SET user.language = '${req.body.language}'
-          SET user.experience = '${req.body.experience}'
-        `)
+        dbSession
+          .run(
+            `
+            MATCH (user:User) WHERE user.ghId = ${Number(req.user.ghInfo.id)}
+            SET user.description = '${req.body.description}'
+            SET user.language = '${req.body.language}'
+            SET user.experience = '${req.body.experience}'
+            `
+          )
           .then(() => resolve())
           .catch(reject);
       });
     }
-  },
-
+  }
 };
